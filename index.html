@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Arena | Сравнение нейросетей 2026</title>
+    <meta name="description" content="Сравнивайте лучшие нейросети мира в реальном времени. Баттл GPT, Claude, Gemini, Llama и других ИИ моделей.">
+    <meta name="keywords" content="сравнение нейросетей, ИИ баттл, GPT vs Claude, нейросети 2026">
+    <meta name="yandex-verification" content="ваш-код-для-яндекса">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background: linear-gradient(135deg, #0a0c10 0%, #12151c 100%);
+            color: #e2e8f0; 
+            min-height: 100vh;
+        }
+        
+        .glass {
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255,255,255,0.08);
+        }
+        
+        .glass-card {
+            background: rgba(20, 25, 40, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.05);
+            transition: all 0.3s ease;
+        }
+        
+        .glass-card:hover {
+            border-color: rgba(59, 130, 246, 0.4);
+            box-shadow: 0 0 30px rgba(59, 130, 246, 0.1);
+            transform: translateY(-2px);
+        }
+        
+        .arena-card {
+            background: linear-gradient(135deg, rgba(30, 35, 55, 0.9) 0%, rgba(20, 25, 45, 0.9) 100%);
+            border-radius: 2rem;
+            border: 1px solid rgba(255,255,255,0.08);
+            transition: all 0.3s ease;
+        }
+        
+        .arena-card:hover {
+            border-color: rgba(59, 130, 246, 0.3);
+        }
+        
+        .select-model {
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 1rem;
+            padding: 0.75rem 1rem;
+            color: white;
+            outline: none;
+            cursor: pointer;
+            font-weight: 500;
+        }
+        
+        .select-model:focus {
+            border-color: #3b82f6;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #3b82f6, #2563eb);
+            transition: all 0.2s ease;
+        }
+        
+        .btn-primary:hover {
+            transform: scale(1.02);
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.4);
+        }
+        
+        .btn-primary:active {
+            transform: scale(0.98);
+        }
+        
+        .response-content {
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+        
+        .response-content h1, .response-content h2, .response-content h3 {
+            color: #60a5fa;
+            margin-top: 1rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .response-content code {
+            background: #1e293b;
+            padding: 0.125rem 0.375rem;
+            border-radius: 0.375rem;
+            font-size: 0.8rem;
+        }
+        
+        .response-content pre {
+            background: #1e293b;
+            padding: 1rem;
+            border-radius: 0.75rem;
+            overflow-x: auto;
+            margin: 1rem 0;
+        }
+        
+        .timer {
+            font-family: monospace;
+            font-size: 0.7rem;
+            padding: 0.25rem 0.5rem;
+            border-radius: 1rem;
+            background: rgba(59, 130, 246, 0.15);
+            color: #60a5fa;
+        }
+        
+        .vote-btn {
+            transition: all 0.2s ease;
+        }
+        
+        .vote-btn:hover {
+            transform: scale(1.05);
+        }
+        
+        .category-btn.active {
+            background: rgba(59, 130, 246, 0.2);
+            color: #3b82f6;
+            border-left: 3px solid #3b82f6;
+        }
+        
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: #1e293b;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: #3b82f6;
+            border-radius: 10px;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 0.4; }
+            50% { opacity: 0.8; }
+        }
+        
+        .loading-pulse {
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.5s ease-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Анимированный фон -->
+    <div class="fixed inset-0 overflow-hidden pointer-events-none z-0">
+        <div class="absolute top-0 left-1/4 w-96 h-96 bg-blue-600/10 rounded-full blur-[100px]"></div>
+        <div class="absolute bottom-0 right-1/4 w-96 h-96 bg-purple-600/10 rounded-full blur-[100px]"></div>
+    </div>
+
+    <!-- Шапка -->
+    <header class="fixed top-0 left-0 right-0 z-50 glass">
+        <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+            <div class="flex items-center gap-3 cursor-pointer" onclick="location.reload()">
+                <div class="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center">
+                    <i class="fas fa-bolt text-white text-lg"></i>
+                </div>
+                <h1 class="text-2xl font-bold tracking-tight">
+                    AI <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400">ARENA</span>
+                </h1>
+            </div>
+            
+            <div class="flex items-center gap-3">
+                <button onclick="toggleCatalog()" class="px-5 py-2 rounded-full bg-white/5 border border-white/10 text-sm font-medium hover:bg-white/10 transition-all flex items-center gap-2">
+                    <i class="fas fa-grid-2"></i>
+                    <span class="hidden sm:inline">Каталог ИИ</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-4 pt-24 pb-12 relative z-10">
+        
+        <!-- Hero секция -->
+        <div class="text-center max-w-3xl mx-auto mb-12">
+            <h2 class="text-4xl md:text-6xl font-bold mb-4 bg-gradient-to-r from-white via-blue-300 to-purple-400 bg-clip-text text-transparent">
+                Кто сильнее?
+            </h2>
+            <p class="text-slate-400 text-lg">Сравните лучшие нейросети мира в реальном баттле</p>
+        </div>
+
+        <!-- Блок с готовыми вопросами (SEO + Удобство) -->
+        <div class="max-w-4xl mx-auto mb-8">
+            <div class="flex flex-wrap justify-center gap-2">
+                <span class="text-xs text-slate-500 mr-2 self-center">🔥 Популярное:</span>
+                <button onclick="setQuestion('Напиши код на Python для сортировки списка')" class="text-xs px-3 py-1.5 rounded-full bg-white/5 hover:bg-white/10 transition-all">Код Python</button>
+                <button onclick="setQuestion('Объясни квантовую физику простыми словами')" class="text-xs px-3 py-1.5 rounded-full bg-white/5 hover:bg-white/10 transition-all">Квантовая физика</button>
+                <button onclick="setQuestion('Придумай бизнес-идею для 2026 года')" class="text-xs px-3 py-1.5 rounded-full bg-white/5 hover:bg-white/10 transition-all">Бизнес идея</button>
+                <button onclick="setQuestion('Сравни React и Vue в таблице')" class="text-xs px-3 py-1.5 rounded-full bg-white/5 hover:bg-white/10 transition-all">React vs Vue</button>
+                <button onclick="setQuestion('Напиши пост для Instagram про ИИ')" class="text-xs px-3 py-1.5 rounded-full bg-white/5 hover:bg-white/10 transition-all">Пост для Instagram</button>
+            </div>
+        </div>
+
+        <!-- Арена баттла -->
+        <div class="grid lg:grid-cols-2 gap-6 max-w-6xl mx-auto mb-8">
+            
+            <!-- Левый угол (Модель 1) -->
+            <div class="arena-card p-6 flex flex-col h-[500px]">
+                <div class="flex justify-between items-center mb-4">
+                    <select id="modelLeft" class="select-model flex-1 mr-3">
+                        <option value="gpt">🧠 GPT-4 Turbo</option>
+                        <option value="claude">🎨 Claude 3.5 Sonnet</option>
+                        <option value="gemini">✨ Gemini 1.5 Pro</option>
+                        <option value="llama" selected>🦙 Llama 3 70B</option>
+                        <option value="mistral">🌪️ Mistral Large</option>
+                    </select>
+                    <span id="timeLeft" class="timer">0ms</span>
+                </div>
+                
+                <div class="flex-1 overflow-y-auto pr-2 space-y-3" id="resultLeft">
+                    <div class="flex items-center justify-center h-full">
+                        <div class="text-center text-slate-500">
+                            <i class="fas fa-microphone-alt text-3xl mb-3 opacity-30"></i>
+                            <p class="text-sm">Ожидание вопроса...</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mt-4 pt-4 border-t border-white/10 flex justify-between items-center">
+                    <span class="text-xs text-slate-500"><i class="fas fa-robot mr-1"></i> Модель #1</span>
+                    <button onclick="vote('left')" class="vote-btn text-sm px-4 py-1.5 rounded-full bg-white/5 hover:bg-green-500/20 hover:text-green-400 transition-all">
+                        <i class="fas fa-thumbs-up mr-1"></i> Голос
+                    </button>
+                </div>
+            </div>
+
+            <!-- Правый угол (Модель 2) -->
+            <div class="arena-card p-6 flex flex-col h-[500px]">
+                <div class="flex justify-between items-center mb-4">
+                    <select id="modelRight" class="select-model flex-1 mr-3">
+                        <option value="gpt">🧠 GPT-4 Turbo</option>
+                        <option value="claude" selected>🎨 Claude 3.5 Sonnet</option>
+                        <option value="gemini">✨ Gemini 1.5 Pro</option>
+                        <option value="llama">🦙 Llama 3 70B</option>
+                        <option value="mistral">🌪️ Mistral Large</option>
+                    </select>
+                    <span id="timeRight" class="timer">0ms</span>
+                </div>
+                
+                <div class="flex-1 overflow-y-auto pr-2 space-y-3" id="resultRight">
+                    <div class="flex items-center justify-center h-full">
+                        <div class="text-center text-slate-500">
+                            <i class="fas fa-microphone-alt text-3xl mb-3 opacity-30"></i>
+                            <p class="text-sm">Ожидание вопроса...</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mt-4 pt-4 border-t border-white/10 flex justify-between items-center">
+                    <span class="text-xs text-slate-500"><i class="fas fa-robot mr-1"></i> Модель #2</span>
+                    <button onclick="vote('right')" class="vote-btn text-sm px-4 py-1.5 rounded-full bg-white/5 hover:bg-green-500/20 hover:text-green-400 transition-all">
+                        <i class="fas fa-thumbs-up mr-1"></i> Голос
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Поле ввода вопроса -->
+        <div class="max-w-4xl mx-auto">
+            <div class="glass rounded-2xl p-2 flex items-center gap-2">
+                <input type="text" id="questionInput" placeholder="Задайте вопрос нейросетям..." 
+                       class="flex-1 bg-transparent px-5 py-4 outline-none text-white placeholder:text-slate-600 text-lg">
+                <button onclick="startBattle()" id="battleBtn" 
+                        class="btn-primary px-8 py-4 rounded-xl font-bold flex items-center gap-2">
+                    <span>БАТТЛ</span>
+                    <i class="fas fa-bolt"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Блок результатов голосования и статистики -->
+        <div class="max-w-4xl mx-auto mt-6">
+            <div class="glass rounded-2xl p-4 text-center">
+                <div class="flex justify-center gap-8 text-sm">
+                    <div class="flex items-center gap-2">
+                        <i class="fas fa-chart-simple text-blue-400"></i>
+                        <span id="votesLeft" class="font-mono">0</span>
+                        <span class="text-slate-500">голосов за левую</span>
+                    </div>
+                    <div class="w-px h-6 bg-white/20"></div>
+                    <div class="flex items-center gap-2">
+                        <i class="fas fa-chart-simple text-purple-400"></i>
+                        <span id="votesRight" class="font-mono">0</span>
+                        <span class="text-slate-500">голосов за правую</span>
+                    </div>
+                    <div class="w-px h-6 bg-white/20"></div>
+                    <div class="flex items-center gap-2">
+                        <i class="fas fa-clock text-slate-500"></i>
+                        <span id="battleCount" class="font-mono">0</span>
+                        <span class="text-slate-500">баттлов проведено</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Модальное окно каталога -->
+    <div id="catalogModal" class="fixed inset-0 z-50 hidden overflow-y-auto" style="background: rgba(0,0,0,0.8); backdrop-filter: blur(8px);">
+        <div class="container mx-auto px-4 py-8 max-w-6xl">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-3xl font-bold">📚 Каталог нейросетей 2026</h2>
+                <button onclick="toggleCatalog()" class="text-4xl text-slate-400 hover:text-white">&times;</button>
+            </div>
+            
+            <!-- Категории -->
+            <div class="flex flex-wrap gap-2 mb-6">
+                <button onclick="filterCatalog('all')" class="category-btn px-4 py-2 rounded-xl bg-white/5 hover:bg-white/10 transition-all text-sm" data-cat="all">🔥 Все</button>
+                <button onclick="filterCatalog('text')" class="category-btn px-4 py-2 rounded-xl bg-white/5 hover:bg-white/10 transition-all text-sm" data-cat="text">💬 Текстовые</button>
+                <button onclick="filterCatalog('image')" class="category-btn px-4 py-2 rounded-xl bg-white/5 hover:bg-white/10 transition-all text-sm" data-cat="image">🎨 Генерация картинок</button>
+                <button onclick="filterCatalog('video')" class="category-btn px-4 py-2 rounded-xl bg-white/5 hover:bg-white/10 transition-all text-sm" data-cat="video">🎬 Генерация видео</button>
+                <button onclick="filterCatalog('code')" class="category-btn px-4 py-2 rounded-xl bg-white/5 hover:bg-white/10 transition-all text-sm" data-cat="code">💻 Помощь в коде</button>
+                <button onclick="filterCatalog('voice')" class="category-btn px-4 py-2 rounded-xl bg-white/5 hover:bg-white/10 transition-all text-sm" data-cat="voice">🎤 Голос/Музыка</button>
+            </div>
+            
+            <!-- Сетка каталога -->
+            <div id="catalogGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <!-- Заполняется через JS -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ============ БАЗА ДАННЫХ ИИ ДЛЯ КАТАЛОГА ============
+        const aiDatabase = [
+            { name: "ChatGPT (GPT-4 Turbo)", cat: "text", desc: "Самый популярный ИИ от OpenAI", link: "https://chat.openai.com", affLink: "https://example.com/aff/gpt" },
+            { name: "Claude 3.5 Sonnet", cat: "text", desc: "Отличный для написания кода", link: "https://claude.ai", affLink: "https://example.com/aff/claude" },
+            { name: "Gemini 1.5 Pro", cat: "text", desc: "От Google, понимает видео", link: "https://gemini.google.com", affLink: "https://example.com/aff/gemini" },
+            { name: "Midjourney v6", cat: "image", desc: "Лучший для арта", link: "https://midjourney.com", affLink: "https://example.com/aff/midjourney" },
+            { name: "DALL-E 3", cat: "image", desc: "От OpenAI, точность промтов", link: "https://openai.com/dall-e-3", affLink: "https://example.com/aff/dalle" },
+            { name: "Stable Diffusion 3", cat: "image", desc: "Бесплатный open-source", link: "https://stability.ai", affLink: "https://example.com/aff/sd" },
+            { name: "Leonardo.ai", cat: "image", desc: "Для игровых ассетов", link: "https://leonardo.ai", affLink: "https://example.com/aff/leonardo" },
+            { name: "Sora", cat: "video", desc: "Текст в видео от OpenAI", link: "https://openai.com/sora", affLink: "https://example.com/aff/sora" },
+            { name: "Runway Gen-3", cat: "video", desc: "Киношное качество", link: "https://runwayml.com", affLink: "https://example.com/aff/runway" },
+            { name: "Pika Labs", cat: "video", desc: "Анимация объектов", link: "https://pika.art", affLink: "https://example.com/aff/pika" },
+            { name: "GitHub Copilot", cat: "code", desc: "Пишет код за вас", link: "https://github.com/features/copilot", affLink: "https://example.com/aff/copilot" },
+            { name: "Cursor AI", cat: "code", desc: "Редактор с ИИ", link: "https://cursor.sh", affLink: "https://example.com/aff/cursor" },
+            { name: "Replit Agent", cat: "code", desc: "Пишет и деплоит приложения", link: "https://replit.com", affLink: "https://example.com/aff/replit" },
+            { name: "Suno AI", cat: "voice", desc: "Генерация музыки", link: "https://suno.ai", affLink: "https://example.com/aff/suno" },
+            { name: "ElevenLabs", cat: "voice", desc: "Озвучка голосом", link: "https://elevenlabs.io", affLink: "https://example.com/aff/elevenlabs" },
+            { name: "Udio", cat: "voice", desc: "Музыка по описанию", link: "https://udio.com", affLink: "https://example.com/aff/udio" }
+        ];
+
+        // ============ ИМИТАЦИЯ ОТВЕТОВ ИИ (пока без API) ============
+        const fakeResponses = {
+            gpt: (q) => `🧠 **GPT-4 Turbo отвечает:**\n\n${q.length > 50 ? q.substring(0, 50) : q} — отличный вопрос! Как языковая модель, я считаю что... *(здесь был бы реальный ответ от GPT, но для демо используем заглушку. Полноценный API подключим позже!)*\n\n> 💡 *Подсказка: Чтобы получить реальные ответы от нейросетей, настройте backend-прокси через Vercel.*`,
+            claude: (q) => `🎨 **Claude 3.5 Sonnet отвечает:**\n\nАнализирую ваш запрос: "${q.substring(0, 60)}..."\n\nClaude славится вниманием к деталям. Вот мой развёрнутый ответ... *(режим демо — реальные ответы появятся после настройки API)*\n\n---\n✨ *Рекомендую зарегистрироваться на Claude.ai для полного доступа.*`,
+            gemini: (q) => `✨ **Gemini 1.5 Pro отвечает:**\n\nОтлично! Многомодальная модель обрабатывает ваш запрос. У Gemini огромный контекст в 1M токенов... *(демо-режим)*\n\n📎 *Получите API ключ от Google AI Studio для реальных ответов.*`,
+            llama: (q) => `🦙 **Llama 3 70B отвечает:**\n\nКак open-source модель от Meta, я рада помочь! По вашему вопросу "${q.substring(0, 40)}..." могу сказать следующее... *(демо)*\n\n🔓 *Запустите Llama локально или через Groq Cloud.*`,
+            mistral: (q) => `🌪️ **Mistral Large отвечает:**\n\nЕвропейская модель с фокусом на эффективность. Отвечаю на "${q.substring(0, 45)}..."\n\n⚡ *API Mistral доступен на их сайте.*`
+        };
+
+        // Состояние
+        let currentLang = 'ru';
+        let votes = { left: 0, right: 0 };
+        let battlesCount = 0;
+        
+        // Загрузка статистики из localStorage
+        function loadStats() {
+            const savedVotes = localStorage.getItem('ai_arena_votes');
+            if (savedVotes) {
+                try {
+                    const v = JSON.parse(savedVotes);
+                    votes = v;
+                    document.getElementById('votesLeft').innerText = votes.left || 0;
+                    document.getElementById('votesRight').innerText = votes.right || 0;
+                } catch(e) {}
+            }
+            
+            const savedBattles = localStorage.getItem('ai_arena_battles');
+            if (savedBattles) {
+                battlesCount = parseInt(savedBattles) || 0;
+                document.getElementById('battleCount').innerText = battlesCount;
+            }
+        }
+        
+        function saveStats() {
+            localStorage.setItem('ai_arena_votes', JSON.stringify(votes));
+            localStorage.setItem('ai_arena_battles', battlesCount.toString());
+        }
+        
+        function vote(side) {
+            if (side === 'left') {
+                votes.left++;
+                document.getElementById('votesLeft').innerText = votes.left;
+            } else {
+                votes.right++;
+                document.getElementById('votesRight').innerText = votes.right;
+            }
+            saveStats();
+            
+            // Анимация
+            alert('✅ Голос учтён! Спасибо за участие в развитии арены.');
+        }
+        
+        function setQuestion(text) {
+            document.getElementById('questionInput').value = text;
+            startBattle();
+        }
+        
+        async function startBattle() {
+            const question = document.getElementById('questionInput').value.trim();
+            if (!question) {
+                alert('Введите вопрос для нейросетей!');
+                return;
+            }
+            
+            const btn = document.getElementById('battleBtn');
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-circle-notch animate-spin"></i> БИТВА...';
+            
+            // Увеличиваем счётчик баттлов
+            battlesCount++;
+            document.getElementById('battleCount').innerText = battlesCount;
+            saveStats();
+            
+            const modelLeft = document.getElementById('modelLeft').value;
+            const modelRight = document.getElementById('modelRight').value;
+            
+            // Имитация задержки ответа
+            const startLeft = Date.now();
+            const startRight = Date.now();
+            
+            // Получаем ответы
+            const responseLeft = fakeResponses[modelLeft] ? fakeResponses[modelLeft](question) : fakeResponses.llama(question);
+            const responseRight = fakeResponses[modelRight] ? fakeResponses[modelRight](question) : fakeResponses.claude(question);
+            
+            // Имитация разной скорости
+            setTimeout(() => {
+                const timeLeft = Date.now() - startLeft;
+                document.getElementById('timeLeft').innerText = `${timeLeft}ms`;
+                document.getElementById('resultLeft').innerHTML = `<div class="response-content fade-in">${marked.parse(responseLeft)}</div>`;
+            }, 300);
+            
+            setTimeout(() => {
+                const timeRight = Date.now() - startRight;
+                document.getElementById('timeRight').innerText = `${timeRight}ms`;
+                document.getElementById('resultRight').innerHTML = `<div class="response-content fade-in">${marked.parse(responseRight)}</div>`;
+            }, 500);
+            
+            // Восстанавливаем кнопку через 2 секунды
+            setTimeout(() => {
+                btn.disabled = false;
+                btn.innerHTML = '<span>БАТТЛ</span><i class="fas fa-bolt"></i>';
+            }, 2000);
+        }
+        
+        // ============ КАТАЛОГ ============
+        function toggleCatalog() {
+            const modal = document.getElementById('catalogModal');
+            modal.classList.toggle('hidden');
+            if (!modal.classList.contains('hidden')) {
+                renderCatalog('all');
+            }
+        }
+        
+        function renderCatalog(cat) {
+            const grid = document.getElementById('catalogGrid');
+            const filtered = cat === 'all' ? aiDatabase : aiDatabase.filter(ai => ai.cat === cat);
+            
+            grid.innerHTML = filtered.map(ai => `
+                <div class="glass-card rounded-xl p-4 hover:scale-[1.02] transition-all fade-in">
+                    <div class="flex justify-between items-start mb-2">
+                        <h3 class="font-bold text-lg">${ai.name}</h3>
+                        <span class="text-xs px-2 py-1 rounded-full bg-white/10">${getCatIcon(ai.cat)}</span>
+                    </div>
+                    <p class="text-sm text-slate-400 mb-3">${ai.desc}</p>
+                    <div class="flex gap-2">
+                        <a href="${ai.affLink}" target="_blank" class="flex-1 text-center text-sm py-2 rounded-lg bg-blue-600/20 hover:bg-blue-600 text-blue-400 hover:text-white transition-all">
+                            🚀 Попробовать
+                        </a>
+                        <a href="${ai.link}" target="_blank" class="text-sm py-2 px-3 rounded-lg bg-white/5 hover:bg-white/10 transition-all">
+                            <i class="fas fa-external-link-alt"></i>
+                        </a>
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        function getCatIcon(cat) {
+            const icons = { text: '💬', image: '🎨', video: '🎬', code: '💻', voice: '🎤' };
+            return icons[cat] || '🤖';
+        }
+        
+        function filterCatalog(cat) {
+            renderCatalog(cat);
+            document.querySelectorAll('.category-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.getAttribute('data-cat') === cat) {
+                    btn.classList.add('active');
+                }
+            });
+        }
+        
+        // Добавляем стиль для active в каталоге
+        const style = document.createElement('style');
+        style.textContent = `.category-btn.active { background: rgba(59,130,246,0.2); color: #3b82f6; }`;
+        document.head.appendChild(style);
+        
+        // Инициализация
+        loadStats();
+        
+        // Обработка Enter
+        document.getElementById('questionInput').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') startBattle();
+        });
+    </script>
+</body>
+</html>
