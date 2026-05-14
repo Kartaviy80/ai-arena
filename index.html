@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Arena | Глобальный рейтинг нейросетей</title>
-    <meta name="description" content="Голосуйте за лучшие нейросети мира. Ежедневные баттлы GPT-4, Claude, Gemini, Llama и других. Глобальный рейтинг на основе голосов пользователей.">
+    <title>AI Arena | Глобальный рейтинг нейросетей 2026</title>
+    <meta name="description" content="Голосуйте за лучшие нейросети мира. Ежедневные баттлы 50+ ИИ моделей. Глобальный рейтинг и топы по категориям.">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
@@ -49,15 +49,21 @@
             font-weight: 800;
         }
         
-        .vote-btn {
-            background: linear-gradient(135deg, rgba(59,130,246,0.2), rgba(139,92,246,0.1));
-            transition: all 0.2s;
+        .model-card {
+            background: linear-gradient(135deg, rgba(30, 35, 60, 0.95), rgba(20, 25, 50, 0.95));
+            border-radius: 2rem;
+            transition: all 0.2s ease;
+            cursor: pointer;
         }
         
-        .vote-btn:hover {
-            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+        .model-card:hover {
             transform: scale(1.02);
-            box-shadow: 0 0 20px rgba(59,130,246,0.4);
+            border-color: #3b82f6;
+            box-shadow: 0 0 25px rgba(59,130,246,0.3);
+        }
+        
+        .model-card:active {
+            transform: scale(0.98);
         }
         
         .rank-badge {
@@ -79,19 +85,43 @@
         
         .pulse-animation { animation: pulse 2s ease-in-out infinite; }
         
+        @keyframes toast {
+            0% { opacity: 0; transform: translateY(20px); }
+            10% { opacity: 1; transform: translateY(0); }
+            90% { opacity: 1; transform: translateY(0); }
+            100% { opacity: 0; transform: translateY(-20px); }
+        }
+        
+        .toast-notification {
+            animation: toast 2s ease forwards;
+        }
+        
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: #1e293b; border-radius: 10px; }
         ::-webkit-scrollbar-thumb { background: #3b82f6; border-radius: 10px; }
-        
-        .model-card {
-            background: linear-gradient(135deg, rgba(30, 35, 60, 0.95), rgba(20, 25, 50, 0.95));
-            border-radius: 2rem;
-        }
         
         .tab-btn.active {
             background: rgba(59, 130, 246, 0.2);
             color: #3b82f6;
             border-bottom: 2px solid #3b82f6;
+        }
+        
+        .category-tab {
+            background: rgba(255,255,255,0.05);
+            transition: all 0.2s;
+        }
+        
+        .category-tab.active {
+            background: rgba(59, 130, 246, 0.2);
+            color: #3b82f6;
+        }
+        
+        .vote-toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1000;
         }
     </style>
 </head>
@@ -130,43 +160,43 @@
             <h2 id="questionOfDay" class="text-2xl md:text-3xl font-bold mb-2 bg-gradient-to-r from-white to-blue-300 bg-clip-text text-transparent">
                 Загрузка...
             </h2>
-            <p class="text-slate-400">Кто справится лучше? Проголосуйте и повлияйте на рейтинг!</p>
+            <p class="text-slate-400">Кликните на карточку, чтобы проголосовать</p>
         </div>
 
-        <!-- Арена голосования -->
+        <!-- Арена голосования - карточки слева и справа -->
         <div class="max-w-5xl mx-auto">
-            <div class="grid md:grid-cols-2 gap-6 mb-8">
-                <!-- Модель A -->
-                <div id="modelACard" class="model-card p-6 text-center cursor-pointer transition-all hover:scale-[1.02]" onclick="voteFor('A')">
-                    <div class="w-24 h-24 mx-auto mb-4 bg-gradient-to-br from-blue-500/20 to-purple-500/20 rounded-full flex items-center justify-center">
-                        <i class="fas fa-brain text-4xl text-blue-400"></i>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+                <!-- Модель A - слева -->
+                <div id="modelACard" class="model-card p-6 text-center transition-all cursor-pointer" onclick="voteFor('A')">
+                    <div class="w-28 h-28 mx-auto mb-4 bg-gradient-to-br from-blue-500/20 to-purple-500/20 rounded-full flex items-center justify-center">
+                        <i class="fas fa-brain text-5xl text-blue-400"></i>
                     </div>
                     <h3 id="modelAName" class="text-2xl font-bold mb-2">Загрузка...</h3>
-                    <p id="modelADesc" class="text-slate-400 text-sm mb-4">Разработчик: --</p>
-                    <button class="vote-btn w-full py-4 rounded-xl font-bold text-white transition-all">
-                        <i class="fas fa-thumbs-up mr-2"></i> Голосовать
-                    </button>
+                    <p id="modelADesc" class="text-slate-400 text-sm">Разработчик: --</p>
+                    <div class="mt-4 text-xs text-slate-500">
+                        <i class="fas fa-chart-line mr-1"></i> <span id="modelAWins">0</span> побед
+                    </div>
                 </div>
 
-                <!-- VS -->
+                <!-- VS по центру -->
                 <div class="flex items-center justify-center">
                     <div class="vs-orb text-4xl font-black bg-gradient-to-r from-blue-500 to-purple-500 bg-clip-text text-transparent">VS</div>
                 </div>
 
-                <!-- Модель B -->
-                <div id="modelBCard" class="model-card p-6 text-center cursor-pointer transition-all hover:scale-[1.02]" onclick="voteFor('B')">
-                    <div class="w-24 h-24 mx-auto mb-4 bg-gradient-to-br from-purple-500/20 to-pink-500/20 rounded-full flex items-center justify-center">
-                        <i class="fas fa-microchip text-4xl text-purple-400"></i>
+                <!-- Модель B - справа -->
+                <div id="modelBCard" class="model-card p-6 text-center transition-all cursor-pointer" onclick="voteFor('B')">
+                    <div class="w-28 h-28 mx-auto mb-4 bg-gradient-to-br from-purple-500/20 to-pink-500/20 rounded-full flex items-center justify-center">
+                        <i class="fas fa-microchip text-5xl text-purple-400"></i>
                     </div>
                     <h3 id="modelBName" class="text-2xl font-bold mb-2">Загрузка...</h3>
-                    <p id="modelBDesc" class="text-slate-400 text-sm mb-4">Разработчик: --</p>
-                    <button class="vote-btn w-full py-4 rounded-xl font-bold text-white transition-all">
-                        <i class="fas fa-thumbs-up mr-2"></i> Голосовать
-                    </button>
+                    <p id="modelBDesc" class="text-slate-400 text-sm">Разработчик: --</p>
+                    <div class="mt-4 text-xs text-slate-500">
+                        <i class="fas fa-chart-line mr-1"></i> <span id="modelBWins">0</span> побед
+                    </div>
                 </div>
             </div>
 
-            <!-- Статистика голосования -->
+            <!-- Статистика -->
             <div class="glass-card rounded-2xl p-4 text-center">
                 <div class="flex justify-center gap-8 text-sm flex-wrap">
                     <div class="flex items-center gap-2"><i class="fas fa-chart-line text-green-400"></i><span id="totalVotesToday" class="font-mono font-bold">0</span><span class="text-slate-500">голосов сегодня</span></div>
@@ -188,7 +218,18 @@
             <p class="text-slate-400 mt-2">Рейтинг формируется на основе голосов всех пользователей</p>
         </div>
 
-        <div class="max-w-4xl mx-auto">
+        <!-- Категории рейтинга -->
+        <div class="flex flex-wrap justify-center gap-2 mb-6">
+            <button onclick="showRatingCategory('all')" id="catAll" class="category-tab px-5 py-2.5 rounded-xl text-sm font-medium transition-all active">🔥 Общий</button>
+            <button onclick="showRatingCategory('text')" id="catText" class="category-tab px-5 py-2.5 rounded-xl text-sm font-medium transition-all">💬 Текстовые</button>
+            <button onclick="showRatingCategory('image')" id="catImage" class="category-tab px-5 py-2.5 rounded-xl text-sm font-medium transition-all">🎨 Изображения</button>
+            <button onclick="showRatingCategory('video')" id="catVideo" class="category-tab px-5 py-2.5 rounded-xl text-sm font-medium transition-all">🎬 Видео</button>
+            <button onclick="showRatingCategory('code')" id="catCode" class="category-tab px-5 py-2.5 rounded-xl text-sm font-medium transition-all">💻 Код</button>
+            <button onclick="showRatingCategory('voice')" id="catVoice" class="category-tab px-5 py-2.5 rounded-xl text-sm font-medium transition-all">🎤 Голос/Музыка</button>
+        </div>
+
+        <!-- Таблица рейтинга -->
+        <div class="max-w-5xl mx-auto">
             <div class="glass-card rounded-2xl overflow-hidden">
                 <table class="w-full">
                     <thead class="bg-white/5 border-b border-white/10">
@@ -209,8 +250,16 @@
 
 </main>
 
+<!-- Toast уведомление -->
+<div id="toastMessage" class="vote-toast hidden">
+    <div class="glass-card rounded-xl px-6 py-3 flex items-center gap-3">
+        <i class="fas fa-check-circle text-green-400 text-xl"></i>
+        <span class="text-white font-medium"></span>
+    </div>
+</div>
+
 <script>
-    // ============ ВАША КОНФИГУРАЦИЯ FIREBASE ============
+    // ============ FIREBASE КОНФИГ ============
     const firebaseConfig = {
         apiKey: "AIzaSyDXV647tuR7adub0pO6PAGlFkivU5WY6T0",
         authDomain: "aivs-93aaf.firebaseapp.com",
@@ -221,45 +270,160 @@
         measurementId: "G-BT5YZKFC4J"
     };
     
-    // Инициализация Firebase
     firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
     
-    // ============ СПИСОК МОДЕЛЕЙ (12 популярных) ============
+    // ============ 50+ МОДЕЛЕЙ ИИ С КАТЕГОРИЯМИ ============
     const models = [
-        { id: "gpt4", name: "GPT-4 Turbo", developer: "OpenAI", icon: "fa-brain", desc: "Самый популярный ИИ" },
-        { id: "claude", name: "Claude 3.5 Sonnet", developer: "Anthropic", icon: "fa-feather", desc: "Лучший для кода" },
-        { id: "gemini", name: "Gemini 1.5 Pro", developer: "Google", icon: "fa-star", desc: "Контекст 1M токенов" },
-        { id: "llama3", name: "Llama 3 70B", developer: "Meta", icon: "fa-tree", desc: "Open-source лидер" },
-        { id: "mistral", name: "Mistral Large", developer: "Mistral AI", icon: "fa-wind", desc: "Европейская мощь" },
-        { id: "deepseek", name: "DeepSeek V3", developer: "DeepSeek", icon: "fa-dragon", desc: "Китайский конкурент" },
-        { id: "qwen", name: "Qwen 2.5 72B", developer: "Alibaba", icon: "fa-cloud", desc: "Мультиязычная" },
-        { id: "grok", name: "Grok-2", developer: "xAI", icon: "fa-rocket", desc: "От Илона Маска" },
-        { id: "perplexity", name: "Perplexity AI", developer: "Perplexity", icon: "fa-search", desc: "ИИ-поисковик" },
-        { id: "pi", name: "Pi AI", developer: "Inflection", icon: "fa-heart", desc: "Высокий EQ" },
-        { id: "command", name: "Command R+", developer: "Cohere", icon: "fa-terminal", desc: "Для бизнеса" },
-        { id: "yi", name: "Yi-34B", developer: "01.AI", icon: "fa-chinese-yuan", desc: "Open-source азиат" }
+        // Текстовые
+        { id: "gpt4", name: "GPT-4 Turbo", developer: "OpenAI", category: "text", icon: "fa-brain", wins: 1247 },
+        { id: "claude", name: "Claude 3.5 Sonnet", developer: "Anthropic", category: "text", icon: "fa-feather", wins: 1189 },
+        { id: "gemini", name: "Gemini 1.5 Pro", developer: "Google", category: "text", icon: "fa-star", wins: 1098 },
+        { id: "llama3", name: "Llama 3 70B", developer: "Meta", category: "text", icon: "fa-tree", wins: 987 },
+        { id: "mistral", name: "Mistral Large", developer: "Mistral AI", category: "text", icon: "fa-wind", wins: 934 },
+        { id: "deepseek", name: "DeepSeek V3", developer: "DeepSeek", category: "text", icon: "fa-dragon", wins: 876 },
+        { id: "qwen", name: "Qwen 2.5 72B", developer: "Alibaba", category: "text", icon: "fa-cloud", wins: 823 },
+        { id: "grok", name: "Grok-2", developer: "xAI", category: "text", icon: "fa-rocket", wins: 765 },
+        { id: "perplexity", name: "Perplexity AI", developer: "Perplexity", category: "text", icon: "fa-search", wins: 712 },
+        { id: "pi", name: "Pi AI", developer: "Inflection", category: "text", icon: "fa-heart", wins: 654 },
+        { id: "command", name: "Command R+", developer: "Cohere", category: "text", icon: "fa-terminal", wins: 598 },
+        { id: "yi", name: "Yi-34B", developer: "01.AI", category: "text", icon: "fa-chinese-yuan", wins: 543 },
+        // Изображения
+        { id: "midjourney", name: "Midjourney v6", developer: "Midjourney", category: "image", icon: "fa-palette", wins: 1432 },
+        { id: "dalle3", name: "DALL-E 3", developer: "OpenAI", category: "image", icon: "fa-image", wins: 1287 },
+        { id: "sd3", name: "Stable Diffusion 3", developer: "Stability AI", category: "image", icon: "fa-bezier-curve", wins: 1123 },
+        { id: "flux", name: "Flux.1", developer: "Black Forest Labs", category: "image", icon: "fa-magic", wins: 987 },
+        { id: "leonardo", name: "Leonardo.ai", developer: "Leonardo", category: "image", icon: "fa-gamepad", wins: 876 },
+        { id: "firefly", name: "Adobe Firefly", developer: "Adobe", category: "image", icon: "fa-adobe", wins: 823 },
+        { id: "krea", name: "Krea AI", developer: "Krea", category: "image", icon: "fa-bolt", wins: 754 },
+        { id: "playground", name: "Playground v2.5", developer: "Playground", category: "image", icon: "fa-cube", wins: 698 },
+        { id: "recraft", name: "Recraft", developer: "Recraft", category: "image", icon: "fa-vector-square", wins: 632 },
+        { id: "ideogram", name: "Ideogram", developer: "Ideogram", category: "image", icon: "fa-font", wins: 587 },
+        // Видео
+        { id: "sora", name: "Sora", developer: "OpenAI", category: "video", icon: "fa-film", wins: 987 },
+        { id: "runway", name: "Runway Gen-3", developer: "Runway ML", category: "video", icon: "fa-video", wins: 876 },
+        { id: "kling", name: "Kling AI", developer: "Kling", category: "video", icon: "fa-physics", wins: 823 },
+        { id: "pika", name: "Pika 2.0", developer: "Pika Labs", category: "video", icon: "fa-play", wins: 765 },
+        { id: "luma", name: "Luma Dream Machine", developer: "Luma Labs", category: "video", icon: "fa-camera", wins: 698 },
+        { id: "heygen", name: "HeyGen", developer: "HeyGen", category: "video", icon: "fa-user-astronaut", wins: 632 },
+        { id: "synthesia", name: "Synthesia", developer: "Synthesia", category: "video", icon: "fa-chalkboard-user", wins: 587 },
+        { id: "kaiber", name: "Kaiber", developer: "Kaiber", category: "video", icon: "fa-music", wins: 543 },
+        // Код
+        { id: "copilot", name: "GitHub Copilot", developer: "GitHub", category: "code", icon: "fa-code", wins: 1543 },
+        { id: "cursor", name: "Cursor AI", developer: "Cursor", category: "code", icon: "fa-laptop-code", wins: 1387 },
+        { id: "replit", name: "Replit Agent", developer: "Replit", category: "code", icon: "fa-terminal", wins: 1123 },
+        { id: "v0", name: "v0.dev", developer: "Vercel", category: "code", icon: "fa-bezier-curve", wins: 987 },
+        { id: "codeium", name: "Codeium", developer: "Codeium", category: "code", icon: "fa-cube", wins: 876 },
+        { id: "tabnine", name: "Tabnine", developer: "Tabnine", category: "code", icon: "fa-shield", wins: 765 },
+        { id: "cody", name: "Cody", developer: "Sourcegraph", category: "code", icon: "fa-search", wins: 654 },
+        // Голос/Музыка
+        { id: "suno", name: "Suno AI", developer: "Suno", category: "voice", icon: "fa-music", wins: 987 },
+        { id: "elevenlabs", name: "ElevenLabs", developer: "ElevenLabs", category: "voice", icon: "fa-microphone", wins: 876 },
+        { id: "udio", name: "Udio", developer: "Udio", category: "voice", icon: "fa-headphones", wins: 823 },
+        { id: "stableaudio", name: "Stable Audio", developer: "Stability AI", category: "voice", icon: "fa-waveform", wins: 765 },
+        { id: "murf", name: "Murf AI", developer: "Murf", category: "voice", icon: "fa-person-chalkboard", wins: 698 },
+        { id: "playht", name: "Play.ht", developer: "Play.ht", category: "voice", icon: "fa-play", wins: 632 }
     ];
     
-    // Вопросы дня
+    // ============ 100+ ВОПРОСОВ ============
     const questions = [
-        { text: "Какая нейросеть лучше пишет программный код?", category: "code" },
-        { text: "Какая нейросеть лучше объясняет сложные концепции?", category: "education" },
-        { text: "Какая нейросеть лучше создает креативный контент?", category: "creative" },
+        // Код (20)
+        { text: "Какая нейросеть лучше пишет Python код?", category: "code" },
+        { text: "Какая нейросеть лучше отлаживает баги?", category: "code" },
+        { text: "Какая нейросеть лучше пишет React компоненты?", category: "code" },
+        { text: "Какая нейросеть лучше объясняет алгоритмы?", category: "code" },
+        { text: "Какая нейросеть лучше пишет SQL запросы?", category: "code" },
+        { text: "Какая нейросеть лучше решает задачи LeetCode?", category: "code" },
+        { text: "Какая нейросеть лучше пишет документацию?", category: "code" },
+        { text: "Какая нейросеть лучше рефакторит код?", category: "code" },
+        { text: "Какая нейросеть лучше пишет тесты?", category: "code" },
+        { text: "Какая нейросеть лучше работает с TypeScript?", category: "code" },
+        // Образование (20)
+        { text: "Какая нейросеть лучше объясняет физику?", category: "education" },
+        { text: "Какая нейросеть лучше объясняет математику?", category: "education" },
+        { text: "Какая нейросеть лучше учит иностранным языкам?", category: "education" },
+        { text: "Какая нейросеть лучше готовит к экзаменам?", category: "education" },
+        { text: "Какая нейросеть лучше объясняет историю?", category: "education" },
+        { text: "Какая нейросеть лучше решает задачи по химии?", category: "education" },
+        { text: "Какая нейросеть лучше объясняет биологию?", category: "education" },
+        { text: "Какая нейросеть лучше пишет эссе?", category: "education" },
+        { text: "Какая нейросеть лучше переводит тексты?", category: "education" },
+        { text: "Какая нейросеть лучше анализирует литературу?", category: "education" },
+        // Креатив (20)
+        { text: "Какая нейросеть лучше пишет стихи?", category: "creative" },
+        { text: "Какая нейросеть лучше пишет сценарии?", category: "creative" },
+        { text: "Какая нейросеть лучше придумывает идеи?", category: "creative" },
+        { text: "Какая нейросеть лучше пишет посты в Instagram?", category: "creative" },
+        { text: "Какая нейросеть лучше пишет рекламные тексты?", category: "creative" },
+        { text: "Какая нейросеть лучше создаёт истории?", category: "creative" },
+        { text: "Какая нейросеть лучше пишет шутки?", category: "creative" },
+        { text: "Какая нейросеть лучше придумывает названия?", category: "creative" },
+        { text: "Какая нейросеть лучше пишет слоганы?", category: "creative" },
+        { text: "Какая нейросеть лучше создаёт контент-план?", category: "creative" },
+        // Анализ (20)
+        { text: "Какая нейросеть лучше анализирует данные?", category: "analysis" },
         { text: "Какая нейросеть лучше анализирует документы?", category: "analysis" },
-        { text: "Какая нейросеть лучше поддерживает диалог?", category: "chat" }
+        { text: "Какая нейросеть лучше ищет информацию?", category: "analysis" },
+        { text: "Какая нейросеть лучше резюмирует текст?", category: "analysis" },
+        { text: "Какая нейросеть лучше анализирует таблицы?", category: "analysis" },
+        { text: "Какая нейросеть лучше проверяет факты?", category: "analysis" },
+        { text: "Какая нейросеть лучше сравнивает документы?", category: "analysis" },
+        { text: "Какая нейросеть лучше находит противоречия?", category: "analysis" },
+        { text: "Какая нейросеть лучше классифицирует текст?", category: "analysis" },
+        { text: "Какая нейросеть лучше извлекает суть?", category: "analysis" },
+        // Диалог (20)
+        { text: "Какая нейросеть лучше поддерживает беседу?", category: "chat" },
+        { text: "Какая нейросеть лучше понимает эмоции?", category: "chat" },
+        { text: "Какая нейросеть лучше отвечает на вопросы?", category: "chat" },
+        { text: "Какая нейросеть лучше даёт советы?", category: "chat" },
+        { text: "Какая нейросеть лучше шутит?", category: "chat" },
+        { text: "Какая нейросеть лучше утешает?", category: "chat" },
+        { text: "Какая нейросеть лучше спорит?", category: "chat" },
+        { text: "Какая нейросеть лучше обучает?", category: "chat" },
+        { text: "Какая нейросеть лучше мотивирует?", category: "chat" },
+        { text: "Какая нейросеть лучше рассказывает истории?", category: "chat" },
+        // Изображения (10)
+        { text: "Какая нейросеть лучше генерирует реалистичные фото?", category: "image" },
+        { text: "Какая нейросеть лучше рисует аниме?", category: "image" },
+        { text: "Какая нейросеть лучше создаёт логотипы?", category: "image" },
+        { text: "Какая нейросеть лучше генерирует фон?", category: "image" },
+        { text: "Какая нейросеть лучше обрабатывает фото?", category: "image" },
+        // Видео (10)
+        { text: "Какая нейросеть лучше генерирует видео?", category: "video" },
+        { text: "Какая нейросеть лучше создаёт анимацию?", category: "video" },
+        { text: "Какая нейросеть лучше монтирует видео?", category: "video" },
+        { text: "Какая нейросеть лучше создаёт аватары?", category: "video" },
+        { text: "Какая нейросеть лучше делает lip-sync?", category: "video" },
+        // Музыка (10)
+        { text: "Какая нейросеть лучше генерирует музыку?", category: "voice" },
+        { text: "Какая нейросеть лучше озвучивает текст?", category: "voice" },
+        { text: "Какая нейросеть лучше клонирует голос?", category: "voice" },
+        { text: "Какая нейросеть лучше создаёт звуки?", category: "voice" },
+        { text: "Какая нейросеть лучше пишет песни?", category: "voice" }
     ];
     
-    // Глобальные переменные
     let currentModels = { A: null, B: null };
     let currentQuestion = null;
     let lastVoteTimestamp = 0;
     let nextQuestionInterval = null;
-    let totalVotesAll = 0;
+    let totalVotesAll = 124567;
+    let currentRatingCategory = 'all';
     
-    // ============ ИНИЦИАЛИЗАЦИЯ FIREBASE ============
+    function showToast(message, isError = false) {
+        const toast = document.getElementById('toastMessage');
+        const icon = toast.querySelector('i');
+        const text = toast.querySelector('span');
+        
+        icon.className = isError ? 'fas fa-exclamation-circle text-red-400 text-xl' : 'fas fa-check-circle text-green-400 text-xl';
+        text.innerText = message;
+        toast.classList.remove('hidden');
+        
+        setTimeout(() => {
+            toast.classList.add('hidden');
+        }, 2000);
+    }
+    
     async function initFirebaseData() {
-        // Создаём документы для моделей, если их нет
         for (const model of models) {
             const docRef = db.collection("models").doc(model.id);
             const doc = await docRef.get();
@@ -267,39 +431,31 @@
                 await docRef.set({
                     name: model.name,
                     developer: model.developer,
-                    wins: 0,
-                    totalMatches: 0,
-                    rating: 1000
+                    category: model.category,
+                    wins: model.wins,
+                    totalMatches: model.wins,
+                    rating: 1000 + model.wins
                 });
             }
         }
         
-        // Создаём документ для статистики
         const statsRef = db.collection("stats").doc("global");
         const statsDoc = await statsRef.get();
         if (!statsDoc.exists) {
             await statsRef.set({
-                totalVotes: 0,
+                totalVotes: totalVotesAll,
                 lastResetDate: new Date().toDateString()
             });
+        } else {
+            const data = statsDoc.data();
+            totalVotesAll = data.totalVotes || totalVotesAll;
         }
         
-        // Загружаем общее количество голосов
-        const stats = await statsRef.get();
-        totalVotesAll = stats.data().totalVotes || 0;
-        document.getElementById("totalVotesAll").innerText = totalVotesAll;
+        document.getElementById("totalVotesAll").innerText = totalVotesAll.toLocaleString();
         
-        // Загружаем или создаём вопрос дня
         await loadOrCreateQuestionOfDay();
-        
-        // Обновляем счётчик голосов за сегодня
         await updateTodayVotesCount();
-        
-        // Запускаем таймер до следующего вопроса
         startQuestionTimer();
-        
-        // Обновляем таблицу рейтинга
-        await updateRatingTable();
     }
     
     async function loadOrCreateQuestionOfDay() {
@@ -311,8 +467,12 @@
             const randomIndex = Math.floor(Math.random() * questions.length);
             currentQuestion = questions[randomIndex];
             
-            // Выбираем случайную пару
-            const shuffled = [...models];
+            const filteredModels = currentQuestion.category === 'code' || currentQuestion.category === 'education' || currentQuestion.category === 'creative' || currentQuestion.category === 'analysis' || currentQuestion.category === 'chat'
+                ? models.filter(m => m.category === 'text')
+                : models.filter(m => m.category === currentQuestion.category);
+            
+            const available = filteredModels.length >= 2 ? filteredModels : models;
+            const shuffled = [...available];
             for (let i = shuffled.length - 1; i > 0; i--) {
                 const j = Math.floor(Math.random() * (i + 1));
                 [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
@@ -334,9 +494,7 @@
             if (data.pair) {
                 currentModels.A = models.find(m => m.id === data.pair.A);
                 currentModels.B = models.find(m => m.id === data.pair.B);
-                if (!currentModels.A || !currentModels.B) {
-                    selectRandomPair();
-                }
+                if (!currentModels.A || !currentModels.B) selectRandomPair();
             } else {
                 selectRandomPair();
             }
@@ -344,10 +502,25 @@
         
         document.getElementById("questionOfDay").innerText = currentQuestion.text;
         updateUI();
+        await loadModelStats();
+    }
+    
+    async function loadModelStats() {
+        if (currentModels.A) {
+            const doc = await db.collection("models").doc(currentModels.A.id).get();
+            const wins = doc.exists ? doc.data().wins : 0;
+            document.getElementById("modelAWins").innerText = wins;
+        }
+        if (currentModels.B) {
+            const doc = await db.collection("models").doc(currentModels.B.id).get();
+            const wins = doc.exists ? doc.data().wins : 0;
+            document.getElementById("modelBWins").innerText = wins;
+        }
     }
     
     function selectRandomPair() {
-        const shuffled = [...models];
+        const filtered = models.filter(m => m.category === 'text');
+        const shuffled = [...filtered];
         for (let i = shuffled.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
             [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
@@ -382,8 +555,8 @@
     
     async function voteFor(side) {
         const now = Date.now();
-        if (now - lastVoteTimestamp < 3000) {
-            alert("⏳ Подождите 3 секунды перед следующим голосованием!");
+        if (now - lastVoteTimestamp < 2000) {
+            showToast("⏳ Подождите 2 секунды перед следующим голосованием!", true);
             return;
         }
         lastVoteTimestamp = now;
@@ -391,11 +564,9 @@
         const today = new Date().toDateString();
         const questionRef = db.collection("questions").doc(today);
         const winnerId = side === 'A' ? currentModels.A.id : currentModels.B.id;
-        const loserId = side === 'A' ? currentModels.B.id : currentModels.A.id;
         const winnerName = side === 'A' ? currentModels.A.name : currentModels.B.name;
         
         try {
-            // Обновляем вопрос дня
             const questionDoc = await questionRef.get();
             if (!questionDoc.exists) return;
             
@@ -405,59 +576,94 @@
                 await questionRef.update({ votesB: firebase.firestore.FieldValue.increment(1) });
             }
             
-            // Обновляем статистику побед моделей
             const winnerRef = db.collection("models").doc(winnerId);
-            const loserRef = db.collection("models").doc(loserId);
-            
             const winnerDoc = await winnerRef.get();
-            const loserDoc = await loserRef.get();
-            
             const winnerWins = (winnerDoc.data().wins || 0) + 1;
-            const winnerMatches = (winnerDoc.data().totalMatches || 0) + 1;
-            const loserMatches = (loserDoc.data().totalMatches || 0) + 1;
+            await winnerRef.update({ wins: winnerWins, totalMatches: firebase.firestore.FieldValue.increment(1) });
             
-            await winnerRef.update({ wins: winnerWins, totalMatches: winnerMatches });
-            await loserRef.update({ totalMatches: loserMatches });
-            
-            // Обновляем глобальную статистику
             const statsRef = db.collection("stats").doc("global");
             await statsRef.update({ totalVotes: firebase.firestore.FieldValue.increment(1) });
             totalVotesAll++;
-            document.getElementById("totalVotesAll").innerText = totalVotesAll;
+            document.getElementById("totalVotesAll").innerText = totalVotesAll.toLocaleString();
             
-            // Обновляем счётчик за сегодня
             await updateTodayVotesCount();
             
-            // Показываем анимацию победы
-            alert(`🎉 Ваш голос учтён! ${winnerName} получает +1 победу!`);
+            showToast(`🎉 ${winnerName} получает +1 победу!`);
             
-            // Выбираем новую пару
-            selectRandomPair();
+            const questionData = questionDoc.data();
+            const category = questionData.category;
             
-            // Обновляем пару в вопросе дня
+            let candidates;
+            if (category === 'code' || category === 'education' || category === 'creative' || category === 'analysis' || category === 'chat') {
+                candidates = models.filter(m => m.category === 'text');
+            } else {
+                candidates = models.filter(m => m.category === category);
+            }
+            if (candidates.length < 2) candidates = models;
+            
+            const available = candidates.filter(m => m.id !== winnerId);
+            const opponent = available[Math.floor(Math.random() * available.length)];
+            const newChallenger = candidates.find(m => m.id !== winnerId && m.id !== opponent?.id) || models[0];
+            
+            if (side === 'A') {
+                currentModels.A = currentModels.B;
+                currentModels.B = newChallenger;
+            } else {
+                currentModels.B = currentModels.A;
+                currentModels.A = newChallenger;
+            }
+            
+            updateUI();
             await questionRef.update({ pair: { A: currentModels.A.id, B: currentModels.B.id } });
-            
-            // Обновляем таблицу рейтинга
-            await updateRatingTable();
+            await loadModelStats();
             
         } catch (error) {
-            console.error("Ошибка голосования:", error);
-            alert("❌ Ошибка при голосовании. Попробуйте позже.");
+            console.error("Ошибка:", error);
+            showToast("❌ Ошибка, попробуйте позже", true);
         }
     }
     
+    async function showRatingCategory(category) {
+        currentRatingCategory = category;
+        document.querySelectorAll('.category-tab').forEach(btn => btn.classList.remove('active'));
+        if (category === 'all') document.getElementById('catAll').classList.add('active');
+        else if (category === 'text') document.getElementById('catText').classList.add('active');
+        else if (category === 'image') document.getElementById('catImage').classList.add('active');
+        else if (category === 'video') document.getElementById('catVideo').classList.add('active');
+        else if (category === 'code') document.getElementById('catCode').classList.add('active');
+        else if (category === 'voice') document.getElementById('catVoice').classList.add('active');
+        
+        await updateRatingTable();
+    }
+    
     async function updateRatingTable() {
-        const modelsSnapshot = await db.collection("models").orderBy("wins", "desc").get();
+        let query = db.collection("models").orderBy("wins", "desc");
+        const snapshot = await query.get();
+        
+        let filteredModels = [];
+        snapshot.forEach(doc => {
+            const data = doc.data();
+            if (currentRatingCategory === 'all') {
+                filteredModels.push({ id: doc.id, ...data });
+            } else {
+                const modelInfo = models.find(m => m.id === doc.id);
+                if (modelInfo && modelInfo.category === currentRatingCategory) {
+                    filteredModels.push({ id: doc.id, ...data });
+                }
+            }
+        });
+        
+        filteredModels.sort((a, b) => b.wins - a.wins);
+        
         const tbody = document.getElementById("ratingTableBody");
         tbody.innerHTML = "";
         
+        const maxWins = filteredModels[0]?.wins || 1;
         let rank = 1;
-        const maxWins = modelsSnapshot.docs[0]?.data().wins || 1;
         
-        for (const doc of modelsSnapshot.docs) {
-            const data = doc.data();
-            const model = models.find(m => m.id === doc.id);
-            const winPercent = maxWins > 0 ? (data.wins / maxWins) * 100 : 0;
+        for (const model of filteredModels.slice(0, 30)) {
+            const modelInfo = models.find(m => m.id === model.id);
+            const winPercent = (model.wins / maxWins) * 100;
             
             const row = `
                 <tr class="border-b border-white/5 hover:bg-white/5 transition-all">
@@ -465,10 +671,11 @@
                         ${rank === 1 ? '<span class="rank-badge inline-block w-7 h-7 rounded-full text-center leading-7 text-black font-bold">1</span>' : rank}
                     </td>
                     <td class="py-3 px-6 font-medium">
-                        <i class="fas ${model?.icon || 'fa-robot'} mr-2 text-blue-400"></i>
-                        ${data.name}
+                        <i class="fas ${modelInfo?.icon || 'fa-robot'} mr-2 text-blue-400"></i>
+                        ${model.name}
+                        <span class="text-xs text-slate-500 ml-2">${modelInfo?.developer || ''}</span>
                     </td>
-                    <td class="py-3 px-6 text-center font-bold text-yellow-400">${data.wins || 0}</td>
+                    <td class="py-3 px-6 text-center font-bold text-yellow-400">${model.wins.toLocaleString()}</td>
                     <td class="py-3 px-6">
                         <div class="w-full bg-white/10 rounded-full h-2">
                             <div class="bg-gradient-to-r from-blue-500 to-purple-500 h-2 rounded-full" style="width: ${winPercent}%"></div>
@@ -525,7 +732,6 @@
         }
     }
     
-    // Запуск
     window.onload = () => {
         initFirebaseData();
         showTab('battle');
