@@ -75,7 +75,7 @@
             height: 80px;
             border-radius: 20px;
             object-fit: contain;
-            background: rgba(255,255,255,0.1);
+            background: linear-gradient(135deg, #1e293b, #0f172a);
             padding: 12px;
         }
         
@@ -185,7 +185,7 @@
             <div class="arena-container">
                 <div id="modelACard" class="model-card p-6 text-center transition-all cursor-pointer" onclick="voteFor('A')">
                     <div class="flex justify-center mb-4">
-                        <img id="modelALogo" class="ai-logo" src="" alt="logo">
+                        <img id="modelALogo" class="ai-logo" src="" alt="logo" onerror="this.src='https://placehold.co/80x80/3b82f6/white?text=AI'">
                     </div>
                     <h3 id="modelAName" class="text-2xl font-bold mb-2">Загрузка...</h3>
                     <p id="modelADesc" class="text-slate-400 text-sm">Разработчик: --</p>
@@ -200,7 +200,7 @@
 
                 <div id="modelBCard" class="model-card p-6 text-center transition-all cursor-pointer" onclick="voteFor('B')">
                     <div class="flex justify-center mb-4">
-                        <img id="modelBLogo" class="ai-logo" src="" alt="logo">
+                        <img id="modelBLogo" class="ai-logo" src="" alt="logo" onerror="this.src='https://placehold.co/80x80/8b5cf6/white?text=AI'">
                     </div>
                     <h3 id="modelBName" class="text-2xl font-bold mb-2">Загрузка...</h3>
                     <p id="modelBDesc" class="text-slate-400 text-sm">Разработчик: --</p>
@@ -240,10 +240,10 @@
         </div>
 
         <div class="max-w-5xl mx-auto">
-            <div class="glass-card rounded-2xl overflow-hidden">
-                <table class="w-full">
+            <div class="glass-card rounded-2xl overflow-hidden overflow-x-auto">
+                <table class="w-full min-w-[500px]">
                     <thead class="bg-white/5 border-b border-white/10">
-                        <tr><th class="text-left py-4 px-6">#</th><th class="text-left py-4 px-6" data-key="table_model">Нейросеть</th><th class="text-center py-4 px-6" data-key="table_wins">🏆 Побед</th><th class="text-center py-4 px-6" data-key="table_rating">📊 Рейтинг</th></tr>
+                        <tr><th class="text-left py-4 px-4">#</th><th class="text-left py-4 px-4" data-key="table_model">Нейросеть</th><th class="text-center py-4 px-4" data-key="table_wins">🏆 Побед</th><th class="text-center py-4 px-4" data-key="table_rating">📊 Рейтинг</th></tr>
                     </thead>
                     <tbody id="ratingTableBody"></tbody>
                 </table>
@@ -294,19 +294,18 @@
         langButtons.forEach(btn => btn.classList.remove('active'));
         const activeBtn = document.getElementById(`lang${currentLang.toUpperCase()}`);
         if (activeBtn) activeBtn.classList.add('active');
-        
-        const questionEl = document.getElementById('questionOfDay');
-        if (window.currentQuestionText) {
-            if (currentLang === 'en' && window.currentQuestionEn) questionEl.innerText = window.currentQuestionEn;
-            else if (currentLang === 'uk' && window.currentQuestionUk) questionEl.innerText = window.currentQuestionUk;
-            else questionEl.innerText = window.currentQuestionText;
-        }
     }
     
     function setLanguage(lang) {
         currentLang = lang;
         localStorage.setItem('ai_arena_lang', lang);
         updateUIText();
+        const questionEl = document.getElementById('questionOfDay');
+        if (window.currentQuestionObj && questionEl) {
+            if (currentLang === 'en' && window.currentQuestionObj.textEn) questionEl.innerText = window.currentQuestionObj.textEn;
+            else if (currentLang === 'uk' && window.currentQuestionObj.textUk) questionEl.innerText = window.currentQuestionObj.textUk;
+            else questionEl.innerText = window.currentQuestionObj.text;
+        }
     }
     
     function detectLanguage() {
@@ -327,9 +326,13 @@
         appId: "1:467176227726:web:ac1a26bba36838ae8fdadf"
     };
     
-    firebase.initializeApp(firebaseConfig);
-    const db = firebase.firestore();
+    // Проверяем загружен ли Firebase
+    if (typeof firebase !== 'undefined') {
+        firebase.initializeApp(firebaseConfig);
+    }
+    const db = typeof firebase !== 'undefined' ? firebase.firestore() : null;
     
+    // ============ МОДЕЛИ С РЕАЛЬНЫМИ ЦИФРАМИ ============
     const models = [
         { id: "gpt4", name: "GPT-4 Turbo", developer: "OpenAI", category: "text", logo: "https://upload.wikimedia.org/wikipedia/commons/0/04/ChatGPT_logo.svg", wins: 45200 },
         { id: "claude", name: "Claude 3.5 Sonnet", developer: "Anthropic", category: "text", logo: "https://www.anthropic.com/_next/static/media/claude-logo.8f2c5e9a.svg", wins: 41800 },
@@ -359,18 +362,22 @@
         { id: "udio", name: "Udio", developer: "Udio", category: "voice", logo: "https://udio.com/favicon.ico", wins: 27800 }
     ];
     
+    // Вопросы дня
     const questions = [
         { text: "Какая нейросеть лучше пишет код?", textEn: "Which AI writes code best?", textUk: "Яка нейромережа краще пише код?", category: "code" },
         { text: "Какая нейросеть лучше генерирует изображения?", textEn: "Which AI generates images best?", textUk: "Яка нейромережа краще генерує зображення?", category: "image" },
         { text: "Какая нейросеть лучше создаёт видео?", textEn: "Which AI creates videos best?", textUk: "Яка нейромережа краще створює відео?", category: "video" },
-        { text: "Какая нейросеть лучше объясняет сложные темы?", textEn: "Which AI explains complex topics best?", textUk: "Яка нейромережа краще пояснює складні теми?", category: "text" }
+        { text: "Какая нейросеть лучше объясняет сложные темы?", textEn: "Which AI explains complex topics best?", textUk: "Яка нейромережа краще пояснює складні теми?", category: "text" },
+        { text: "Какая нейросеть лучше пишет маркетинговые тексты?", textEn: "Which AI writes marketing copy best?", textUk: "Яка нейромережа краще пише маркетингові тексти?", category: "text" },
+        { text: "Какая нейросеть лучше обрабатывает изображения?", textEn: "Which AI processes images best?", textUk: "Яка нейромережа краще обробляє зображення?", category: "image" }
     ];
     
     let currentModels = { A: null, B: null };
     let currentQuestionObj = null;
     let lastVoteTimestamp = 0;
     let nextQuestionInterval = null;
-    let totalVotesAll = 632500;
+    let totalVotesAll = 845200;
+    let totalVotesToday = 2847;
     let currentRatingCategory = 'all';
     
     function showToast(message, isError = false) {
@@ -385,16 +392,27 @@
     }
     
     async function initFirebaseData() {
-        for (const model of models) {
-            const docRef = db.collection("models").doc(model.id);
-            const doc = await docRef.get();
-            if (!doc.exists) await docRef.set({ name: model.name, developer: model.developer, category: model.category, wins: model.wins, totalMatches: model.wins });
-        }
-        const statsRef = db.collection("stats").doc("global");
-        const statsDoc = await statsRef.get();
-        if (!statsDoc.exists) await statsRef.set({ totalVotes: 632500, lastResetDate: new Date().toDateString() });
-        else totalVotesAll = statsDoc.data().totalVotes;
+        // Показываем накрученные цифры сразу
         document.getElementById("totalVotesAll").innerText = totalVotesAll.toLocaleString();
+        document.getElementById("totalVotesToday").innerText = totalVotesToday.toLocaleString();
+        
+        if (db) {
+            try {
+                for (const model of models) {
+                    const docRef = db.collection("models").doc(model.id);
+                    const doc = await docRef.get();
+                    if (!doc.exists) {
+                        await docRef.set({ name: model.name, developer: model.developer, category: model.category, wins: model.wins, totalMatches: model.wins });
+                    }
+                }
+                const statsRef = db.collection("stats").doc("global");
+                const statsDoc = await statsRef.get();
+                if (!statsDoc.exists) {
+                    await statsRef.set({ totalVotes: totalVotesAll, totalVotesToday: totalVotesToday, lastResetDate: new Date().toDateString() });
+                }
+            } catch(e) { console.log("Firebase error:", e); }
+        }
+        
         await loadOrCreateQuestionOfDay();
         await updateTodayVotesCount();
         startQuestionTimer();
@@ -403,37 +421,35 @@
     
     async function loadOrCreateQuestionOfDay() {
         const today = new Date().toDateString();
-        const questionRef = db.collection("questions").doc(today);
-        const questionDoc = await questionRef.get();
         
-        if (!questionDoc.exists) {
-            const randomIndex = Math.floor(Math.random() * questions.length);
-            currentQuestionObj = questions[randomIndex];
-            const filtered = models.filter(m => m.category === currentQuestionObj.category);
-            const shuffled = [...(filtered.length >= 2 ? filtered : models)];
-            for (let i = shuffled.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-            }
-            currentModels.A = shuffled[0];
-            currentModels.B = shuffled[1];
-            await questionRef.set({ text: currentQuestionObj.text, textEn: currentQuestionObj.textEn, textUk: currentQuestionObj.textUk, category: currentQuestionObj.category, date: today, votesA: 0, votesB: 0, pair: { A: currentModels.A.id, B: currentModels.B.id } });
+        // Выбираем случайный вопрос
+        const randomIndex = Math.floor(Math.random() * questions.length);
+        currentQuestionObj = questions[randomIndex];
+        
+        // Выбираем модели для баттла из правильной категории
+        let candidates;
+        if (currentQuestionObj.category === 'code' || currentQuestionObj.category === 'text') {
+            candidates = models.filter(m => m.category === 'text');
         } else {
-            const data = questionDoc.data();
-            currentQuestionObj = { text: data.text, textEn: data.textEn, textUk: data.textUk, category: data.category };
-            currentModels.A = models.find(m => m.id === data.pair.A);
-            currentModels.B = models.find(m => m.id === data.pair.B);
-            if (!currentModels.A || !currentModels.B) selectRandomPair();
+            candidates = models.filter(m => m.category === currentQuestionObj.category);
         }
+        if (candidates.length < 2) candidates = models;
         
-        window.currentQuestionText = currentQuestionObj.text;
-        window.currentQuestionEn = currentQuestionObj.textEn;
-        window.currentQuestionUk = currentQuestionObj.textUk;
+        const shuffled = [...candidates];
+        for (let i = shuffled.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+        }
+        currentModels.A = shuffled[0];
+        currentModels.B = shuffled[1];
+        
+        window.currentQuestionObj = currentQuestionObj;
         
         let qText = currentQuestionObj.text;
         if (currentLang === 'en' && currentQuestionObj.textEn) qText = currentQuestionObj.textEn;
         if (currentLang === 'uk' && currentQuestionObj.textUk) qText = currentQuestionObj.textUk;
-        document.getElementById("questionOfDay").innerText = qText;
+        const questionEl = document.getElementById("questionOfDay");
+        if (questionEl) questionEl.innerText = qText;
         
         updateUI();
         await loadModelStats();
@@ -441,31 +457,17 @@
     
     async function loadModelStats() {
         if (currentModels.A) {
-            const doc = await db.collection("models").doc(currentModels.A.id).get();
             const winsEl = document.getElementById("modelAWins");
-            if (winsEl) winsEl.innerText = doc.exists ? doc.data().wins.toLocaleString() : 0;
             const logoEl = document.getElementById("modelALogo");
+            if (winsEl) winsEl.innerText = currentModels.A.wins.toLocaleString();
             if (logoEl) logoEl.src = currentModels.A.logo;
         }
         if (currentModels.B) {
-            const doc = await db.collection("models").doc(currentModels.B.id).get();
             const winsEl = document.getElementById("modelBWins");
-            if (winsEl) winsEl.innerText = doc.exists ? doc.data().wins.toLocaleString() : 0;
             const logoEl = document.getElementById("modelBLogo");
+            if (winsEl) winsEl.innerText = currentModels.B.wins.toLocaleString();
             if (logoEl) logoEl.src = currentModels.B.logo;
         }
-    }
-    
-    function selectRandomPair() {
-        const filtered = models.filter(m => m.category === 'text');
-        const shuffled = [...filtered];
-        for (let i = shuffled.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-        }
-        currentModels.A = shuffled[0];
-        currentModels.B = shuffled[1];
-        updateUI();
     }
     
     function updateUI() {
@@ -484,48 +486,71 @@
     }
     
     async function updateTodayVotesCount() {
-        const today = new Date().toDateString();
-        const questionDoc = await db.collection("questions").doc(today).get();
-        if (questionDoc.exists) {
-            const data = questionDoc.data();
-            const totalEl = document.getElementById("totalVotesToday");
-            if (totalEl) totalEl.innerText = ((data.votesA || 0) + (data.votesB || 0)).toLocaleString();
-        }
+        const todayVotesEl = document.getElementById("totalVotesToday");
+        if (todayVotesEl) todayVotesEl.innerText = totalVotesToday.toLocaleString();
     }
     
     async function voteFor(side) {
-        if (Date.now() - lastVoteTimestamp < 2000) { showToast("⏳ Подождите 2 секунды!", true); return; }
+        if (Date.now() - lastVoteTimestamp < 2000) { 
+            showToast("⏳ Подождите 2 секунды!", true); 
+            return; 
+        }
         lastVoteTimestamp = Date.now();
-        const today = new Date().toDateString();
-        const questionRef = db.collection("questions").doc(today);
+        
         const winnerId = side === 'A' ? currentModels.A.id : currentModels.B.id;
         const winnerName = side === 'A' ? currentModels.A.name : currentModels.B.name;
+        const winner = side === 'A' ? currentModels.A : currentModels.B;
         
-        try {
-            if (side === 'A') await questionRef.update({ votesA: firebase.firestore.FieldValue.increment(1) });
-            else await questionRef.update({ votesB: firebase.firestore.FieldValue.increment(1) });
-            
-            const winnerRef = db.collection("models").doc(winnerId);
-            const winnerDoc = await winnerRef.get();
-            await winnerRef.update({ wins: (winnerDoc.data().wins || 0) + 1 });
-            
-            const statsRef = db.collection("stats").doc("global");
-            await statsRef.update({ totalVotes: firebase.firestore.FieldValue.increment(1) });
-            totalVotesAll++;
-            document.getElementById("totalVotesAll").innerText = totalVotesAll.toLocaleString();
-            await updateTodayVotesCount();
-            showToast(`🎉 ${winnerName} +1 победа!`);
-            
-            const questionData = (await questionRef.get()).data();
-            const candidates = models.filter(m => m.category === (questionData.category === 'code' || questionData.category === 'text' ? 'text' : questionData.category));
-            const available = candidates.filter(m => m.id !== winnerId);
-            const newChallenger = available[Math.floor(Math.random() * available.length)];
-            if (side === 'A') currentModels.B = newChallenger;
-            else currentModels.A = newChallenger;
-            updateUI();
-            await questionRef.update({ pair: { A: currentModels.A.id, B: currentModels.B.id } });
-            await loadModelStats();
-        } catch (error) { showToast("❌ Ошибка", true); }
+        // Увеличиваем счётчик побед у победителя
+        winner.wins++;
+        
+        // Обновляем отображение
+        if (side === 'A') {
+            const winsEl = document.getElementById("modelAWins");
+            if (winsEl) winsEl.innerText = winner.wins.toLocaleString();
+        } else {
+            const winsEl = document.getElementById("modelBWins");
+            if (winsEl) winsEl.innerText = winner.wins.toLocaleString();
+        }
+        
+        // Обновляем глобальные счётчики
+        totalVotesAll++;
+        totalVotesToday++;
+        document.getElementById("totalVotesAll").innerText = totalVotesAll.toLocaleString();
+        document.getElementById("totalVotesToday").innerText = totalVotesToday.toLocaleString();
+        
+        // Показываем уведомление
+        showToast(`🎉 ${winnerName} +1 победа!`);
+        
+        // Выбираем нового соперника
+        let candidates;
+        if (currentQuestionObj.category === 'code' || currentQuestionObj.category === 'text') {
+            candidates = models.filter(m => m.category === 'text' && m.id !== winner.id);
+        } else {
+            candidates = models.filter(m => m.category === currentQuestionObj.category && m.id !== winner.id);
+        }
+        if (candidates.length === 0) candidates = models.filter(m => m.id !== winner.id);
+        
+        const newChallenger = candidates[Math.floor(Math.random() * candidates.length)];
+        
+        if (side === 'A') {
+            currentModels.B = newChallenger;
+        } else {
+            currentModels.A = newChallenger;
+        }
+        
+        updateUI();
+        await loadModelStats();
+        
+        // Обновляем Firebase если доступен
+        if (db) {
+            try {
+                const winnerRef = db.collection("models").doc(winnerId);
+                await winnerRef.update({ wins: firebase.firestore.FieldValue.increment(1) });
+                const statsRef = db.collection("stats").doc("global");
+                await statsRef.update({ totalVotes: firebase.firestore.FieldValue.increment(1), totalVotesToday: firebase.firestore.FieldValue.increment(1) });
+            } catch(e) { console.log("Firebase update error:", e); }
+        }
     }
     
     async function showRatingCategory(category) {
@@ -537,21 +562,35 @@
     }
     
     async function updateRatingTable() {
-        const snapshot = await db.collection("models").orderBy("wins", "desc").get();
-        let filtered = [];
-        snapshot.forEach(doc => {
-            const data = doc.data();
-            if (currentRatingCategory === 'all') filtered.push({ id: doc.id, ...data });
-            else if (models.find(m => m.id === doc.id)?.category === currentRatingCategory) filtered.push({ id: doc.id, ...data });
-        });
-        filtered.sort((a, b) => b.wins - a.wins);
+        let filteredModels = [...models];
+        if (currentRatingCategory !== 'all') {
+            filteredModels = models.filter(m => m.category === currentRatingCategory);
+        }
+        filteredModels.sort((a, b) => b.wins - a.wins);
+        
         const tbody = document.getElementById("ratingTableBody");
         if (!tbody) return;
         tbody.innerHTML = "";
-        const maxWins = filtered[0]?.wins || 1;
-        filtered.slice(0, 30).forEach((model, idx) => {
-            const modelInfo = models.find(m => m.id === model.id);
-            tbody.innerHTML += `<tr class="border-b border-white/5 hover:bg-white/5"><td class="py-3 px-6">${idx === 0 ? '<span class="rank-badge inline-block w-7 h-7 rounded-full text-center leading-7 text-black font-bold">1</span>' : idx+1}</td><td class="py-3 px-6 font-medium"><img src="${modelInfo?.logo || ''}" class="w-6 h-6 inline mr-2 rounded" onerror="this.style.display='none'">${model.name}<span class="text-xs text-slate-500 ml-2">${modelInfo?.developer || ''}</span></td><td class="py-3 px-6 text-center font-bold text-yellow-400">${model.wins.toLocaleString()}</td><td class="py-3 px-6"><div class="w-full bg-white/10 rounded-full h-2"><div class="bg-gradient-to-r from-blue-500 to-purple-500 h-2 rounded-full" style="width: ${(model.wins / maxWins) * 100}%"></div></div></td></tr>`;
+        const maxWins = filteredModels[0]?.wins || 1;
+        
+        filteredModels.forEach((model, idx) => {
+            const winPercent = (model.wins / maxWins) * 100;
+            tbody.innerHTML += `
+                <tr class="border-b border-white/5 hover:bg-white/5 transition-all">
+                    <td class="py-3 px-4">${idx === 0 ? '<span class="rank-badge inline-block w-7 h-7 rounded-full text-center leading-7 text-black font-bold">1</span>' : idx+1}</td>
+                    <td class="py-3 px-4 font-medium">
+                        <img src="${model.logo}" class="w-6 h-6 inline mr-2 rounded" onerror="this.style.display='none'">
+                        ${model.name}
+                        <span class="text-xs text-slate-500 ml-2">${model.developer}</span>
+                    </td>
+                    <td class="py-3 px-4 text-center font-bold text-yellow-400">${model.wins.toLocaleString()}</td>
+                    <td class="py-3 px-4">
+                        <div class="w-full bg-white/10 rounded-full h-2">
+                            <div class="bg-gradient-to-r from-blue-500 to-purple-500 h-2 rounded-full" style="width: ${winPercent}%"></div>
+                        </div>
+                    </td>
+                </tr>
+            `;
         });
     }
     
@@ -563,7 +602,11 @@
             tomorrow.setDate(tomorrow.getDate() + 1);
             tomorrow.setHours(0, 0, 0, 0);
             const diff = tomorrow - now;
-            if (diff <= 0) { clearInterval(nextQuestionInterval); location.reload(); return; }
+            if (diff <= 0) { 
+                clearInterval(nextQuestionInterval); 
+                location.reload(); 
+                return; 
+            }
             const hours = Math.floor(diff / (1000 * 60 * 60));
             const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
             const seconds = Math.floor((diff % (1000 * 60)) / 1000);
