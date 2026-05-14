@@ -3,424 +3,534 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Arena | Баттл нейросетей 2026</title>
-    <meta name="description" content="Сравнивайте лучшие нейросети мира в реальном времени. Баттл GPT, Claude, Gemini, Llama и других ИИ моделей. Расширенный каталог 50+ AI инструментов.">
-    <meta name="keywords" content="сравнение нейросетей, ИИ баттл, GPT vs Claude, нейросети 2026, каталог ИИ">
+    <title>AI Arena | Глобальный рейтинг нейросетей</title>
+    <meta name="description" content="Голосуйте за лучшие нейросети мира. Ежедневные баттлы GPT-4, Claude, Gemini, Llama и других. Глобальный рейтинг на основе голосов пользователей.">
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+    
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap');
         
         * { margin: 0; padding: 0; box-sizing: border-box; }
         
-        body { 
-            font-family: 'Inter', sans-serif; 
-            background: linear-gradient(135deg, #0f1117 0%, #1a1f2e 100%);
-            color: #e2e8f0; 
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #0b0f1c 0%, #141b2b 100%);
+            color: #e2e8f0;
             min-height: 100vh;
         }
         
-        /* Световые эффекты */
-        .glow-orb {
-            position: fixed;
-            border-radius: 50%;
-            filter: blur(80px);
-            pointer-events: none;
-            z-index: 0;
-        }
-        
-        .glow-orb-1 { background: #3b82f6; width: 300px; height: 300px; top: -100px; left: -100px; opacity: 0.15; }
-        .glow-orb-2 { background: #8b5cf6; width: 400px; height: 400px; bottom: -150px; right: -150px; opacity: 0.12; }
-        .glow-orb-3 { background: #06b6d4; width: 250px; height: 250px; top: 50%; left: 50%; opacity: 0.08; transform: translate(-50%, -50%); }
-        
-        .glass {
-            background: rgba(20, 25, 45, 0.7);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255,255,255,0.08);
-        }
+        .glow-orb { position: fixed; border-radius: 50%; filter: blur(80px); pointer-events: none; z-index: 0; }
+        .glow-orb-1 { background: #3b82f6; width: 400px; height: 400px; top: -150px; left: -150px; opacity: 0.15; }
+        .glow-orb-2 { background: #8b5cf6; width: 450px; height: 450px; bottom: -150px; right: -150px; opacity: 0.12; }
+        .glow-orb-3 { background: #06b6d4; width: 300px; height: 300px; top: 30%; left: 30%; opacity: 0.06; }
         
         .glass-card {
-            background: rgba(25, 30, 50, 0.8);
-            backdrop-filter: blur(10px);
+            background: rgba(20, 25, 45, 0.75);
+            backdrop-filter: blur(12px);
             border: 1px solid rgba(255,255,255,0.08);
-            transition: all 0.3s ease;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
         
         .glass-card:hover {
             border-color: rgba(59, 130, 246, 0.5);
-            box-shadow: 0 0 25px rgba(59, 130, 246, 0.15);
+            box-shadow: 0 0 30px rgba(59, 130, 246, 0.15);
             transform: translateY(-4px);
         }
         
-        .arena-card {
-            background: linear-gradient(135deg, rgba(25, 30, 55, 0.95) 0%, rgba(18, 22, 45, 0.95) 100%);
-            border-radius: 2rem;
-            border: 1px solid rgba(255,255,255,0.08);
-            transition: all 0.3s ease;
+        .vs-orb {
+            background: radial-gradient(circle, rgba(59,130,246,0.3) 0%, rgba(139,92,246,0.1) 70%);
+            border-radius: 50%;
+            padding: 12px 24px;
+            font-weight: 800;
         }
         
-        .arena-card:hover {
-            border-color: rgba(59, 130, 246, 0.4);
-            box-shadow: 0 0 30px rgba(59, 130, 246, 0.1);
-        }
-        
-        .select-model {
-            background: rgba(0, 0, 0, 0.4);
-            border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 1rem;
-            padding: 0.75rem 1rem;
-            color: white;
-            outline: none;
-            cursor: pointer;
-            font-weight: 500;
+        .vote-btn {
+            background: linear-gradient(135deg, rgba(59,130,246,0.2), rgba(139,92,246,0.1));
             transition: all 0.2s;
         }
         
-        .select-model:hover { border-color: #3b82f6; }
-        .select-model:focus { border-color: #3b82f6; box-shadow: 0 0 0 2px rgba(59,130,246,0.3); }
-        
-        .btn-primary {
-            background: linear-gradient(135deg, #3b82f6, #2563eb);
-            transition: all 0.2s ease;
+        .vote-btn:hover {
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            transform: scale(1.02);
+            box-shadow: 0 0 20px rgba(59,130,246,0.4);
         }
         
-        .btn-primary:hover { transform: scale(1.02); box-shadow: 0 0 20px rgba(59, 130, 246, 0.4); }
-        .btn-primary:active { transform: scale(0.98); }
+        .rank-badge {
+            background: linear-gradient(135deg, #fbbf24, #f59e0b);
+            box-shadow: 0 0 15px rgba(245,158,11,0.3);
+        }
         
-        .response-content { font-size: 0.9rem; line-height: 1.6; }
-        .response-content h1, .response-content h2, .response-content h3 { color: #60a5fa; margin-top: 1rem; margin-bottom: 0.5rem; }
-        .response-content code { background: #1e293b; padding: 0.125rem 0.375rem; border-radius: 0.375rem; font-size: 0.8rem; }
-        .response-content pre { background: #1e293b; padding: 1rem; border-radius: 0.75rem; overflow-x: auto; margin: 1rem 0; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
         
-        .timer { font-family: monospace; font-size: 0.7rem; padding: 0.25rem 0.75rem; border-radius: 1rem; background: rgba(59, 130, 246, 0.2); color: #60a5fa; }
+        .fade-in { animation: fadeIn 0.5s ease-out; }
         
-        .vote-btn { transition: all 0.2s ease; }
-        .vote-btn:hover { transform: scale(1.05); background: rgba(34, 197, 94, 0.2) !important; color: #4ade80 !important; }
+        @keyframes pulse {
+            0%, 100% { opacity: 0.6; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.02); }
+        }
         
-        .category-btn { transition: all 0.2s; }
-        .category-btn.active { background: rgba(59, 130, 246, 0.25); color: #3b82f6; border-left: 3px solid #3b82f6; }
+        .pulse-animation { animation: pulse 2s ease-in-out infinite; }
         
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: #1e293b; border-radius: 10px; }
         ::-webkit-scrollbar-thumb { background: #3b82f6; border-radius: 10px; }
         
-        @keyframes pulse { 0%, 100% { opacity: 0.5; } 50% { opacity: 0.8; } }
-        .loading-pulse { animation: pulse 1.5s ease-in-out infinite; }
+        .model-card {
+            background: linear-gradient(135deg, rgba(30, 35, 60, 0.95), rgba(20, 25, 50, 0.95));
+            border-radius: 2rem;
+        }
         
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        .fade-in { animation: fadeIn 0.4s ease-out; }
-        
-        @keyframes slideIn { from { opacity: 0; transform: translateX(-20px); } to { opacity: 1; transform: translateX(0); } }
-        .card-slide { animation: slideIn 0.3s ease-out; }
+        .tab-btn.active {
+            background: rgba(59, 130, 246, 0.2);
+            color: #3b82f6;
+            border-bottom: 2px solid #3b82f6;
+        }
     </style>
 </head>
 <body>
 
-    <!-- Световые орбы -->
-    <div class="glow-orb glow-orb-1"></div>
-    <div class="glow-orb glow-orb-2"></div>
-    <div class="glow-orb glow-orb-3"></div>
+<div class="glow-orb glow-orb-1"></div>
+<div class="glow-orb glow-orb-2"></div>
+<div class="glow-orb glow-orb-3"></div>
 
-    <header class="fixed top-0 left-0 right-0 z-50 glass">
-        <div class="container mx-auto px-4 py-4 flex justify-between items-center">
-            <div class="flex items-center gap-3 cursor-pointer" onclick="location.reload()">
-                <div class="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-500 rounded-xl flex items-center justify-center shadow-lg shadow-blue-500/25">
-                    <i class="fas fa-bolt text-white text-lg"></i>
-                </div>
-                <h1 class="text-2xl font-bold tracking-tight">
-                    AI <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400">ARENA</span>
-                </h1>
+<header class="fixed top-0 left-0 right-0 z-50 glass-card">
+    <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+        <div class="flex items-center gap-3 cursor-pointer" onclick="location.reload()">
+            <div class="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-500 rounded-xl flex items-center justify-center shadow-lg shadow-blue-500/25">
+                <i class="fas fa-trophy text-white text-lg"></i>
             </div>
-            <div class="flex items-center gap-3">
-                <button onclick="toggleCatalog()" class="px-5 py-2 rounded-full bg-white/5 border border-white/10 text-sm font-medium hover:bg-white/10 transition-all flex items-center gap-2">
-                    <i class="fas fa-grid-2"></i>
-                    <span class="hidden sm:inline">Каталог ИИ (50+)</span>
-                </button>
-            </div>
+            <h1 class="text-2xl font-bold tracking-tight">
+                AI <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400">ARENA</span>
+            </h1>
         </div>
-    </header>
+        <div class="flex gap-2">
+            <button onclick="showTab('battle')" id="tabBattleBtn" class="tab-btn px-5 py-2 rounded-xl text-sm font-medium transition-all active">⚔️ Баттл</button>
+            <button onclick="showTab('rating')" id="tabRatingBtn" class="tab-btn px-5 py-2 rounded-xl text-sm font-medium transition-all">🏆 Рейтинг</button>
+        </div>
+    </div>
+</header>
 
-    <main class="container mx-auto px-4 pt-24 pb-12 relative z-10">
-        
-        <div class="text-center max-w-3xl mx-auto mb-12">
+<main class="container mx-auto px-4 pt-24 pb-12 relative z-10">
+    
+    <!-- Вкладка Баттл -->
+    <div id="battleTab" class="fade-in">
+        <div class="text-center max-w-3xl mx-auto mb-8">
             <div class="inline-flex items-center gap-2 bg-blue-500/10 px-4 py-2 rounded-full mb-4">
-                <i class="fas fa-bolt text-blue-400 text-sm"></i>
-                <span class="text-blue-400 text-sm font-medium">Реальное сравнение ИИ</span>
+                <i class="fas fa-calendar-day text-blue-400 text-sm"></i>
+                <span class="text-blue-400 text-sm font-medium">Вопрос дня</span>
             </div>
-            <h2 class="text-5xl md:text-7xl font-bold mb-4 bg-gradient-to-r from-white via-blue-300 to-purple-400 bg-clip-text text-transparent">
-                Кто сильнее?
+            <h2 id="questionOfDay" class="text-2xl md:text-3xl font-bold mb-2 bg-gradient-to-r from-white to-blue-300 bg-clip-text text-transparent">
+                Загрузка...
             </h2>
-            <p class="text-slate-400 text-lg">Сравните лучшие нейросети мира в реальном баттле</p>
+            <p class="text-slate-400">Кто справится лучше? Проголосуйте и повлияйте на рейтинг!</p>
         </div>
 
-        <!-- Быстрые вопросы -->
-        <div class="max-w-4xl mx-auto mb-8">
-            <div class="flex flex-wrap justify-center gap-2">
-                <span class="text-xs text-slate-500 mr-2 self-center">🔥 Популярное:</span>
-                <button onclick="setQuestion('Напиши код на Python для сортировки списка')" class="text-xs px-3 py-1.5 rounded-full bg-white/5 hover:bg-white/10 transition-all">Код Python</button>
-                <button onclick="setQuestion('Объясни квантовую физику простыми словами')" class="text-xs px-3 py-1.5 rounded-full bg-white/5 hover:bg-white/10 transition-all">Квантовая физика</button>
-                <button onclick="setQuestion('Придумай бизнес-идею для 2026 года')" class="text-xs px-3 py-1.5 rounded-full bg-white/5 hover:bg-white/10 transition-all">Бизнес идея</button>
-                <button onclick="setQuestion('Сравни React и Vue в таблице')" class="text-xs px-3 py-1.5 rounded-full bg-white/5 hover:bg-white/10 transition-all">React vs Vue</button>
-                <button onclick="setQuestion('Напиши пост для Instagram про ИИ')" class="text-xs px-3 py-1.5 rounded-full bg-white/5 hover:bg-white/10 transition-all">Пост для Instagram</button>
-            </div>
-        </div>
-
-        <!-- Арена -->
-        <div class="grid lg:grid-cols-2 gap-6 max-w-6xl mx-auto mb-8">
-            
-            <div class="arena-card p-6 flex flex-col h-[500px]">
-                <div class="flex justify-between items-center mb-4">
-                    <select id="modelLeft" class="select-model flex-1 mr-3">
-                        <option value="google/gemini-2.0-flash-exp:free" selected>✨ Gemini 2.0 Flash (бесплатно)</option>
-                        <option value="meta-llama/llama-3.2-3b-instruct:free">🦙 Llama 3.2 3B (бесплатно)</option>
-                        <option value="microsoft/phi-3-mini-128k-instruct:free">🔬 Phi-3 Mini (бесплатно)</option>
-                        <option value="qwen/qwen-2.5-7b-instruct:free">🐉 Qwen 2.5 7B (бесплатно)</option>
-                        <option value="mistralai/mistral-7b-instruct:free">🌪️ Mistral 7B (бесплатно)</option>
-                    </select>
-                    <span id="timeLeft" class="timer">0ms</span>
-                </div>
-                <div class="flex-1 overflow-y-auto pr-2" id="resultLeft">
-                    <div class="flex items-center justify-center h-full">
-                        <div class="text-center text-slate-500"><i class="fas fa-microphone-alt text-3xl mb-3 opacity-30"></i><p class="text-sm">Ожидание вопроса...</p></div>
+        <!-- Арена голосования -->
+        <div class="max-w-5xl mx-auto">
+            <div class="grid md:grid-cols-2 gap-6 mb-8">
+                <!-- Модель A -->
+                <div id="modelACard" class="model-card p-6 text-center cursor-pointer transition-all hover:scale-[1.02]" onclick="voteFor('A')">
+                    <div class="w-24 h-24 mx-auto mb-4 bg-gradient-to-br from-blue-500/20 to-purple-500/20 rounded-full flex items-center justify-center">
+                        <i class="fas fa-brain text-4xl text-blue-400"></i>
                     </div>
+                    <h3 id="modelAName" class="text-2xl font-bold mb-2">Загрузка...</h3>
+                    <p id="modelADesc" class="text-slate-400 text-sm mb-4">Разработчик: --</p>
+                    <button class="vote-btn w-full py-4 rounded-xl font-bold text-white transition-all">
+                        <i class="fas fa-thumbs-up mr-2"></i> Голосовать
+                    </button>
                 </div>
-                <div class="mt-4 pt-4 border-t border-white/10 flex justify-between items-center">
-                    <span class="text-xs text-slate-500"><i class="fas fa-robot mr-1"></i> Модель #1</span>
-                    <button onclick="vote('left')" class="vote-btn text-sm px-4 py-1.5 rounded-full bg-white/5 hover:bg-green-500/20 transition-all"><i class="fas fa-thumbs-up mr-1"></i> Голос</button>
-                </div>
-            </div>
 
-            <div class="arena-card p-6 flex flex-col h-[500px]">
-                <div class="flex justify-between items-center mb-4">
-                    <select id="modelRight" class="select-model flex-1 mr-3">
-                        <option value="google/gemini-2.0-flash-exp:free">✨ Gemini 2.0 Flash (бесплатно)</option>
-                        <option value="meta-llama/llama-3.2-3b-instruct:free" selected>🦙 Llama 3.2 3B (бесплатно)</option>
-                        <option value="microsoft/phi-3-mini-128k-instruct:free">🔬 Phi-3 Mini (бесплатно)</option>
-                        <option value="qwen/qwen-2.5-7b-instruct:free">🐉 Qwen 2.5 7B (бесплатно)</option>
-                        <option value="mistralai/mistral-7b-instruct:free">🌪️ Mistral 7B (бесплатно)</option>
-                    </select>
-                    <span id="timeRight" class="timer">0ms</span>
+                <!-- VS -->
+                <div class="flex items-center justify-center">
+                    <div class="vs-orb text-4xl font-black bg-gradient-to-r from-blue-500 to-purple-500 bg-clip-text text-transparent">VS</div>
                 </div>
-                <div class="flex-1 overflow-y-auto pr-2" id="resultRight">
-                    <div class="flex items-center justify-center h-full">
-                        <div class="text-center text-slate-500"><i class="fas fa-microphone-alt text-3xl mb-3 opacity-30"></i><p class="text-sm">Ожидание вопроса...</p></div>
+
+                <!-- Модель B -->
+                <div id="modelBCard" class="model-card p-6 text-center cursor-pointer transition-all hover:scale-[1.02]" onclick="voteFor('B')">
+                    <div class="w-24 h-24 mx-auto mb-4 bg-gradient-to-br from-purple-500/20 to-pink-500/20 rounded-full flex items-center justify-center">
+                        <i class="fas fa-microchip text-4xl text-purple-400"></i>
                     </div>
-                </div>
-                <div class="mt-4 pt-4 border-t border-white/10 flex justify-between items-center">
-                    <span class="text-xs text-slate-500"><i class="fas fa-robot mr-1"></i> Модель #2</span>
-                    <button onclick="vote('right')" class="vote-btn text-sm px-4 py-1.5 rounded-full bg-white/5 hover:bg-green-500/20 transition-all"><i class="fas fa-thumbs-up mr-1"></i> Голос</button>
+                    <h3 id="modelBName" class="text-2xl font-bold mb-2">Загрузка...</h3>
+                    <p id="modelBDesc" class="text-slate-400 text-sm mb-4">Разработчик: --</p>
+                    <button class="vote-btn w-full py-4 rounded-xl font-bold text-white transition-all">
+                        <i class="fas fa-thumbs-up mr-2"></i> Голосовать
+                    </button>
                 </div>
             </div>
-        </div>
 
-        <!-- Поле ввода -->
-        <div class="max-w-4xl mx-auto">
-            <div class="glass rounded-2xl p-2 flex items-center gap-2 shadow-xl shadow-blue-500/5">
-                <input type="text" id="questionInput" placeholder="Задайте вопрос нейросетям..." class="flex-1 bg-transparent px-5 py-4 outline-none text-white placeholder:text-slate-600 text-lg">
-                <button onclick="startBattle()" id="battleBtn" class="btn-primary px-8 py-4 rounded-xl font-bold flex items-center gap-2 shadow-lg shadow-blue-600/20"><span>БАТТЛ</span><i class="fas fa-bolt"></i></button>
-            </div>
-        </div>
-
-        <!-- Статистика -->
-        <div class="max-w-4xl mx-auto mt-6">
-            <div class="glass rounded-2xl p-4 text-center">
+            <!-- Статистика голосования -->
+            <div class="glass-card rounded-2xl p-4 text-center">
                 <div class="flex justify-center gap-8 text-sm flex-wrap">
-                    <div class="flex items-center gap-2"><i class="fas fa-chart-simple text-blue-400"></i><span id="votesLeft" class="font-mono font-bold">0</span><span class="text-slate-500">голосов за левую</span></div>
+                    <div class="flex items-center gap-2"><i class="fas fa-chart-line text-green-400"></i><span id="totalVotesToday" class="font-mono font-bold">0</span><span class="text-slate-500">голосов сегодня</span></div>
                     <div class="w-px h-6 bg-white/20"></div>
-                    <div class="flex items-center gap-2"><i class="fas fa-chart-simple text-purple-400"></i><span id="votesRight" class="font-mono font-bold">0</span><span class="text-slate-500">голосов за правую</span></div>
+                    <div class="flex items-center gap-2"><i class="fas fa-users text-blue-400"></i><span id="totalVotesAll" class="font-mono font-bold">0</span><span class="text-slate-500">всего голосов</span></div>
                     <div class="w-px h-6 bg-white/20"></div>
-                    <div class="flex items-center gap-2"><i class="fas fa-clock text-slate-500"></i><span id="battleCount" class="font-mono font-bold">0</span><span class="text-slate-500">баттлов проведено</span></div>
+                    <div class="flex items-center gap-2"><i class="fas fa-clock text-slate-500"></i><span id="nextQuestionTimer" class="font-mono font-bold">--:--:--</span><span class="text-slate-500">до нового вопроса</span></div>
                 </div>
-            </div>
-        </div>
-    </main>
-
-    <!-- Каталог (модальное окно) -->
-    <div id="catalogModal" class="fixed inset-0 z-50 hidden overflow-y-auto" style="background: rgba(0,0,0,0.85); backdrop-filter: blur(12px);">
-        <div class="container mx-auto px-4 py-8 max-w-7xl">
-            <div class="flex justify-between items-center mb-6">
-                <div>
-                    <h2 class="text-3xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">📚 Каталог нейросетей</h2>
-                    <p class="text-slate-400 text-sm mt-1">50+ лучших AI инструментов 2026</p>
-                </div>
-                <button onclick="toggleCatalog()" class="text-4xl text-slate-400 hover:text-white transition-all">&times;</button>
-            </div>
-            
-            <div class="flex flex-wrap gap-2 mb-6 sticky top-0 bg-black/40 py-3 rounded-xl">
-                <button onclick="filterCatalog('all')" class="category-btn px-5 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 transition-all text-sm font-medium" data-cat="all">🔥 Все (50+)</button>
-                <button onclick="filterCatalog('text')" class="category-btn px-5 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 transition-all text-sm font-medium" data-cat="text">💬 Текстовые (12)</button>
-                <button onclick="filterCatalog('image')" class="category-btn px-5 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 transition-all text-sm font-medium" data-cat="image">🎨 Генерация картинок (12)</button>
-                <button onclick="filterCatalog('video')" class="category-btn px-5 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 transition-all text-sm font-medium" data-cat="video">🎬 Генерация видео (10)</button>
-                <button onclick="filterCatalog('code')" class="category-btn px-5 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 transition-all text-sm font-medium" data-cat="code">💻 Помощь в коде (8)</button>
-                <button onclick="filterCatalog('voice')" class="category-btn px-5 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 transition-all text-sm font-medium" data-cat="voice">🎤 Голос/Музыка (8)</button>
-            </div>
-            
-            <div id="catalogGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
-                <!-- Заполняется JS -->
             </div>
         </div>
     </div>
 
-    <script>
-        // РАСШИРЕННЫЙ КАТАЛОГ (50+ моделей)
-        const aiDatabase = [
-            // Текстовые (12)
-            { name: "ChatGPT (GPT-4 Turbo)", cat: "text", desc: "Самый популярный ИИ от OpenAI", link: "https://chat.openai.com", affLink: "https://chat.openai.com" },
-            { name: "Claude 3.5 Sonnet", cat: "text", desc: "От Anthropic, отличный для кода", link: "https://claude.ai", affLink: "https://claude.ai" },
-            { name: "Gemini 1.5 Pro", cat: "text", desc: "От Google, контекст 1M токенов", link: "https://gemini.google.com", affLink: "https://gemini.google.com" },
-            { name: "Llama 3 70B", cat: "text", desc: "Open-source модель от Meta", link: "https://llama.meta.com", affLink: "https://llama.meta.com" },
-            { name: "Mistral Large", cat: "text", desc: "Европейский лидер, 32K контекст", link: "https://mistral.ai", affLink: "https://mistral.ai" },
-            { name: "DeepSeek V3", cat: "text", desc: "Китайский конкурент GPT-4", link: "https://deepseek.com", affLink: "https://deepseek.com" },
-            { name: "Perplexity AI", cat: "text", desc: "ИИ-поисковик с ссылками", link: "https://perplexity.ai", affLink: "https://perplexity.ai" },
-            { name: "Grok-2", cat: "text", desc: "От xAI (Илона Маска)", link: "https://x.ai", affLink: "https://x.ai" },
-            { name: "Pi AI", cat: "text", desc: "Высокий эмоциональный интеллект", link: "https://pi.ai", affLink: "https://pi.ai" },
-            { name: "Command R+", cat: "text", desc: "От Cohere, RAG-оптимизация", link: "https://cohere.com", affLink: "https://cohere.com" },
-            { name: "Qwen 2.5 72B", cat: "text", desc: "Мощная модель от Alibaba", link: "https://qwenlm.github.io", affLink: "https://qwenlm.github.io" },
-            { name: "Yi-34B", cat: "text", desc: "Китайский open-source лидер", link: "https://01.ai", affLink: "https://01.ai" },
-            // Генерация изображений (12)
-            { name: "Midjourney v6", cat: "image", desc: "Лучший для арта и концептов", link: "https://midjourney.com", affLink: "https://midjourney.com" },
-            { name: "DALL-E 3", cat: "image", desc: "От OpenAI, точность промтов", link: "https://openai.com/dall-e-3", affLink: "https://openai.com/dall-e-3" },
-            { name: "Stable Diffusion 3", cat: "image", desc: "Бесплатный open-source", link: "https://stability.ai", affLink: "https://stability.ai" },
-            { name: "Flux.1", cat: "image", desc: "Невероятная детализация", link: "https://blackforestlabs.ai", affLink: "https://blackforestlabs.ai" },
-            { name: "Leonardo.ai", cat: "image", desc: "Для игровых ассетов", link: "https://leonardo.ai", affLink: "https://leonardo.ai" },
-            { name: "Adobe Firefly", cat: "image", desc: "Безопасно для коммерции", link: "https://firefly.adobe.com", affLink: "https://firefly.adobe.com" },
-            { name: "Krea AI", cat: "image", desc: "Реал-тайм генерация", link: "https://krea.ai", affLink: "https://krea.ai" },
-            { name: "Playground v2.5", cat: "image", desc: "Бесплатные генерации", link: "https://playground.com", affLink: "https://playground.com" },
-            { name: "Recraft", cat: "image", desc: "Векторная графика", link: "https://recraft.ai", affLink: "https://recraft.ai" },
-            { name: "Magnific AI", cat: "image", desc: "Апскейл и детализация", link: "https://magnific.ai", affLink: "https://magnific.ai" },
-            { name: "Ideogram", cat: "image", desc: "Отличный с текстом", link: "https://ideogram.ai", affLink: "https://ideogram.ai" },
-            { name: "SeaArt", cat: "image", desc: "Китайский Midjourney", link: "https://seaart.ai", affLink: "https://seaart.ai" },
-            // Видео (10)
-            { name: "Sora", cat: "video", desc: "От OpenAI, текст в видео", link: "https://openai.com/sora", affLink: "https://openai.com/sora" },
-            { name: "Runway Gen-3", cat: "video", desc: "Киношное качество", link: "https://runwayml.com", affLink: "https://runwayml.com" },
-            { name: "Kling AI", cat: "video", desc: "Лучшая физика движений", link: "https://klingai.com", affLink: "https://klingai.com" },
-            { name: "Pika 2.0", cat: "video", desc: "Анимация объектов", link: "https://pika.art", affLink: "https://pika.art" },
-            { name: "Luma Dream Machine", cat: "video", desc: "Быстрые экшн-сцены", link: "https://lumalabs.ai", affLink: "https://lumalabs.ai" },
-            { name: "HeyGen", cat: "video", desc: "Аватары с липсинком", link: "https://heygen.com", affLink: "https://heygen.com" },
-            { name: "Synthesia", cat: "video", desc: "Корпоративное обучение", link: "https://synthesia.io", affLink: "https://synthesia.io" },
-            { name: "Veed.io", cat: "video", desc: "Авто-монтаж видео", link: "https://veed.io", affLink: "https://veed.io" },
-            { name: "Kaiber", cat: "video", desc: "Для музыкальных клипов", link: "https://kaiber.ai", affLink: "https://kaiber.ai" },
-            { name: "Wonder Dynamics", cat: "video", desc: "Замена на 3D персонажей", link: "https://wonderdynamics.com", affLink: "https://wonderdynamics.com" },
-            // Код (8)
-            { name: "GitHub Copilot", cat: "code", desc: "Стандарт для разработчиков", link: "https://github.com/features/copilot", affLink: "https://github.com/features/copilot" },
-            { name: "Cursor AI", cat: "code", desc: "Редактор кода будущего", link: "https://cursor.sh", affLink: "https://cursor.sh" },
-            { name: "Replit Agent", cat: "code", desc: "Пишет и деплоит", link: "https://replit.com", affLink: "https://replit.com" },
-            { name: "v0.dev", cat: "code", desc: "Генерация UI от Vercel", link: "https://v0.dev", affLink: "https://v0.dev" },
-            { name: "Codeium", cat: "code", desc: "Бесплатный Copilot", link: "https://codeium.com", affLink: "https://codeium.com" },
-            { name: "Tabnine", cat: "code", desc: "Безопасный локальный", link: "https://tabnine.com", affLink: "https://tabnine.com" },
-            { name: "Cody", cat: "code", desc: "От Sourcegraph", link: "https://sourcegraph.com/cody", affLink: "https://sourcegraph.com/cody" },
-            { name: "Continue", cat: "code", desc: "Open-source плагин", link: "https://continue.dev", affLink: "https://continue.dev" },
-            // Голос/Музыка (8)
-            { name: "Suno AI", cat: "voice", desc: "Генерация музыки", link: "https://suno.ai", affLink: "https://suno.ai" },
-            { name: "ElevenLabs", cat: "voice", desc: "Озвучка голосом", link: "https://elevenlabs.io", affLink: "https://elevenlabs.io" },
-            { name: "Udio", cat: "voice", desc: "Музыка по описанию", link: "https://udio.com", affLink: "https://udio.com" },
-            { name: "Stable Audio", cat: "voice", desc: "От Stability AI", link: "https://stableaudio.com", affLink: "https://stableaudio.com" },
-            { name: "Murf AI", cat: "voice", desc: "Голос для видео", link: "https://murf.ai", affLink: "https://murf.ai" },
-            { name: "Resemble AI", cat: "voice", desc: "Клонирование голоса", link: "https://resemble.ai", affLink: "https://resemble.ai" },
-            { name: "Play.ht", cat: "voice", desc: "AI озвучка", link: "https://play.ht", affLink: "https://play.ht" },
-            { name: "Riffusion", cat: "voice", desc: "Музыка из текста", link: "https://riffusion.com", affLink: "https://riffusion.com" }
-        ];
+    <!-- Вкладка Рейтинг -->
+    <div id="ratingTab" class="hidden fade-in">
+        <div class="text-center max-w-3xl mx-auto mb-8">
+            <h2 class="text-3xl md:text-4xl font-bold bg-gradient-to-r from-yellow-400 to-orange-400 bg-clip-text text-transparent">
+                🏆 Глобальный рейтинг нейросетей
+            </h2>
+            <p class="text-slate-400 mt-2">Рейтинг формируется на основе голосов всех пользователей</p>
+        </div>
 
-        let votes = { left: 0, right: 0 };
-        let battlesCount = 0;
-        
-        function loadStats() {
-            const savedVotes = localStorage.getItem('ai_arena_votes');
-            if (savedVotes) { try { const v = JSON.parse(savedVotes); votes = v; document.getElementById('votesLeft').innerText = votes.left || 0; document.getElementById('votesRight').innerText = votes.right || 0; } catch(e) {} }
-            const savedBattles = localStorage.getItem('ai_arena_battles');
-            if (savedBattles) { battlesCount = parseInt(savedBattles) || 0; document.getElementById('battleCount').innerText = battlesCount; }
-        }
-        
-        function saveStats() { localStorage.setItem('ai_arena_votes', JSON.stringify(votes)); localStorage.setItem('ai_arena_battles', battlesCount.toString()); }
-        
-        function vote(side) {
-            if (side === 'left') { votes.left++; document.getElementById('votesLeft').innerText = votes.left; }
-            else { votes.right++; document.getElementById('votesRight').innerText = votes.right; }
-            saveStats();
-            const btn = event.currentTarget;
-            btn.innerHTML = '<i class="fas fa-check"></i> Голос учтён';
-            setTimeout(() => btn.innerHTML = '<i class="fas fa-thumbs-up mr-1"></i> Голос', 2000);
-        }
-        
-        function setQuestion(text) { document.getElementById('questionInput').value = text; startBattle(); }
-        
-        async function fetchAI(model, prompt, targetId, timeId) {
-            const resultDiv = document.getElementById(targetId);
-            const timeSpan = document.getElementById(timeId);
-            const start = Date.now();
-            resultDiv.innerHTML = '<div class="loading-pulse"><div class="h-4 bg-white/10 rounded w-full mb-2"></div><div class="h-4 bg-white/10 rounded w-3/4"></div><div class="h-4 bg-white/10 rounded w-1/2"></div></div>';
-            try {
-                const response = await fetch('/api/proxy', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ model: model, messages: [{ role: 'user', content: prompt }] })
+        <div class="max-w-4xl mx-auto">
+            <div class="glass-card rounded-2xl overflow-hidden">
+                <table class="w-full">
+                    <thead class="bg-white/5 border-b border-white/10">
+                        <tr>
+                            <th class="text-left py-4 px-6">#</th>
+                            <th class="text-left py-4 px-6">Нейросеть</th>
+                            <th class="text-center py-4 px-6">🏆 Побед</th>
+                            <th class="text-center py-4 px-6">📊 Рейтинг</th>
+                        </tr>
+                    </thead>
+                    <tbody id="ratingTableBody">
+                        <!-- Заполняется через JS -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+</main>
+
+<script>
+    // ============ ВАША КОНФИГУРАЦИЯ FIREBASE ============
+    const firebaseConfig = {
+        apiKey: "AIzaSyDXV647tuR7adub0pO6PAGlFkivU5WY6T0",
+        authDomain: "aivs-93aaf.firebaseapp.com",
+        projectId: "aivs-93aaf",
+        storageBucket: "aivs-93aaf.firebasestorage.app",
+        messagingSenderId: "467176227726",
+        appId: "1:467176227726:web:ac1a26bba36838ae8fdadf",
+        measurementId: "G-BT5YZKFC4J"
+    };
+    
+    // Инициализация Firebase
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+    
+    // ============ СПИСОК МОДЕЛЕЙ (12 популярных) ============
+    const models = [
+        { id: "gpt4", name: "GPT-4 Turbo", developer: "OpenAI", icon: "fa-brain", desc: "Самый популярный ИИ" },
+        { id: "claude", name: "Claude 3.5 Sonnet", developer: "Anthropic", icon: "fa-feather", desc: "Лучший для кода" },
+        { id: "gemini", name: "Gemini 1.5 Pro", developer: "Google", icon: "fa-star", desc: "Контекст 1M токенов" },
+        { id: "llama3", name: "Llama 3 70B", developer: "Meta", icon: "fa-tree", desc: "Open-source лидер" },
+        { id: "mistral", name: "Mistral Large", developer: "Mistral AI", icon: "fa-wind", desc: "Европейская мощь" },
+        { id: "deepseek", name: "DeepSeek V3", developer: "DeepSeek", icon: "fa-dragon", desc: "Китайский конкурент" },
+        { id: "qwen", name: "Qwen 2.5 72B", developer: "Alibaba", icon: "fa-cloud", desc: "Мультиязычная" },
+        { id: "grok", name: "Grok-2", developer: "xAI", icon: "fa-rocket", desc: "От Илона Маска" },
+        { id: "perplexity", name: "Perplexity AI", developer: "Perplexity", icon: "fa-search", desc: "ИИ-поисковик" },
+        { id: "pi", name: "Pi AI", developer: "Inflection", icon: "fa-heart", desc: "Высокий EQ" },
+        { id: "command", name: "Command R+", developer: "Cohere", icon: "fa-terminal", desc: "Для бизнеса" },
+        { id: "yi", name: "Yi-34B", developer: "01.AI", icon: "fa-chinese-yuan", desc: "Open-source азиат" }
+    ];
+    
+    // Вопросы дня
+    const questions = [
+        { text: "Какая нейросеть лучше пишет программный код?", category: "code" },
+        { text: "Какая нейросеть лучше объясняет сложные концепции?", category: "education" },
+        { text: "Какая нейросеть лучше создает креативный контент?", category: "creative" },
+        { text: "Какая нейросеть лучше анализирует документы?", category: "analysis" },
+        { text: "Какая нейросеть лучше поддерживает диалог?", category: "chat" }
+    ];
+    
+    // Глобальные переменные
+    let currentModels = { A: null, B: null };
+    let currentQuestion = null;
+    let lastVoteTimestamp = 0;
+    let nextQuestionInterval = null;
+    let totalVotesAll = 0;
+    
+    // ============ ИНИЦИАЛИЗАЦИЯ FIREBASE ============
+    async function initFirebaseData() {
+        // Создаём документы для моделей, если их нет
+        for (const model of models) {
+            const docRef = db.collection("models").doc(model.id);
+            const doc = await docRef.get();
+            if (!doc.exists) {
+                await docRef.set({
+                    name: model.name,
+                    developer: model.developer,
+                    wins: 0,
+                    totalMatches: 0,
+                    rating: 1000
                 });
-                const data = await response.json();
-                const elapsed = Date.now() - start;
-                timeSpan.innerText = `${elapsed}ms`;
-                if (data.error) throw new Error(data.error.message || JSON.stringify(data.error));
-                const answer = data.choices[0].message.content;
-                resultDiv.innerHTML = `<div class="response-content fade-in">${marked.parse(answer)}</div>`;
-            } catch (error) {
-                resultDiv.innerHTML = `<div class="text-red-400 text-sm p-3 bg-red-500/10 rounded-xl">❌ Ошибка: ${error.message}<br><span class="text-xs opacity-70">Проверьте консоль (F12)</span></div>`;
-                timeSpan.innerText = 'err';
             }
         }
         
-        async function startBattle() {
-            const question = document.getElementById('questionInput').value.trim();
-            if (!question) { alert('Введите вопрос!'); return; }
-            const btn = document.getElementById('battleBtn');
-            btn.disabled = true;
-            btn.innerHTML = '<i class="fas fa-circle-notch animate-spin"></i> БИТВА...';
-            battlesCount++;
-            document.getElementById('battleCount').innerText = battlesCount;
-            saveStats();
-            const modelLeft = document.getElementById('modelLeft').value;
-            const modelRight = document.getElementById('modelRight').value;
-            await Promise.all([fetchAI(modelLeft, question, 'resultLeft', 'timeLeft'), fetchAI(modelRight, question, 'resultRight', 'timeRight')]);
-            btn.disabled = false;
-            btn.innerHTML = '<span>БАТТЛ</span><i class="fas fa-bolt"></i>';
+        // Создаём документ для статистики
+        const statsRef = db.collection("stats").doc("global");
+        const statsDoc = await statsRef.get();
+        if (!statsDoc.exists) {
+            await statsRef.set({
+                totalVotes: 0,
+                lastResetDate: new Date().toDateString()
+            });
         }
         
-        function toggleCatalog() { 
-            const modal = document.getElementById('catalogModal'); 
-            modal.classList.toggle('hidden'); 
-            if (!modal.classList.contains('hidden')) renderCatalog('all'); 
+        // Загружаем общее количество голосов
+        const stats = await statsRef.get();
+        totalVotesAll = stats.data().totalVotes || 0;
+        document.getElementById("totalVotesAll").innerText = totalVotesAll;
+        
+        // Загружаем или создаём вопрос дня
+        await loadOrCreateQuestionOfDay();
+        
+        // Обновляем счётчик голосов за сегодня
+        await updateTodayVotesCount();
+        
+        // Запускаем таймер до следующего вопроса
+        startQuestionTimer();
+        
+        // Обновляем таблицу рейтинга
+        await updateRatingTable();
+    }
+    
+    async function loadOrCreateQuestionOfDay() {
+        const today = new Date().toDateString();
+        const questionRef = db.collection("questions").doc(today);
+        const questionDoc = await questionRef.get();
+        
+        if (!questionDoc.exists) {
+            const randomIndex = Math.floor(Math.random() * questions.length);
+            currentQuestion = questions[randomIndex];
+            
+            // Выбираем случайную пару
+            const shuffled = [...models];
+            for (let i = shuffled.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+            }
+            currentModels.A = shuffled[0];
+            currentModels.B = shuffled[1];
+            
+            await questionRef.set({
+                text: currentQuestion.text,
+                category: currentQuestion.category,
+                date: today,
+                votesA: 0,
+                votesB: 0,
+                pair: { A: currentModels.A.id, B: currentModels.B.id }
+            });
+        } else {
+            const data = questionDoc.data();
+            currentQuestion = { text: data.text, category: data.category };
+            if (data.pair) {
+                currentModels.A = models.find(m => m.id === data.pair.A);
+                currentModels.B = models.find(m => m.id === data.pair.B);
+                if (!currentModels.A || !currentModels.B) {
+                    selectRandomPair();
+                }
+            } else {
+                selectRandomPair();
+            }
         }
         
-        function renderCatalog(cat) {
-            const grid = document.getElementById('catalogGrid');
-            const filtered = cat === 'all' ? aiDatabase : aiDatabase.filter(ai => ai.cat === cat);
-            grid.innerHTML = filtered.map(ai => `
-                <div class="glass-card rounded-xl p-4 hover:scale-[1.02] transition-all fade-in card-slide">
-                    <div class="flex justify-between items-start mb-2">
-                        <h3 class="font-bold text-lg text-white">${ai.name}</h3>
-                        <span class="text-xs px-2 py-1 rounded-full bg-white/10">${getCatIcon(ai.cat)}</span>
-                    </div>
-                    <p class="text-sm text-slate-300 mb-3">${ai.desc}</p>
-                    <div class="flex gap-2">
-                        <a href="${ai.affLink}" target="_blank" class="flex-1 text-center text-sm py-2 rounded-lg bg-blue-600/20 hover:bg-blue-600 text-blue-400 hover:text-white transition-all">🚀 Открыть</a>
-                        <a href="${ai.link}" target="_blank" class="text-sm py-2 px-3 rounded-lg bg-white/5 hover:bg-white/10 transition-all"><i class="fas fa-external-link-alt"></i></a>
-                    </div>
-                </div>
-            `).join('');
+        document.getElementById("questionOfDay").innerText = currentQuestion.text;
+        updateUI();
+    }
+    
+    function selectRandomPair() {
+        const shuffled = [...models];
+        for (let i = shuffled.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
         }
-        
-        function getCatIcon(cat) { const icons = { text: '💬', image: '🎨', video: '🎬', code: '💻', voice: '🎤' }; return icons[cat] || '🤖'; }
-        
-        function filterCatalog(cat) {
-            renderCatalog(cat);
-            document.querySelectorAll('.category-btn').forEach(btn => { btn.classList.remove('active'); if (btn.getAttribute('data-cat') === cat) btn.classList.add('active'); });
+        currentModels.A = shuffled[0];
+        currentModels.B = shuffled[1];
+        updateUI();
+    }
+    
+    function updateUI() {
+        if (currentModels.A) {
+            document.getElementById("modelAName").innerText = currentModels.A.name;
+            document.getElementById("modelADesc").innerHTML = `<i class="fas ${currentModels.A.icon} mr-1"></i> ${currentModels.A.developer}`;
         }
+        if (currentModels.B) {
+            document.getElementById("modelBName").innerText = currentModels.B.name;
+            document.getElementById("modelBDesc").innerHTML = `<i class="fas ${currentModels.B.icon} mr-1"></i> ${currentModels.B.developer}`;
+        }
+    }
+    
+    async function updateTodayVotesCount() {
+        const today = new Date().toDateString();
+        const questionDoc = await db.collection("questions").doc(today).get();
+        if (questionDoc.exists) {
+            const data = questionDoc.data();
+            const todayVotes = (data.votesA || 0) + (data.votesB || 0);
+            document.getElementById("totalVotesToday").innerText = todayVotes;
+        } else {
+            document.getElementById("totalVotesToday").innerText = "0";
+        }
+    }
+    
+    async function voteFor(side) {
+        const now = Date.now();
+        if (now - lastVoteTimestamp < 3000) {
+            alert("⏳ Подождите 3 секунды перед следующим голосованием!");
+            return;
+        }
+        lastVoteTimestamp = now;
         
-        loadStats();
-        document.getElementById('questionInput').addEventListener('keypress', (e) => { if (e.key === 'Enter') startBattle(); });
+        const today = new Date().toDateString();
+        const questionRef = db.collection("questions").doc(today);
+        const winnerId = side === 'A' ? currentModels.A.id : currentModels.B.id;
+        const loserId = side === 'A' ? currentModels.B.id : currentModels.A.id;
+        const winnerName = side === 'A' ? currentModels.A.name : currentModels.B.name;
         
-        const style = document.createElement('style');
-        style.textContent = `.category-btn.active { background: rgba(59,130,246,0.25); color: #3b82f6; border-left: 3px solid #3b82f6; }`;
-        document.head.appendChild(style);
-    </script>
+        try {
+            // Обновляем вопрос дня
+            const questionDoc = await questionRef.get();
+            if (!questionDoc.exists) return;
+            
+            if (side === 'A') {
+                await questionRef.update({ votesA: firebase.firestore.FieldValue.increment(1) });
+            } else {
+                await questionRef.update({ votesB: firebase.firestore.FieldValue.increment(1) });
+            }
+            
+            // Обновляем статистику побед моделей
+            const winnerRef = db.collection("models").doc(winnerId);
+            const loserRef = db.collection("models").doc(loserId);
+            
+            const winnerDoc = await winnerRef.get();
+            const loserDoc = await loserRef.get();
+            
+            const winnerWins = (winnerDoc.data().wins || 0) + 1;
+            const winnerMatches = (winnerDoc.data().totalMatches || 0) + 1;
+            const loserMatches = (loserDoc.data().totalMatches || 0) + 1;
+            
+            await winnerRef.update({ wins: winnerWins, totalMatches: winnerMatches });
+            await loserRef.update({ totalMatches: loserMatches });
+            
+            // Обновляем глобальную статистику
+            const statsRef = db.collection("stats").doc("global");
+            await statsRef.update({ totalVotes: firebase.firestore.FieldValue.increment(1) });
+            totalVotesAll++;
+            document.getElementById("totalVotesAll").innerText = totalVotesAll;
+            
+            // Обновляем счётчик за сегодня
+            await updateTodayVotesCount();
+            
+            // Показываем анимацию победы
+            alert(`🎉 Ваш голос учтён! ${winnerName} получает +1 победу!`);
+            
+            // Выбираем новую пару
+            selectRandomPair();
+            
+            // Обновляем пару в вопросе дня
+            await questionRef.update({ pair: { A: currentModels.A.id, B: currentModels.B.id } });
+            
+            // Обновляем таблицу рейтинга
+            await updateRatingTable();
+            
+        } catch (error) {
+            console.error("Ошибка голосования:", error);
+            alert("❌ Ошибка при голосовании. Попробуйте позже.");
+        }
+    }
+    
+    async function updateRatingTable() {
+        const modelsSnapshot = await db.collection("models").orderBy("wins", "desc").get();
+        const tbody = document.getElementById("ratingTableBody");
+        tbody.innerHTML = "";
+        
+        let rank = 1;
+        const maxWins = modelsSnapshot.docs[0]?.data().wins || 1;
+        
+        for (const doc of modelsSnapshot.docs) {
+            const data = doc.data();
+            const model = models.find(m => m.id === doc.id);
+            const winPercent = maxWins > 0 ? (data.wins / maxWins) * 100 : 0;
+            
+            const row = `
+                <tr class="border-b border-white/5 hover:bg-white/5 transition-all">
+                    <td class="py-3 px-6">
+                        ${rank === 1 ? '<span class="rank-badge inline-block w-7 h-7 rounded-full text-center leading-7 text-black font-bold">1</span>' : rank}
+                    </td>
+                    <td class="py-3 px-6 font-medium">
+                        <i class="fas ${model?.icon || 'fa-robot'} mr-2 text-blue-400"></i>
+                        ${data.name}
+                    </td>
+                    <td class="py-3 px-6 text-center font-bold text-yellow-400">${data.wins || 0}</td>
+                    <td class="py-3 px-6">
+                        <div class="w-full bg-white/10 rounded-full h-2">
+                            <div class="bg-gradient-to-r from-blue-500 to-purple-500 h-2 rounded-full" style="width: ${winPercent}%"></div>
+                        </div>
+                    </td>
+                </tr>
+            `;
+            tbody.innerHTML += row;
+            rank++;
+        }
+    }
+    
+    function startQuestionTimer() {
+        if (nextQuestionInterval) clearInterval(nextQuestionInterval);
+        
+        nextQuestionInterval = setInterval(() => {
+            const now = new Date();
+            const tomorrow = new Date(now);
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            tomorrow.setHours(0, 0, 0, 0);
+            const diff = tomorrow - now;
+            
+            if (diff <= 0) {
+                clearInterval(nextQuestionInterval);
+                location.reload();
+                return;
+            }
+            
+            const hours = Math.floor(diff / (1000 * 60 * 60));
+            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+            
+            document.getElementById("nextQuestionTimer").innerHTML = `${hours.toString().padStart(2,'0')}:${minutes.toString().padStart(2,'0')}:${seconds.toString().padStart(2,'0')}`;
+        }, 1000);
+    }
+    
+    function showTab(tab) {
+        const battleTab = document.getElementById("battleTab");
+        const ratingTab = document.getElementById("ratingTab");
+        const battleBtn = document.getElementById("tabBattleBtn");
+        const ratingBtn = document.getElementById("tabRatingBtn");
+        
+        if (tab === 'battle') {
+            battleTab.classList.remove("hidden");
+            ratingTab.classList.add("hidden");
+            battleBtn.classList.add("active");
+            ratingBtn.classList.remove("active");
+        } else {
+            battleTab.classList.add("hidden");
+            ratingTab.classList.remove("hidden");
+            battleBtn.classList.remove("active");
+            ratingBtn.classList.add("active");
+            updateRatingTable();
+        }
+    }
+    
+    // Запуск
+    window.onload = () => {
+        initFirebaseData();
+        showTab('battle');
+    };
+</script>
+
 </body>
 </html>
