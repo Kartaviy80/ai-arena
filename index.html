@@ -42,7 +42,6 @@
             font-weight: 800;
         }
         
-        /* Карточки в одну линию - flex вместо grid */
         .arena-container {
             display: flex;
             flex-direction: row;
@@ -71,7 +70,6 @@
             transform: scale(0.98);
         }
         
-        /* Реальные иконки ИИ */
         .ai-logo {
             width: 80px;
             height: 80px;
@@ -99,8 +97,6 @@
             90% { opacity: 1; transform: translateY(0); }
             100% { opacity: 0; transform: translateY(-20px); }
         }
-        
-        .toast-notification { animation: toast 2s ease forwards; }
         
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: #1e293b; border-radius: 10px; }
@@ -163,7 +159,6 @@
             <button onclick="showTab('rating')" id="tabRatingBtn" class="tab-btn px-5 py-2 rounded-xl text-sm font-medium transition-all">🏆 <span data-key="nav_rating">Рейтинг</span></button>
         </div>
         
-        <!-- Переключатель языка -->
         <div class="flex gap-1">
             <button onclick="setLanguage('ru')" id="langRu" class="lang-btn px-3 py-1.5 rounded-lg text-sm transition-all">🇷🇺 RU</button>
             <button onclick="setLanguage('en')" id="langEn" class="lang-btn px-3 py-1.5 rounded-lg text-sm transition-all">🇬🇧 EN</button>
@@ -174,7 +169,6 @@
 
 <main class="container mx-auto px-4 pt-24 pb-12 relative z-10">
     
-    <!-- Вкладка Баттл -->
     <div id="battleTab" class="fade-in">
         <div class="text-center max-w-3xl mx-auto mb-8">
             <div class="inline-flex items-center gap-2 bg-blue-500/10 px-4 py-2 rounded-full mb-4">
@@ -187,10 +181,8 @@
             <p class="text-slate-400" data-key="click_hint">Кликните на карточку, чтобы проголосовать</p>
         </div>
 
-        <!-- Арена - карточки в одну линию -->
         <div class="max-w-6xl mx-auto">
             <div class="arena-container">
-                <!-- Модель A - слева -->
                 <div id="modelACard" class="model-card p-6 text-center transition-all cursor-pointer" onclick="voteFor('A')">
                     <div class="flex justify-center mb-4">
                         <img id="modelALogo" class="ai-logo" src="" alt="logo">
@@ -202,12 +194,10 @@
                     </div>
                 </div>
 
-                <!-- VS по центру -->
                 <div class="flex items-center justify-center">
                     <div class="vs-orb text-4xl font-black bg-gradient-to-r from-blue-500 to-purple-500 bg-clip-text text-transparent">VS</div>
                 </div>
 
-                <!-- Модель B - справа -->
                 <div id="modelBCard" class="model-card p-6 text-center transition-all cursor-pointer" onclick="voteFor('B')">
                     <div class="flex justify-center mb-4">
                         <img id="modelBLogo" class="ai-logo" src="" alt="logo">
@@ -220,7 +210,6 @@
                 </div>
             </div>
 
-            <!-- Статистика -->
             <div class="glass-card rounded-2xl p-4 text-center mt-8">
                 <div class="flex justify-center gap-8 text-sm flex-wrap">
                     <div class="flex items-center gap-2"><i class="fas fa-chart-line text-green-400"></i><span id="totalVotesToday" class="font-mono font-bold">0</span><span class="text-slate-500" data-key="votes_today">голосов сегодня</span></div>
@@ -233,7 +222,6 @@
         </div>
     </div>
 
-    <!-- Вкладка Рейтинг -->
     <div id="ratingTab" class="hidden fade-in">
         <div class="text-center max-w-3xl mx-auto mb-8">
             <h2 class="text-3xl md:text-4xl font-bold bg-gradient-to-r from-yellow-400 to-orange-400 bg-clip-text text-transparent">
@@ -294,19 +282,31 @@
     
     let currentLang = 'ru';
     
-    function updateUItext() {
+    function updateUIText() {
         document.querySelectorAll('[data-key]').forEach(el => {
             const key = el.getAttribute('data-key');
-            if (translations[currentLang][key]) el.innerText = translations[currentLang][key];
+            if (translations[currentLang] && translations[currentLang][key]) {
+                el.innerText = translations[currentLang][key];
+            }
         });
-        document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
-        document.getElementById(`lang${currentLang.toUpperCase()}`).classList.add('active');
+        
+        const langButtons = document.querySelectorAll('.lang-btn');
+        langButtons.forEach(btn => btn.classList.remove('active'));
+        const activeBtn = document.getElementById(`lang${currentLang.toUpperCase()}`);
+        if (activeBtn) activeBtn.classList.add('active');
+        
+        const questionEl = document.getElementById('questionOfDay');
+        if (window.currentQuestionText) {
+            if (currentLang === 'en' && window.currentQuestionEn) questionEl.innerText = window.currentQuestionEn;
+            else if (currentLang === 'uk' && window.currentQuestionUk) questionEl.innerText = window.currentQuestionUk;
+            else questionEl.innerText = window.currentQuestionText;
+        }
     }
     
     function setLanguage(lang) {
         currentLang = lang;
         localStorage.setItem('ai_arena_lang', lang);
-        updateUItext();
+        updateUIText();
     }
     
     function detectLanguage() {
@@ -315,7 +315,6 @@
         const browserLang = navigator.language.split('-')[0];
         if (translations[browserLang]) currentLang = browserLang;
         else currentLang = 'en';
-        updateUItext();
     }
     
     // ============ FIREBASE ============
@@ -331,7 +330,6 @@
     firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
     
-    // ============ МОДЕЛИ С РЕАЛЬНЫМИ ЛОГОТИПАМИ И ЦИФРАМИ ============
     const models = [
         { id: "gpt4", name: "GPT-4 Turbo", developer: "OpenAI", category: "text", logo: "https://upload.wikimedia.org/wikipedia/commons/0/04/ChatGPT_logo.svg", wins: 45200 },
         { id: "claude", name: "Claude 3.5 Sonnet", developer: "Anthropic", category: "text", logo: "https://www.anthropic.com/_next/static/media/claude-logo.8f2c5e9a.svg", wins: 41800 },
@@ -361,7 +359,6 @@
         { id: "udio", name: "Udio", developer: "Udio", category: "voice", logo: "https://udio.com/favicon.ico", wins: 27800 }
     ];
     
-    // 100+ вопросов (сокращённо для читаемости)
     const questions = [
         { text: "Какая нейросеть лучше пишет код?", textEn: "Which AI writes code best?", textUk: "Яка нейромережа краще пише код?", category: "code" },
         { text: "Какая нейросеть лучше генерирует изображения?", textEn: "Which AI generates images best?", textUk: "Яка нейромережа краще генерує зображення?", category: "image" },
@@ -370,18 +367,19 @@
     ];
     
     let currentModels = { A: null, B: null };
-    let currentQuestion = null;
+    let currentQuestionObj = null;
     let lastVoteTimestamp = 0;
     let nextQuestionInterval = null;
-    let totalVotesAll = 0;
+    let totalVotesAll = 632500;
     let currentRatingCategory = 'all';
     
     function showToast(message, isError = false) {
         const toast = document.getElementById('toastMessage');
+        if (!toast) return;
         const icon = toast.querySelector('i');
         const text = toast.querySelector('span');
-        icon.className = isError ? 'fas fa-exclamation-circle text-red-400 text-xl' : 'fas fa-check-circle text-green-400 text-xl';
-        text.innerText = message;
+        if (icon) icon.className = isError ? 'fas fa-exclamation-circle text-red-400 text-xl' : 'fas fa-check-circle text-green-400 text-xl';
+        if (text) text.innerText = message;
         toast.classList.remove('hidden');
         setTimeout(() => toast.classList.add('hidden'), 2000);
     }
@@ -400,6 +398,7 @@
         await loadOrCreateQuestionOfDay();
         await updateTodayVotesCount();
         startQuestionTimer();
+        updateUIText();
     }
     
     async function loadOrCreateQuestionOfDay() {
@@ -409,8 +408,8 @@
         
         if (!questionDoc.exists) {
             const randomIndex = Math.floor(Math.random() * questions.length);
-            currentQuestion = questions[randomIndex];
-            const filtered = models.filter(m => m.category === currentQuestion.category);
+            currentQuestionObj = questions[randomIndex];
+            const filtered = models.filter(m => m.category === currentQuestionObj.category);
             const shuffled = [...(filtered.length >= 2 ? filtered : models)];
             for (let i = shuffled.length - 1; i > 0; i--) {
                 const j = Math.floor(Math.random() * (i + 1));
@@ -418,36 +417,42 @@
             }
             currentModels.A = shuffled[0];
             currentModels.B = shuffled[1];
-            await questionRef.set({ text: currentQuestion.text, textEn: currentQuestion.textEn, textUk: currentQuestion.textUk, category: currentQuestion.category, date: today, votesA: 0, votesB: 0, pair: { A: currentModels.A.id, B: currentModels.B.id } });
+            await questionRef.set({ text: currentQuestionObj.text, textEn: currentQuestionObj.textEn, textUk: currentQuestionObj.textUk, category: currentQuestionObj.category, date: today, votesA: 0, votesB: 0, pair: { A: currentModels.A.id, B: currentModels.B.id } });
         } else {
             const data = questionDoc.data();
-            currentQuestion = { text: data.text, textEn: data.textEn, textUk: data.textUk, category: data.category };
+            currentQuestionObj = { text: data.text, textEn: data.textEn, textUk: data.textUk, category: data.category };
             currentModels.A = models.find(m => m.id === data.pair.A);
             currentModels.B = models.find(m => m.id === data.pair.B);
             if (!currentModels.A || !currentModels.B) selectRandomPair();
         }
-        updateQuestionText();
+        
+        window.currentQuestionText = currentQuestionObj.text;
+        window.currentQuestionEn = currentQuestionObj.textEn;
+        window.currentQuestionUk = currentQuestionObj.textUk;
+        
+        let qText = currentQuestionObj.text;
+        if (currentLang === 'en' && currentQuestionObj.textEn) qText = currentQuestionObj.textEn;
+        if (currentLang === 'uk' && currentQuestionObj.textUk) qText = currentQuestionObj.textUk;
+        document.getElementById("questionOfDay").innerText = qText;
+        
         updateUI();
         await loadModelStats();
-    }
-    
-    function updateQuestionText() {
-        let qText = currentQuestion.text;
-        if (currentLang === 'en' && currentQuestion.textEn) qText = currentQuestion.textEn;
-        if (currentLang === 'uk' && currentQuestion.textUk) qText = currentQuestion.textUk;
-        document.getElementById("questionOfDay").innerText = qText;
     }
     
     async function loadModelStats() {
         if (currentModels.A) {
             const doc = await db.collection("models").doc(currentModels.A.id).get();
-            document.getElementById("modelAWins").innerText = doc.exists ? doc.data().wins.toLocaleString() : 0;
-            document.getElementById("modelALogo").src = currentModels.A.logo;
+            const winsEl = document.getElementById("modelAWins");
+            if (winsEl) winsEl.innerText = doc.exists ? doc.data().wins.toLocaleString() : 0;
+            const logoEl = document.getElementById("modelALogo");
+            if (logoEl) logoEl.src = currentModels.A.logo;
         }
         if (currentModels.B) {
             const doc = await db.collection("models").doc(currentModels.B.id).get();
-            document.getElementById("modelBWins").innerText = doc.exists ? doc.data().wins.toLocaleString() : 0;
-            document.getElementById("modelBLogo").src = currentModels.B.logo;
+            const winsEl = document.getElementById("modelBWins");
+            if (winsEl) winsEl.innerText = doc.exists ? doc.data().wins.toLocaleString() : 0;
+            const logoEl = document.getElementById("modelBLogo");
+            if (logoEl) logoEl.src = currentModels.B.logo;
         }
     }
     
@@ -465,12 +470,16 @@
     
     function updateUI() {
         if (currentModels.A) {
-            document.getElementById("modelAName").innerText = currentModels.A.name;
-            document.getElementById("modelADesc").innerHTML = `${currentModels.A.developer}`;
+            const nameEl = document.getElementById("modelAName");
+            const descEl = document.getElementById("modelADesc");
+            if (nameEl) nameEl.innerText = currentModels.A.name;
+            if (descEl) descEl.innerHTML = currentModels.A.developer;
         }
         if (currentModels.B) {
-            document.getElementById("modelBName").innerText = currentModels.B.name;
-            document.getElementById("modelBDesc").innerHTML = `${currentModels.B.developer}`;
+            const nameEl = document.getElementById("modelBName");
+            const descEl = document.getElementById("modelBDesc");
+            if (nameEl) nameEl.innerText = currentModels.B.name;
+            if (descEl) descEl.innerHTML = currentModels.B.developer;
         }
     }
     
@@ -479,7 +488,8 @@
         const questionDoc = await db.collection("questions").doc(today).get();
         if (questionDoc.exists) {
             const data = questionDoc.data();
-            document.getElementById("totalVotesToday").innerText = ((data.votesA || 0) + (data.votesB || 0)).toLocaleString();
+            const totalEl = document.getElementById("totalVotesToday");
+            if (totalEl) totalEl.innerText = ((data.votesA || 0) + (data.votesB || 0)).toLocaleString();
         }
     }
     
@@ -521,7 +531,8 @@
     async function showRatingCategory(category) {
         currentRatingCategory = category;
         document.querySelectorAll('.category-tab').forEach(btn => btn.classList.remove('active'));
-        document.getElementById(`cat${category === 'all' ? 'All' : category.charAt(0).toUpperCase() + category.slice(1)}`).classList.add('active');
+        const activeBtn = document.getElementById(`cat${category === 'all' ? 'All' : category.charAt(0).toUpperCase() + category.slice(1)}`);
+        if (activeBtn) activeBtn.classList.add('active');
         await updateRatingTable();
     }
     
@@ -535,11 +546,12 @@
         });
         filtered.sort((a, b) => b.wins - a.wins);
         const tbody = document.getElementById("ratingTableBody");
+        if (!tbody) return;
         tbody.innerHTML = "";
         const maxWins = filtered[0]?.wins || 1;
         filtered.slice(0, 30).forEach((model, idx) => {
             const modelInfo = models.find(m => m.id === model.id);
-            tbody.innerHTML += `<tr class="border-b border-white/5 hover:bg-white/5"><td class="py-3 px-6">${idx === 0 ? '<span class="rank-badge inline-block w-7 h-7 rounded-full text-center leading-7 text-black font-bold">1</span>' : idx+1}</td><td class="py-3 px-6 font-medium"><img src="${modelInfo?.logo}" class="w-6 h-6 inline mr-2 rounded">${model.name}<span class="text-xs text-slate-500 ml-2">${modelInfo?.developer}</span></td><td class="py-3 px-6 text-center font-bold text-yellow-400">${model.wins.toLocaleString()}</td><td class="py-3 px-6"><div class="w-full bg-white/10 rounded-full h-2"><div class="bg-gradient-to-r from-blue-500 to-purple-500 h-2 rounded-full" style="width: ${(model.wins / maxWins) * 100}%"></div></div></td></tr>`;
+            tbody.innerHTML += `<tr class="border-b border-white/5 hover:bg-white/5"><td class="py-3 px-6">${idx === 0 ? '<span class="rank-badge inline-block w-7 h-7 rounded-full text-center leading-7 text-black font-bold">1</span>' : idx+1}</td><td class="py-3 px-6 font-medium"><img src="${modelInfo?.logo || ''}" class="w-6 h-6 inline mr-2 rounded" onerror="this.style.display='none'">${model.name}<span class="text-xs text-slate-500 ml-2">${modelInfo?.developer || ''}</span></td><td class="py-3 px-6 text-center font-bold text-yellow-400">${model.wins.toLocaleString()}</td><td class="py-3 px-6"><div class="w-full bg-white/10 rounded-full h-2"><div class="bg-gradient-to-r from-blue-500 to-purple-500 h-2 rounded-full" style="width: ${(model.wins / maxWins) * 100}%"></div></div></td></tr>`;
         });
     }
     
@@ -555,20 +567,30 @@
             const hours = Math.floor(diff / (1000 * 60 * 60));
             const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
             const seconds = Math.floor((diff % (1000 * 60)) / 1000);
-            document.getElementById("nextQuestionTimer").innerHTML = `${hours.toString().padStart(2,'0')}:${minutes.toString().padStart(2,'0')}:${seconds.toString().padStart(2,'0')}`;
+            const timerEl = document.getElementById("nextQuestionTimer");
+            if (timerEl) timerEl.innerHTML = `${hours.toString().padStart(2,'0')}:${minutes.toString().padStart(2,'0')}:${seconds.toString().padStart(2,'0')}`;
         }, 1000);
     }
     
     function showTab(tab) {
-        document.getElementById("battleTab").classList.toggle("hidden", tab !== 'battle');
-        document.getElementById("ratingTab").classList.toggle("hidden", tab !== 'rating');
-        document.getElementById("tabBattleBtn").classList.toggle("active", tab === 'battle');
-        document.getElementById("tabRatingBtn").classList.toggle("active", tab === 'rating');
+        const battleTab = document.getElementById("battleTab");
+        const ratingTab = document.getElementById("ratingTab");
+        const battleBtn = document.getElementById("tabBattleBtn");
+        const ratingBtn = document.getElementById("tabRatingBtn");
+        
+        if (battleTab) battleTab.classList.toggle("hidden", tab !== 'battle');
+        if (ratingTab) ratingTab.classList.toggle("hidden", tab !== 'rating');
+        if (battleBtn) battleBtn.classList.toggle("active", tab === 'battle');
+        if (ratingBtn) ratingBtn.classList.toggle("active", tab === 'rating');
         if (tab === 'rating') updateRatingTable();
     }
     
     detectLanguage();
-    window.onload = () => { initFirebaseData(); showTab('battle'); };
+    document.addEventListener('DOMContentLoaded', () => {
+        initFirebaseData();
+        showTab('battle');
+        updateUIText();
+    });
 </script>
 </body>
 </html>
