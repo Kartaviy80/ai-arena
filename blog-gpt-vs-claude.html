@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GPT-4 vs Claude 3.5: сравнение лидеров нейросетей | AI Arena</title>
+    <meta name="description" content="Подробное сравнение GPT-4 Turbo и Claude 3.5 Sonnet. Кто лучше пишет код, анализирует документы и решает логические задачи?">
+    <meta name="keywords" content="GPT-4 vs Claude, сравнение нейросетей, GPT-4 Turbo, Claude 3.5 Sonnet">
+    <meta property="og:title" content="GPT-4 vs Claude 3.5: сравнение лидеров">
+    <meta property="og:description" content="Кто лучше пишет код, анализирует документы и решает логические задачи? Полный разбор.">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://ai-arena-self.vercel.app/blog-gpt-vs-claude.html">
+    <link rel="canonical" href="https://ai-arena-self.vercel.app/blog-gpt-vs-claude.html">
+    
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-XXXXXXXXXX');
+    </script>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&display=swap');
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #0a0c15;
+            color: #e2e8f0;
+            min-height: 100vh;
+        }
+        .animated-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; overflow: hidden; }
+        .gradient-1 { position: absolute; top: -20%; left: -10%; width: 70%; height: 70%; background: radial-gradient(circle, rgba(59,130,246,0.3) 0%, rgba(139,92,246,0.1) 50%, transparent 70%); filter: blur(80px); animation: float 20s ease-in-out infinite; }
+        .gradient-2 { position: absolute; bottom: -20%; right: -10%; width: 70%; height: 70%; background: radial-gradient(circle, rgba(236,72,153,0.25) 0%, rgba(59,130,246,0.1) 50%, transparent 70%); filter: blur(80px); animation: float 25s ease-in-out infinite reverse; }
+        @keyframes float { 0%, 100% { transform: translate(0, 0) scale(1); } 50% { transform: translate(5%, 5%) scale(1.05); } }
+        .glass-card { background: rgba(15, 20, 35, 0.7); backdrop-filter: blur(16px); border: 1px solid rgba(59, 130, 246, 0.2); transition: all 0.3s; }
+        .glass-card:hover { border-color: rgba(59, 130, 246, 0.6); box-shadow: 0 0 30px rgba(59, 130, 246, 0.2); }
+        .content h1, .content h2, .content h3 { color: #3b82f6; margin-top: 1.5rem; margin-bottom: 0.75rem; }
+        .content p { margin-bottom: 1rem; line-height: 1.7; color: #cbd5e1; }
+        .content ul, .content ol { margin: 1rem 0 1rem 2rem; color: #cbd5e1; }
+        .content li { margin-bottom: 0.5rem; }
+        .content code { background: #1e293b; padding: 0.125rem 0.375rem; border-radius: 0.375rem; font-size: 0.875rem; color: #60a5fa; }
+        .content pre { background: #1e293b; padding: 1rem; border-radius: 0.75rem; overflow-x: auto; margin: 1rem 0; }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #1e293b; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb { background: #3b82f6; border-radius: 10px; }
+    </style>
+</head>
+<body>
+
+<div class="animated-bg">
+    <div class="gradient-1"></div>
+    <div class="gradient-2"></div>
+</div>
+
+<header class="fixed top-0 left-0 right-0 z-50 glass-card">
+    <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+        <a href="/" class="flex items-center gap-3">
+            <div class="w-10 h-10 bg-gradient-to-br from-blue-500 to-pink-500 rounded-xl flex items-center justify-center">
+                <i class="fas fa-bolt text-white text-lg"></i>
+            </div>
+            <h1 class="text-2xl font-bold bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">AI ARENA</h1>
+        </a>
+        <a href="/" class="px-5 py-2 rounded-full bg-blue-600/20 text-blue-400 text-sm hover:bg-blue-600 hover:text-white transition">← На главную</a>
+    </div>
+</header>
+
+<main class="container mx-auto px-4 pt-28 pb-12 relative z-10">
+    <div class="max-w-4xl mx-auto">
+        <div class="glass-card rounded-2xl p-6 md:p-10">
+            <div class="mb-6">
+                <span class="text-xs text-blue-400 bg-blue-400/10 px-3 py-1 rounded-full">Сравнение</span>
+                <span class="text-xs text-slate-500 ml-3">15 мая 2026</span>
+            </div>
+            <h1 class="text-3xl md:text-4xl font-bold mb-4 bg-gradient-to-r from-white to-blue-300 bg-clip-text text-transparent">GPT-4 vs Claude 3.5: сравнение лидеров нейросетей</h1>
+            <p class="text-slate-400 text-lg mb-6">Кто лучше пишет код, анализирует документы и решает логические задачи? Полный разбор двух самых мощных ИИ-моделей 2026 года.</p>
+            
+            <div class="content">
+                <h2>Введение</h2>
+                <p>GPT-4 Turbo от OpenAI и Claude 3.5 Sonnet от Anthropic — две самые мощные текстовые нейросети на рынке. Обе модели показывают впечатляющие результаты, но у каждой есть свои сильные стороны. В этой статье мы подробно сравним их по ключевым параметрам и поможем вам выбрать лучший инструмент для ваших задач.</p>
+                
+                <h2>1. Написание кода</h2>
+                <p><strong>Claude 3.5 Sonnet</strong> считается лучшей моделью для программирования. Она отлично понимает контекст, пишет чистый код и может работать с большими файлами (до 200K токенов). Разработчики отмечают, что Claude реже допускает логические ошибки и лучше объясняет свои решения.</p>
+                <p><strong>GPT-4 Turbo</strong> тоже силён в коде, особенно в популярных языках вроде Python и JavaScript. Однако при работе со сложными алгоритмами может допускать ошибки. Зато GPT-4 лучше подходит для генерации UI-компонентов и фронтенд-кода.</p>
+                <p><strong>Вердикт:</strong> Claude 3.5 Sonnet выигрывает в категории "Код".</p>
+                
+                <h2>2. Анализ документов</h2>
+                <p>Обе модели поддерживают загрузку файлов (PDF, DOCX, TXT). Claude имеет контекст 200K токенов — этого достаточно для обработки 500-страничного документа. GPT-4 Turbo имеет контекст 128K токенов, что тоже очень много.</p>
+                <p>Однако Claude лучше справляется с извлечением ключевой информации из длинных документов и реже "забывает" важные детали в середине текста. GPT-4 быстрее обрабатывает документы, но может пропускать нюансы.</p>
+                <p><strong>Вердикт:</strong> Небольшое преимущество у Claude.</p>
+                
+                <h2>3. Логические задачи и рассуждения</h2>
+                <p>GPT-4 Turbo традиционно силён в задачах, требующих многошаговых рассуждений. Он лучше справляется с математикой, физикой и сложными логическими цепочками. Claude тоже неплох, но иногда даёт более консервативные ответы, избегая нестандартных решений.</p>
+                <p><strong>Вердикт:</strong> GPT-4 Turbo побеждает в сложных рассуждениях.</p>
+                
+                <h2>4. Скорость и стоимость</h2>
+                <p>GPT-4 Turbo работает быстрее — ответ приходит в среднем на 20-30% быстрее, чем у Claude. По стоимости: GPT-4 Turbo стоит $10 за 1M токенов (input) и $30 за 1M токенов (output). Claude 3.5 Sonnet — $3 за 1M токенов (input) и $15 за 1M токенов (output).</p>
+                <p><strong>Вердикт:</strong> Claude значительно дешевле, GPT-4 быстрее.</p>
+                
+                <h2>Итоговая таблица</h2>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-sm border-collapse">
+                        <thead><tr class="border-b border-white/20"><th class="text-left py-2">Параметр</th><th class="text-left py-2">GPT-4 Turbo</th><th class="text-left py-2">Claude 3.5 Sonnet</th></tr></thead>
+                        <tbody>
+                            <tr class="border-b border-white/10"><td class="py-2">Написание кода</td><td class="py-2">⭐️⭐️⭐️⭐️</td><td class="py-2">⭐️⭐️⭐️⭐️⭐️</td></tr>
+                            <tr class="border-b border-white/10"><td class="py-2">Анализ документов</td><td class="py-2">⭐️⭐️⭐️⭐️</td><td class="py-2">⭐️⭐️⭐️⭐️⭐️</td></tr>
+                            <tr class="border-b border-white/10"><td class="py-2">Логика</td><td class="py-2">⭐️⭐️⭐️⭐️⭐️</td><td class="py-2">⭐️⭐️⭐️⭐️</td></tr>
+                            <tr class="border-b border-white/10"><td class="py-2">Скорость</td><td class="py-2">⭐️⭐️⭐️⭐️⭐️</td><td class="py-2">⭐️⭐️⭐️⭐️</td></tr>
+                            <tr><td class="py-2">Цена</td><td class="py-2">⭐️⭐️⭐️</td><td class="py-2">⭐️⭐️⭐️⭐️⭐️</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <h2>Заключение</h2>
+                <p>Выбор между GPT-4 Turbo и Claude 3.5 Sonnet зависит от ваших задач:</p>
+                <ul>
+                    <li><strong>Для программирования</strong> — выбирайте Claude 3.5 Sonnet.</li>
+                    <li><strong>Для сложных рассуждений и математики</strong> — лучше GPT-4 Turbo.</li>
+                    <li><strong>Для работы с большими документами</strong> — Claude предпочтительнее.</li>
+                    <li><strong>Если важна скорость и бюджет позволяет</strong> — GPT-4 Turbo.</li>
+                    <li><strong>Если важна экономия</strong> — Claude в 2-3 раза дешевле.</li>
+                </ul>
+                <p>Обе модели отличные, и лучший способ выбрать — протестировать их на своих задачах. А мы в AI Arena продолжаем собирать голоса пользователей, чтобы определить настоящего лидера!</p>
+            </div>
+            
+            <div class="mt-8 pt-6 border-t border-white/10 text-center">
+                <a href="/" class="inline-block px-6 py-3 bg-blue-600 hover:bg-blue-500 rounded-xl font-medium transition">← Вернуться на главную и проголосовать</a>
+            </div>
+        </div>
+    </div>
+</main>
+
+<footer class="glass-card mt-12 py-6">
+    <div class="container mx-auto px-4 text-center">
+        <p class="text-slate-500 text-sm">© 2026 AI Arena. Все права защищены.</p>
+    </div>
+</footer>
+</body>
+</html>
