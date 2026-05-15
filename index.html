@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Arena | Глобальный рейтинг нейросетей 2026</title>
+    <title>AI Arena | Арена нейросетей 2026</title>
     <meta name="description" content="Голосуйте за лучшие нейросети мира. Ежедневные баттлы 50+ ИИ моделей. Глобальный рейтинг и топы по категориям.">
+    <meta name="keywords" content="нейросети, ИИ баттл, сравнение ИИ, GPT, Claude, Gemini, Midjourney">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
@@ -19,64 +20,196 @@
         
         body {
             font-family: 'Inter', sans-serif;
-            background: linear-gradient(135deg, #0b0f1c 0%, #141b2b 100%);
+            background: #0a0c15;
             color: #e2e8f0;
             min-height: 100vh;
         }
         
-        .glow-orb { position: fixed; border-radius: 50%; filter: blur(80px); pointer-events: none; z-index: 0; }
-        .glow-orb-1 { background: #3b82f6; width: 400px; height: 400px; top: -150px; left: -150px; opacity: 0.15; }
-        .glow-orb-2 { background: #8b5cf6; width: 450px; height: 450px; bottom: -150px; right: -150px; opacity: 0.12; }
+        /* Анимированный градиентный фон */
+        .animated-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            overflow: hidden;
+        }
         
+        .gradient-1 {
+            position: absolute;
+            top: -20%;
+            left: -10%;
+            width: 70%;
+            height: 70%;
+            background: radial-gradient(circle, rgba(59,130,246,0.3) 0%, rgba(139,92,246,0.1) 50%, transparent 70%);
+            filter: blur(80px);
+            animation: float 20s ease-in-out infinite;
+        }
+        
+        .gradient-2 {
+            position: absolute;
+            bottom: -20%;
+            right: -10%;
+            width: 70%;
+            height: 70%;
+            background: radial-gradient(circle, rgba(236,72,153,0.25) 0%, rgba(59,130,246,0.1) 50%, transparent 70%);
+            filter: blur(80px);
+            animation: float 25s ease-in-out infinite reverse;
+        }
+        
+        .gradient-3 {
+            position: absolute;
+            top: 30%;
+            left: 30%;
+            width: 40%;
+            height: 40%;
+            background: radial-gradient(circle, rgba(6,182,212,0.2) 0%, transparent 70%);
+            filter: blur(100px);
+            animation: pulse 8s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(5%, 5%) scale(1.05); }
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 0.3; transform: scale(1); }
+            50% { opacity: 0.6; transform: scale(1.1); }
+        }
+        
+        /* Стеклянные карточки с неоновой окантовкой */
         .glass-card {
-            background: rgba(20, 25, 45, 0.75);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255,255,255,0.08);
+            background: rgba(15, 20, 35, 0.7);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(59, 130, 246, 0.2);
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
         
-        .vs-orb {
-            background: radial-gradient(circle, rgba(59,130,246,0.3) 0%, rgba(139,92,246,0.1) 70%);
-            border-radius: 50%;
-            padding: 12px 24px;
-            font-weight: 800;
+        .glass-card:hover {
+            border-color: rgba(59, 130, 246, 0.6);
+            box-shadow: 0 0 30px rgba(59, 130, 246, 0.2);
         }
         
-        .arena-container {
-            display: flex;
-            flex-direction: row;
-            justify-content: center;
-            align-items: center;
-            gap: 2rem;
-            flex-wrap: wrap;
-        }
-        
-        .model-card {
-            flex: 1;
-            min-width: 280px;
-            background: linear-gradient(135deg, rgba(30, 35, 60, 0.95), rgba(20, 25, 50, 0.95));
+        /* Карточка арены */
+        .arena-card {
+            background: linear-gradient(135deg, rgba(20, 25, 55, 0.9), rgba(10, 15, 35, 0.95));
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(59, 130, 246, 0.25);
             border-radius: 2rem;
-            transition: all 0.2s ease;
+            transition: all 0.3s ease;
+        }
+        
+        .arena-card:hover {
+            border-color: rgba(59, 130, 246, 0.6);
+            box-shadow: 0 0 40px rgba(59, 130, 246, 0.15);
+            transform: translateY(-5px);
+        }
+        
+        /* Неоновая VS */
+        .vs-neon {
+            font-size: 3rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #3b82f6, #ec4899, #8b5cf6);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 0 30px rgba(59,130,246,0.5);
+            animation: vsPulse 2s ease-in-out infinite;
+        }
+        
+        @keyframes vsPulse {
+            0%, 100% { opacity: 0.8; text-shadow: 0 0 20px rgba(59,130,246,0.3); }
+            50% { opacity: 1; text-shadow: 0 0 40px rgba(59,130,246,0.8); }
+        }
+        
+        /* Карточка модели */
+        .model-card {
+            background: linear-gradient(135deg, rgba(25, 30, 55, 0.95), rgba(15, 20, 40, 0.98));
+            border-radius: 1.5rem;
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            transition: all 0.3s ease;
             cursor: pointer;
         }
         
         .model-card:hover {
-            transform: scale(1.02);
+            transform: translateY(-8px) scale(1.02);
             border-color: #3b82f6;
-            box-shadow: 0 0 25px rgba(59,130,246,0.3);
+            box-shadow: 0 20px 40px rgba(59, 130, 246, 0.2);
         }
         
         .model-card:active {
             transform: scale(0.98);
         }
         
+        /* Кнопки меню */
+        .nav-btn {
+            position: relative;
+            padding: 0.5rem 1.25rem;
+            border-radius: 2rem;
+            font-weight: 500;
+            transition: all 0.2s;
+            background: transparent;
+            color: #94a3b8;
+        }
+        
+        .nav-btn.active {
+            background: linear-gradient(135deg, rgba(59,130,246,0.2), rgba(139,92,246,0.1));
+            color: #3b82f6;
+        }
+        
+        .nav-btn.active::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 30px;
+            height: 2px;
+            background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+            border-radius: 2px;
+        }
+        
+        .nav-btn:hover:not(.active) {
+            color: #cbd5e1;
+            background: rgba(255,255,255,0.05);
+        }
+        
+        /* Категории в каталоге */
+        .catalog-cat {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: all 0.2s;
+        }
+        
+        .catalog-cat.active {
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            border-color: transparent;
+            color: white;
+        }
+        
+        /* Карточка каталога */
+        .catalog-item {
+            background: rgba(20, 25, 45, 0.8);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.08);
+            transition: all 0.3s;
+        }
+        
+        .catalog-item:hover {
+            transform: translateY(-5px);
+            border-color: #3b82f6;
+            box-shadow: 0 10px 30px rgba(59,130,246,0.2);
+        }
+        
         .ai-logo {
-            width: 80px;
-            height: 80px;
-            border-radius: 20px;
+            width: 60px;
+            height: 60px;
+            border-radius: 16px;
             object-fit: contain;
             background: linear-gradient(135deg, #1e293b, #0f172a);
-            padding: 12px;
+            padding: 8px;
         }
         
         .rank-badge {
@@ -84,12 +217,14 @@
             box-shadow: 0 0 15px rgba(245,158,11,0.3);
         }
         
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
             to { opacity: 1; transform: translateY(0); }
         }
         
-        .fade-in { animation: fadeIn 0.5s ease-out; }
+        .fade-in-up {
+            animation: fadeInUp 0.6s ease-out;
+        }
         
         @keyframes toast {
             0% { opacity: 0; transform: translateY(20px); }
@@ -98,67 +233,60 @@
             100% { opacity: 0; transform: translateY(-20px); }
         }
         
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: #1e293b; border-radius: 10px; }
-        ::-webkit-scrollbar-thumb { background: #3b82f6; border-radius: 10px; }
-        
-        .tab-btn.active {
-            background: rgba(59, 130, 246, 0.2);
-            color: #3b82f6;
-            border-bottom: 2px solid #3b82f6;
-        }
-        
-        .category-tab {
-            background: rgba(255,255,255,0.05);
-            transition: all 0.2s;
-        }
-        
-        .category-tab.active {
-            background: rgba(59, 130, 246, 0.2);
-            color: #3b82f6;
-        }
-        
         .vote-toast {
             position: fixed;
             bottom: 30px;
             left: 50%;
             transform: translateX(-50%);
             z-index: 1000;
+            animation: toast 2s ease forwards;
         }
         
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #1e293b; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb { background: #3b82f6; border-radius: 10px; }
+        
         .lang-btn.active {
-            background: rgba(59, 130, 246, 0.3);
+            background: rgba(59,130,246,0.3);
             color: #3b82f6;
         }
         
         @media (max-width: 768px) {
             .arena-container { flex-direction: column; }
             .model-card { width: 100%; }
-            .vs-orb { margin: 1rem 0; }
+            .vs-neon { margin: 1rem 0; }
         }
     </style>
 </head>
 <body>
 
-<div class="glow-orb glow-orb-1"></div>
-<div class="glow-orb glow-orb-2"></div>
+<!-- Анимированный фон -->
+<div class="animated-bg">
+    <div class="gradient-1"></div>
+    <div class="gradient-2"></div>
+    <div class="gradient-3"></div>
+</div>
 
+<!-- Шапка -->
 <header class="fixed top-0 left-0 right-0 z-50 glass-card">
     <div class="container mx-auto px-4 py-4 flex justify-between items-center flex-wrap gap-3">
         <div class="flex items-center gap-3 cursor-pointer" onclick="location.reload()">
-            <div class="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-500 rounded-xl flex items-center justify-center">
-                <i class="fas fa-trophy text-white text-lg"></i>
+            <div class="w-10 h-10 bg-gradient-to-br from-blue-500 to-pink-500 rounded-xl flex items-center justify-center shadow-lg shadow-blue-500/25">
+                <i class="fas fa-bolt text-white text-lg"></i>
             </div>
-            <h1 class="text-2xl font-bold tracking-tight">
-                AI <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400">ARENA</span>
+            <h1 class="text-2xl font-bold tracking-tight bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
+                AI ARENA
             </h1>
         </div>
         
-        <div class="flex gap-2">
-            <button onclick="showTab('battle')" id="tabBattleBtn" class="tab-btn px-5 py-2 rounded-xl text-sm font-medium transition-all active">⚔️ <span data-key="nav_battle">Баттл</span></button>
-            <button onclick="showTab('rating')" id="tabRatingBtn" class="tab-btn px-5 py-2 rounded-xl text-sm font-medium transition-all">🏆 <span data-key="nav_rating">Рейтинг</span></button>
+        <!-- Навигация -->
+        <div class="flex gap-1">
+            <button onclick="showTab('battle')" id="tabBattleBtn" class="nav-btn transition-all">⚔️ Баттл</button>
+            <button onclick="showTab('rating')" id="tabRatingBtn" class="nav-btn transition-all">🏆 Рейтинг</button>
+            <button onclick="showTab('catalog')" id="tabCatalogBtn" class="nav-btn transition-all">📚 Каталог</button>
         </div>
         
+        <!-- Языки -->
         <div class="flex gap-1">
             <button onclick="setLanguage('ru')" id="langRu" class="lang-btn px-3 py-1.5 rounded-lg text-sm transition-all">🇷🇺 RU</button>
             <button onclick="setLanguage('en')" id="langEn" class="lang-btn px-3 py-1.5 rounded-lg text-sm transition-all">🇬🇧 EN</button>
@@ -169,87 +297,139 @@
 
 <main class="container mx-auto px-4 pt-24 pb-12 relative z-10">
     
-    <div id="battleTab" class="fade-in">
-        <div class="text-center max-w-3xl mx-auto mb-8">
-            <div class="inline-flex items-center gap-2 bg-blue-500/10 px-4 py-2 rounded-full mb-4">
+    <!-- ==================== ВКЛАДКА БАТТЛ ==================== -->
+    <div id="battleTab" class="fade-in-up">
+        <div class="text-center max-w-3xl mx-auto mb-12">
+            <div class="inline-flex items-center gap-2 bg-gradient-to-r from-blue-500/20 to-purple-500/20 px-5 py-2 rounded-full mb-4 border border-blue-500/30">
                 <i class="fas fa-calendar-day text-blue-400 text-sm"></i>
-                <span class="text-blue-400 text-sm font-medium" data-key="question_label">Вопрос дня</span>
+                <span class="text-blue-400 text-sm font-medium">Вопрос дня</span>
             </div>
-            <h2 id="questionOfDay" class="text-2xl md:text-3xl font-bold mb-2 bg-gradient-to-r from-white to-blue-300 bg-clip-text text-transparent">
+            <h2 id="questionOfDay" class="text-3xl md:text-4xl font-bold mb-3 bg-gradient-to-r from-white via-blue-300 to-purple-300 bg-clip-text text-transparent">
                 Загрузка...
             </h2>
-            <p class="text-slate-400" data-key="click_hint">Кликните на карточку, чтобы проголосовать</p>
+            <p class="text-slate-400">Кликните на карточку, чтобы проголосовать</p>
         </div>
 
+        <!-- Арена -->
         <div class="max-w-6xl mx-auto">
-            <div class="arena-container">
-                <div id="modelACard" class="model-card p-6 text-center transition-all cursor-pointer" onclick="voteFor('A')">
-                    <div class="flex justify-center mb-4">
-                        <img id="modelALogo" class="ai-logo" src="" alt="logo" onerror="this.src='https://placehold.co/80x80/3b82f6/white?text=AI'">
+            <div class="arena-container" style="display: flex; flex-direction: row; justify-content: center; align-items: center; gap: 2rem; flex-wrap: wrap;">
+                <!-- Модель A -->
+                <div id="modelACard" class="model-card p-8 text-center" style="flex: 1; min-width: 280px; cursor: pointer;" onclick="voteFor('A')">
+                    <div class="relative">
+                        <div class="w-28 h-28 mx-auto mb-4 bg-gradient-to-br from-blue-500/30 to-purple-500/30 rounded-full flex items-center justify-center">
+                            <img id="modelALogo" class="ai-logo w-20 h-20" src="" alt="logo" onerror="this.src='https://placehold.co/80x80/3b82f6/white?text=AI'">
+                        </div>
+                        <div class="absolute -top-2 -right-2 w-8 h-8 bg-green-500 rounded-full flex items-center justify-center text-xs font-bold">VS</div>
                     </div>
                     <h3 id="modelAName" class="text-2xl font-bold mb-2">Загрузка...</h3>
-                    <p id="modelADesc" class="text-slate-400 text-sm">Разработчик: --</p>
-                    <div class="mt-4 text-xs text-slate-500">
-                        <i class="fas fa-chart-line mr-1"></i> <span id="modelAWins">0</span> <span data-key="wins">побед</span>
+                    <p id="modelADesc" class="text-slate-400 text-sm mb-4">Разработчик: --</p>
+                    <div class="flex justify-center gap-4 text-sm">
+                        <div class="flex items-center gap-1 text-yellow-400">
+                            <i class="fas fa-trophy"></i>
+                            <span id="modelAWins" class="font-bold">0</span>
+                        </div>
                     </div>
                 </div>
 
+                <!-- VS центр -->
                 <div class="flex items-center justify-center">
-                    <div class="vs-orb text-4xl font-black bg-gradient-to-r from-blue-500 to-purple-500 bg-clip-text text-transparent">VS</div>
+                    <div class="vs-neon">VS</div>
                 </div>
 
-                <div id="modelBCard" class="model-card p-6 text-center transition-all cursor-pointer" onclick="voteFor('B')">
-                    <div class="flex justify-center mb-4">
-                        <img id="modelBLogo" class="ai-logo" src="" alt="logo" onerror="this.src='https://placehold.co/80x80/8b5cf6/white?text=AI'">
+                <!-- Модель B -->
+                <div id="modelBCard" class="model-card p-8 text-center" style="flex: 1; min-width: 280px; cursor: pointer;" onclick="voteFor('B')">
+                    <div class="relative">
+                        <div class="w-28 h-28 mx-auto mb-4 bg-gradient-to-br from-purple-500/30 to-pink-500/30 rounded-full flex items-center justify-center">
+                            <img id="modelBLogo" class="ai-logo w-20 h-20" src="" alt="logo" onerror="this.src='https://placehold.co/80x80/8b5cf6/white?text=AI'">
+                        </div>
+                        <div class="absolute -top-2 -right-2 w-8 h-8 bg-green-500 rounded-full flex items-center justify-center text-xs font-bold">VS</div>
                     </div>
                     <h3 id="modelBName" class="text-2xl font-bold mb-2">Загрузка...</h3>
-                    <p id="modelBDesc" class="text-slate-400 text-sm">Разработчик: --</p>
-                    <div class="mt-4 text-xs text-slate-500">
-                        <i class="fas fa-chart-line mr-1"></i> <span id="modelBWins">0</span> <span data-key="wins">побед</span>
+                    <p id="modelBDesc" class="text-slate-400 text-sm mb-4">Разработчик: --</p>
+                    <div class="flex justify-center gap-4 text-sm">
+                        <div class="flex items-center gap-1 text-yellow-400">
+                            <i class="fas fa-trophy"></i>
+                            <span id="modelBWins" class="font-bold">0</span>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <div class="glass-card rounded-2xl p-4 text-center mt-8">
+            <!-- Статистика -->
+            <div class="glass-card rounded-2xl p-5 text-center mt-10">
                 <div class="flex justify-center gap-8 text-sm flex-wrap">
-                    <div class="flex items-center gap-2"><i class="fas fa-chart-line text-green-400"></i><span id="totalVotesToday" class="font-mono font-bold">0</span><span class="text-slate-500" data-key="votes_today">голосов сегодня</span></div>
-                    <div class="w-px h-6 bg-white/20"></div>
-                    <div class="flex items-center gap-2"><i class="fas fa-users text-blue-400"></i><span id="totalVotesAll" class="font-mono font-bold">0</span><span class="text-slate-500" data-key="votes_total">всего голосов</span></div>
-                    <div class="w-px h-6 bg-white/20"></div>
-                    <div class="flex items-center gap-2"><i class="fas fa-clock text-slate-500"></i><span id="nextQuestionTimer" class="font-mono font-bold">--:--:--</span><span class="text-slate-500" data-key="next_question">до нового вопроса</span></div>
+                    <div class="flex items-center gap-2"><i class="fas fa-chart-line text-green-400"></i><span id="totalVotesToday" class="font-mono font-bold text-xl">0</span><span class="text-slate-500">голосов сегодня</span></div>
+                    <div class="w-px h-8 bg-white/20"></div>
+                    <div class="flex items-center gap-2"><i class="fas fa-users text-blue-400"></i><span id="totalVotesAll" class="font-mono font-bold text-xl">0</span><span class="text-slate-500">всего голосов</span></div>
+                    <div class="w-px h-8 bg-white/20"></div>
+                    <div class="flex items-center gap-2"><i class="fas fa-clock text-slate-500"></i><span id="nextQuestionTimer" class="font-mono font-bold text-xl">--:--:--</span><span class="text-slate-500">до нового вопроса</span></div>
                 </div>
             </div>
         </div>
     </div>
 
-    <div id="ratingTab" class="hidden fade-in">
-        <div class="text-center max-w-3xl mx-auto mb-8">
-            <h2 class="text-3xl md:text-4xl font-bold bg-gradient-to-r from-yellow-400 to-orange-400 bg-clip-text text-transparent">
-                🏆 <span data-key="rating_title">Глобальный рейтинг нейросетей</span>
+    <!-- ==================== ВКЛАДКА РЕЙТИНГ ==================== -->
+    <div id="ratingTab" class="hidden fade-in-up">
+        <div class="text-center max-w-3xl mx-auto mb-10">
+            <h2 class="text-4xl md:text-5xl font-bold bg-gradient-to-r from-yellow-400 via-orange-400 to-pink-400 bg-clip-text text-transparent">
+                🏆 Глобальный рейтинг
             </h2>
-            <p class="text-slate-400 mt-2" data-key="rating_desc">Рейтинг формируется на основе голосов всех пользователей</p>
+            <p class="text-slate-400 mt-3">Рейтинг формируется на основе голосов всех пользователей</p>
         </div>
 
-        <div class="flex flex-wrap justify-center gap-2 mb-6">
-            <button onclick="showRatingCategory('all')" id="catAll" class="category-tab px-5 py-2.5 rounded-xl text-sm font-medium transition-all active">🔥 <span data-key="cat_all">Общий</span></button>
-            <button onclick="showRatingCategory('text')" id="catText" class="category-tab px-5 py-2.5 rounded-xl text-sm font-medium transition-all">💬 <span data-key="cat_text">Текстовые</span></button>
-            <button onclick="showRatingCategory('image')" id="catImage" class="category-tab px-5 py-2.5 rounded-xl text-sm font-medium transition-all">🎨 <span data-key="cat_image">Изображения</span></button>
-            <button onclick="showRatingCategory('video')" id="catVideo" class="category-tab px-5 py-2.5 rounded-xl text-sm font-medium transition-all">🎬 <span data-key="cat_video">Видео</span></button>
-            <button onclick="showRatingCategory('code')" id="catCode" class="category-tab px-5 py-2.5 rounded-xl text-sm font-medium transition-all">💻 <span data-key="cat_code">Код</span></button>
-            <button onclick="showRatingCategory('voice')" id="catVoice" class="category-tab px-5 py-2.5 rounded-xl text-sm font-medium transition-all">🎤 <span data-key="cat_voice">Голос/Музыка</span></button>
+        <!-- Категории рейтинга -->
+        <div class="flex flex-wrap justify-center gap-2 mb-8">
+            <button onclick="showRatingCategory('all')" id="catAll" class="catalog-cat px-5 py-2.5 rounded-xl text-sm font-medium transition-all active">🔥 Все</button>
+            <button onclick="showRatingCategory('text')" id="catText" class="catalog-cat px-5 py-2.5 rounded-xl text-sm font-medium transition-all">💬 Текстовые</button>
+            <button onclick="showRatingCategory('image')" id="catImage" class="catalog-cat px-5 py-2.5 rounded-xl text-sm font-medium transition-all">🎨 Изображения</button>
+            <button onclick="showRatingCategory('video')" id="catVideo" class="catalog-cat px-5 py-2.5 rounded-xl text-sm font-medium transition-all">🎬 Видео</button>
+            <button onclick="showRatingCategory('code')" id="catCode" class="catalog-cat px-5 py-2.5 rounded-xl text-sm font-medium transition-all">💻 Код</button>
+            <button onclick="showRatingCategory('voice')" id="catVoice" class="catalog-cat px-5 py-2.5 rounded-xl text-sm font-medium transition-all">🎤 Голос/Музыка</button>
         </div>
 
+        <!-- Таблица рейтинга -->
         <div class="max-w-5xl mx-auto">
             <div class="glass-card rounded-2xl overflow-hidden overflow-x-auto">
                 <table class="w-full min-w-[500px]">
-                    <thead class="bg-white/5 border-b border-white/10">
-                        <tr><th class="text-left py-4 px-4">#</th><th class="text-left py-4 px-4" data-key="table_model">Нейросеть</th><th class="text-center py-4 px-4" data-key="table_wins">🏆 Побед</th><th class="text-center py-4 px-4" data-key="table_rating">📊 Рейтинг</th></tr>
+                    <thead class="bg-white/10 border-b border-white/10">
+                        <tr>
+                            <th class="text-left py-4 px-4 text-slate-400 font-medium">#</th>
+                            <th class="text-left py-4 px-4 text-slate-400 font-medium">Нейросеть</th>
+                            <th class="text-center py-4 px-4 text-slate-400 font-medium">🏆 Побед</th>
+                            <th class="text-center py-4 px-4 text-slate-400 font-medium">📊 Рейтинг</th>
+                        </tr>
                     </thead>
                     <tbody id="ratingTableBody"></tbody>
                 </table>
             </div>
         </div>
     </div>
+
+    <!-- ==================== ВКЛАДКА КАТАЛОГ ==================== -->
+    <div id="catalogTab" class="hidden fade-in-up">
+        <div class="text-center max-w-3xl mx-auto mb-10">
+            <h2 class="text-4xl md:text-5xl font-bold bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
+                📚 Каталог нейросетей
+            </h2>
+            <p class="text-slate-400 mt-3">50+ лучших AI инструментов 2026 с подробным описанием</p>
+        </div>
+
+        <!-- Категории каталога -->
+        <div class="flex flex-wrap justify-center gap-2 mb-8">
+            <button onclick="filterCatalog('all')" id="catalogCatAll" class="catalog-cat px-5 py-2.5 rounded-xl text-sm font-medium transition-all active">🔥 Все</button>
+            <button onclick="filterCatalog('text')" id="catalogCatText" class="catalog-cat px-5 py-2.5 rounded-xl text-sm font-medium transition-all">💬 Текстовые</button>
+            <button onclick="filterCatalog('image')" id="catalogCatImage" class="catalog-cat px-5 py-2.5 rounded-xl text-sm font-medium transition-all">🎨 Изображения</button>
+            <button onclick="filterCatalog('video')" id="catalogCatVideo" class="catalog-cat px-5 py-2.5 rounded-xl text-sm font-medium transition-all">🎬 Видео</button>
+            <button onclick="filterCatalog('code')" id="catalogCatCode" class="catalog-cat px-5 py-2.5 rounded-xl text-sm font-medium transition-all">💻 Код</button>
+            <button onclick="filterCatalog('voice')" id="catalogCatVoice" class="catalog-cat px-5 py-2.5 rounded-xl text-sm font-medium transition-all">🎤 Голос/Музыка</button>
+        </div>
+
+        <!-- Сетка каталога -->
+        <div id="catalogGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            <!-- Заполняется JS -->
+        </div>
+    </div>
+
 </main>
 
 <div id="toastMessage" class="vote-toast hidden"><div class="glass-card rounded-xl px-6 py-3 flex items-center gap-3"><i class="fas fa-check-circle text-green-400 text-xl"></i><span class="text-white font-medium"></span></div></div>
@@ -258,118 +438,54 @@
     // ============ ПЕРЕВОДЫ ============
     const translations = {
         ru: {
-            nav_battle: "Баттл", nav_rating: "Рейтинг", question_label: "Вопрос дня", click_hint: "Кликните на карточку, чтобы проголосовать",
-            wins: "побед", votes_today: "голосов сегодня", votes_total: "всего голосов", next_question: "до нового вопроса",
-            rating_title: "Глобальный рейтинг нейросетей", rating_desc: "Рейтинг формируется на основе голосов всех пользователей",
-            cat_all: "Общий", cat_text: "Текстовые", cat_image: "Изображения", cat_video: "Видео", cat_code: "Код", cat_voice: "Голос/Музыка",
-            table_model: "Нейросеть", table_wins: "🏆 Побед", table_rating: "📊 Рейтинг"
+            nav_battle: "⚔️ Баттл", nav_rating: "🏆 Рейтинг", nav_catalog: "📚 Каталог"
         },
         en: {
-            nav_battle: "Battle", nav_rating: "Rating", question_label: "Question of the day", click_hint: "Click on the card to vote",
-            wins: "wins", votes_today: "votes today", votes_total: "total votes", next_question: "until next question",
-            rating_title: "Global AI Ranking", rating_desc: "Ranking based on all users' votes",
-            cat_all: "All", cat_text: "Text", cat_image: "Images", cat_video: "Video", cat_code: "Code", cat_voice: "Voice/Music",
-            table_model: "AI Model", table_wins: "🏆 Wins", table_rating: "📊 Rating"
+            nav_battle: "⚔️ Battle", nav_rating: "🏆 Rating", nav_catalog: "📚 Catalog"
         },
         uk: {
-            nav_battle: "Битва", nav_rating: "Рейтинг", question_label: "Питання дня", click_hint: "Клацніть на картку, щоб проголосувати",
-            wins: "перемог", votes_today: "голосів сьогодні", votes_total: "всього голосів", next_question: "до нового питання",
-            rating_title: "Глобальний рейтинг нейромереж", rating_desc: "Рейтинг формується на основі голосів усіх користувачів",
-            cat_all: "Загальний", cat_text: "Текстові", cat_image: "Зображення", cat_video: "Відео", cat_code: "Код", cat_voice: "Голос/Музика",
-            table_model: "Нейромережа", table_wins: "🏆 Перемог", table_rating: "📊 Рейтинг"
+            nav_battle: "⚔️ Битва", nav_rating: "🏆 Рейтинг", nav_catalog: "📚 Каталог"
         }
     };
     
     let currentLang = 'ru';
+    let currentTab = 'battle';
+    let currentRatingCategory = 'all';
+    let currentCatalogFilter = 'all';
     
-    function updateUIText() {
-        document.querySelectorAll('[data-key]').forEach(el => {
-            const key = el.getAttribute('data-key');
-            if (translations[currentLang] && translations[currentLang][key]) {
-                el.innerText = translations[currentLang][key];
-            }
-        });
-        
-        const langButtons = document.querySelectorAll('.lang-btn');
-        langButtons.forEach(btn => btn.classList.remove('active'));
-        const activeBtn = document.getElementById(`lang${currentLang.toUpperCase()}`);
-        if (activeBtn) activeBtn.classList.add('active');
-    }
-    
-    function setLanguage(lang) {
-        currentLang = lang;
-        localStorage.setItem('ai_arena_lang', lang);
-        updateUIText();
-        const questionEl = document.getElementById('questionOfDay');
-        if (window.currentQuestionObj && questionEl) {
-            if (currentLang === 'en' && window.currentQuestionObj.textEn) questionEl.innerText = window.currentQuestionObj.textEn;
-            else if (currentLang === 'uk' && window.currentQuestionObj.textUk) questionEl.innerText = window.currentQuestionObj.textUk;
-            else questionEl.innerText = window.currentQuestionObj.text;
-        }
-    }
-    
-    function detectLanguage() {
-        const saved = localStorage.getItem('ai_arena_lang');
-        if (saved && translations[saved]) { currentLang = saved; return; }
-        const browserLang = navigator.language.split('-')[0];
-        if (translations[browserLang]) currentLang = browserLang;
-        else currentLang = 'en';
-    }
-    
-    // ============ FIREBASE ============
-    const firebaseConfig = {
-        apiKey: "AIzaSyDXV647tuR7adub0pO6PAGlFkivU5WY6T0",
-        authDomain: "aivs-93aaf.firebaseapp.com",
-        projectId: "aivs-93aaf",
-        storageBucket: "aivs-93aaf.firebasestorage.app",
-        messagingSenderId: "467176227726",
-        appId: "1:467176227726:web:ac1a26bba36838ae8fdadf"
-    };
-    
-    // Проверяем загружен ли Firebase
-    if (typeof firebase !== 'undefined') {
-        firebase.initializeApp(firebaseConfig);
-    }
-    const db = typeof firebase !== 'undefined' ? firebase.firestore() : null;
-    
-    // ============ МОДЕЛИ С РЕАЛЬНЫМИ ЦИФРАМИ ============
-    const models = [
-        { id: "gpt4", name: "GPT-4 Turbo", developer: "OpenAI", category: "text", logo: "https://upload.wikimedia.org/wikipedia/commons/0/04/ChatGPT_logo.svg", wins: 45200 },
-        { id: "claude", name: "Claude 3.5 Sonnet", developer: "Anthropic", category: "text", logo: "https://www.anthropic.com/_next/static/media/claude-logo.8f2c5e9a.svg", wins: 41800 },
-        { id: "gemini", name: "Gemini 1.5 Pro", developer: "Google", category: "text", logo: "https://www.gstatic.com/lamda/images/gemini_logo_4a5e6c3f.svg", wins: 38500 },
-        { id: "deepseek", name: "DeepSeek V3", developer: "DeepSeek", category: "text", logo: "https://deepseek.com/favicon.ico", wins: 32100 },
-        { id: "llama3", name: "Llama 3 70B", developer: "Meta", category: "text", logo: "https://about.meta.com/brand/resources/meta/logo/logo.png", wins: 29400 },
-        { id: "mistral", name: "Mistral Large", developer: "Mistral AI", category: "text", logo: "https://mistral.ai/images/logo.png", wins: 26300 },
-        { id: "qwen", name: "Qwen 2.5 72B", developer: "Alibaba", category: "text", logo: "https://qwenlm.github.io/favicon.ico", wins: 23700 },
-        { id: "grok", name: "Grok-2", developer: "xAI", category: "text", logo: "https://x.ai/favicon.ico", wins: 19800 },
-        { id: "perplexity", name: "Perplexity AI", developer: "Perplexity", category: "text", logo: "https://www.perplexity.ai/favicon.ico", wins: 17200 },
-        { id: "command", name: "Command R+", developer: "Cohere", category: "text", logo: "https://cohere.com/favicon.ico", wins: 14500 },
-        { id: "midjourney", name: "Midjourney v6", developer: "Midjourney", category: "image", logo: "https://cdn.midjourney.com/favicon.ico", wins: 52000 },
-        { id: "dalle3", name: "DALL-E 3", developer: "OpenAI", category: "image", logo: "https://openai.com/favicon.ico", wins: 44300 },
-        { id: "flux", name: "Flux.1", developer: "Black Forest Labs", category: "image", logo: "https://blackforestlabs.ai/favicon.ico", wins: 38700 },
-        { id: "sd3", name: "Stable Diffusion 3", developer: "Stability AI", category: "image", logo: "https://stability.ai/favicon.ico", wins: 33200 },
-        { id: "leonardo", name: "Leonardo.ai", developer: "Leonardo", category: "image", logo: "https://leonardo.ai/favicon.ico", wins: 27800 },
-        { id: "sora", name: "Sora", developer: "OpenAI", category: "video", logo: "https://openai.com/favicon.ico", wins: 31000 },
-        { id: "runway", name: "Runway Gen-3", developer: "Runway ML", category: "video", logo: "https://runwayml.com/favicon.ico", wins: 27400 },
-        { id: "kling", name: "Kling AI", developer: "Kling", category: "video", logo: "https://klingai.com/favicon.ico", wins: 23900 },
-        { id: "pika", name: "Pika 2.0", developer: "Pika Labs", category: "video", logo: "https://pika.art/favicon.ico", wins: 19500 },
-        { id: "copilot", name: "GitHub Copilot", developer: "GitHub", category: "code", logo: "https://github.githubassets.com/favicon.ico", wins: 48000 },
-        { id: "cursor", name: "Cursor AI", developer: "Cursor", category: "code", logo: "https://cursor.sh/favicon.ico", wins: 42500 },
-        { id: "replit", name: "Replit Agent", developer: "Replit", category: "code", logo: "https://replit.com/favicon.ico", wins: 33200 },
-        { id: "v0", name: "v0.dev", developer: "Vercel", category: "code", logo: "https://v0.dev/favicon.ico", wins: 28700 },
-        { id: "suno", name: "Suno AI", developer: "Suno", category: "voice", logo: "https://suno.ai/favicon.ico", wins: 31500 },
-        { id: "elevenlabs", name: "ElevenLabs", developer: "ElevenLabs", category: "voice", logo: "https://elevenlabs.io/favicon.ico", wins: 35000 },
-        { id: "udio", name: "Udio", developer: "Udio", category: "voice", logo: "https://udio.com/favicon.ico", wins: 27800 }
-    ];
-    
-    // Вопросы дня
-    const questions = [
-        { text: "Какая нейросеть лучше пишет код?", textEn: "Which AI writes code best?", textUk: "Яка нейромережа краще пише код?", category: "code" },
-        { text: "Какая нейросеть лучше генерирует изображения?", textEn: "Which AI generates images best?", textUk: "Яка нейромережа краще генерує зображення?", category: "image" },
-        { text: "Какая нейросеть лучше создаёт видео?", textEn: "Which AI creates videos best?", textUk: "Яка нейромережа краще створює відео?", category: "video" },
-        { text: "Какая нейросеть лучше объясняет сложные темы?", textEn: "Which AI explains complex topics best?", textUk: "Яка нейромережа краще пояснює складні теми?", category: "text" },
-        { text: "Какая нейросеть лучше пишет маркетинговые тексты?", textEn: "Which AI writes marketing copy best?", textUk: "Яка нейромережа краще пише маркетингові тексти?", category: "text" },
-        { text: "Какая нейросеть лучше обрабатывает изображения?", textEn: "Which AI processes images best?", textUk: "Яка нейромережа краще обробляє зображення?", category: "image" }
+    // Модели с полными данными для каталога
+    const catalogModels = [
+        // Текстовые
+        { id: "gpt4", name: "GPT-4 Turbo", developer: "OpenAI", category: "text", logo: "https://upload.wikimedia.org/wikipedia/commons/0/04/ChatGPT_logo.svg", wins: 45200, founded: "2023", price: "от $20/мес", desc: "Самая мощная модель от OpenAI. Поддерживает анализ изображений, написание кода, решение сложных задач. Контекст 128K токенов.", link: "https://chat.openai.com" },
+        { id: "claude", name: "Claude 3.5 Sonnet", developer: "Anthropic", category: "text", logo: "https://www.anthropic.com/_next/static/media/claude-logo.8f2c5e9a.svg", wins: 41800, founded: "2024", price: "от $20/мес", desc: "Лучшая модель для написания кода и анализа документов. Контекст 200K токенов. Отличается высокой точностью и безопасностью.", link: "https://claude.ai" },
+        { id: "gemini", name: "Gemini 1.5 Pro", developer: "Google", category: "text", logo: "https://www.gstatic.com/lamda/images/gemini_logo_4a5e6c3f.svg", wins: 38500, founded: "2023", price: "бесплатно / $19.99", desc: "Мультимодальная модель от Google. Контекст 1M токенов — может обработать целую книгу за раз. Отличная интеграция с Google Workspace.", link: "https://gemini.google.com" },
+        { id: "deepseek", name: "DeepSeek V3", developer: "DeepSeek", category: "text", logo: "https://deepseek.com/favicon.ico", wins: 32100, founded: "2024", price: "бесплатно", desc: "Китайский конкурент GPT-4. Отличается низкой стоимостью и хорошим качеством для кода и математики. Контекст 128K токенов.", link: "https://deepseek.com" },
+        { id: "llama3", name: "Llama 3 70B", developer: "Meta", category: "text", logo: "https://about.meta.com/brand/resources/meta/logo/logo.png", wins: 29400, founded: "2024", price: "бесплатно (open-source)", desc: "Open-source модель от Meta. Можно запускать локально. Отличное соотношение цены и качества. Контекст 8K токенов.", link: "https://llama.meta.com" },
+        { id: "mistral", name: "Mistral Large", developer: "Mistral AI", category: "text", logo: "https://mistral.ai/images/logo.png", wins: 26300, founded: "2024", price: "от $8/мес", desc: "Европейский лидер. Высокая производительность и эффективность. Контекст 32K токенов. API с конкурентными ценами.", link: "https://mistral.ai" },
+        { id: "qwen", name: "Qwen 2.5 72B", developer: "Alibaba", category: "text", logo: "https://qwenlm.github.io/favicon.ico", wins: 23700, founded: "2023", price: "бесплатно", desc: "Мультиязычная модель от Alibaba. Отлично работает с китайским, английским и другими языками. Контекст 128K токенов.", link: "https://qwenlm.github.io" },
+        { id: "grok", name: "Grok-2", developer: "xAI", category: "text", logo: "https://x.ai/favicon.ico", wins: 19800, founded: "2024", price: "$16/мес (X Premium)", desc: "ИИ от Илона Маска. Имеет доступ к данным X (Twitter). Отличается прямотой и чувством юмора. Контекст 128K токенов.", link: "https://x.ai" },
+        { id: "perplexity", name: "Perplexity AI", developer: "Perplexity", category: "text", logo: "https://www.perplexity.ai/favicon.ico", wins: 17200, founded: "2022", price: "бесплатно / $20/мес", desc: "ИИ-поисковик с ссылками на источники. Отличный инструмент для исследований и фактчекинга.", link: "https://perplexity.ai" },
+        { id: "command", name: "Command R+", developer: "Cohere", category: "text", logo: "https://cohere.com/favicon.ico", wins: 14500, founded: "2023", price: "от $10/мес", desc: "Оптимизирована для RAG (поиск по документам) и бизнес-задач. Контекст 128K токенов.", link: "https://cohere.com" },
+        // Изображения
+        { id: "midjourney", name: "Midjourney v6", developer: "Midjourney", category: "image", logo: "https://cdn.midjourney.com/favicon.ico", wins: 52000, founded: "2022", price: "от $10/мес", desc: "Лучшая нейросеть для генерации арта. Невероятное качество, стили, детализация. Работает через Discord.", link: "https://midjourney.com" },
+        { id: "dalle3", name: "DALL-E 3", developer: "OpenAI", category: "image", logo: "https://openai.com/favicon.ico", wins: 44300, founded: "2023", price: "доступен в ChatGPT Plus", desc: "Генерация изображений от OpenAI. Лучшее понимание промтов. Интегрирован в ChatGPT.", link: "https://openai.com/dall-e-3" },
+        { id: "flux", name: "Flux.1", developer: "Black Forest Labs", category: "image", logo: "https://blackforestlabs.ai/favicon.ico", wins: 38700, founded: "2024", price: "бесплатно", desc: "Новая модель с невероятной детализацией. Создана бывшими разработчиками Stable Diffusion.", link: "https://blackforestlabs.ai" },
+        { id: "sd3", name: "Stable Diffusion 3", developer: "Stability AI", category: "image", logo: "https://stability.ai/favicon.ico", wins: 33200, founded: "2022", price: "бесплатно (open-source)", desc: "Самая популярная open-source модель. Можно запускать локально на своём ПК.", link: "https://stability.ai" },
+        { id: "leonardo", name: "Leonardo.ai", developer: "Leonardo", category: "image", logo: "https://leonardo.ai/favicon.ico", wins: 27800, founded: "2022", price: "бесплатно / от $12/мес", desc: "Отличная модель для игровых ассетов, персонажей и фонов. Мощные инструменты для доработки.", link: "https://leonardo.ai" },
+        // Видео
+        { id: "sora", name: "Sora", developer: "OpenAI", category: "video", logo: "https://openai.com/favicon.ico", wins: 31000, founded: "2024", price: "ожидается", desc: "Текст в видео от OpenAI. Генерирует гиперреалистичные видео до 1 минуты.", link: "https://openai.com/sora" },
+        { id: "runway", name: "Runway Gen-3", developer: "Runway ML", category: "video", logo: "https://runwayml.com/favicon.ico", wins: 27400, founded: "2023", price: "от $12/мес", desc: "Киношное качество генерации видео. Отличные инструменты для редактирования.", link: "https://runwayml.com" },
+        { id: "kling", name: "Kling AI", developer: "Kling", category: "video", logo: "https://klingai.com/favicon.ico", wins: 23900, founded: "2024", price: "бесплатно (ограничения)", desc: "Китайская модель с лучшей физикой движений тела. Генерирует видео до 2 минут.", link: "https://klingai.com" },
+        { id: "pika", name: "Pika 2.0", developer: "Pika Labs", category: "video", logo: "https://pika.art/favicon.ico", wins: 19500, founded: "2023", price: "бесплатно", desc: "Анимация любых объектов. Простой и интуитивный интерфейс.", link: "https://pika.art" },
+        // Код
+        { id: "copilot", name: "GitHub Copilot", developer: "GitHub", category: "code", logo: "https://github.githubassets.com/favicon.ico", wins: 48000, founded: "2021", price: "$10/мес или $100/год", desc: "Стандарт для разработчиков. Автодополнение кода в реальном времени. Поддерживает все популярные IDE.", link: "https://github.com/features/copilot" },
+        { id: "cursor", name: "Cursor AI", developer: "Cursor", category: "code", logo: "https://cursor.sh/favicon.ico", wins: 42500, founded: "2023", price: "бесплатно / $20/мес", desc: "Редактор кода будущего. Встроенный ИИ для написания, рефакторинга и отладки кода.", link: "https://cursor.sh" },
+        { id: "replit", name: "Replit Agent", developer: "Replit", category: "code", logo: "https://replit.com/favicon.ico", wins: 33200, founded: "2023", price: "$7/мес", desc: "Пишет и деплоит приложения прямо из браузера. Отлично подходит для быстрого прототипирования.", link: "https://replit.com" },
+        { id: "v0", name: "v0.dev", developer: "Vercel", category: "code", logo: "https://v0.dev/favicon.ico", wins: 28700, founded: "2023", price: "бесплатно", desc: "Генерация фронтенд-компонентов на React. Идеально для UI и дизайн-систем.", link: "https://v0.dev" },
+        // Голос/Музыка
+        { id: "elevenlabs", name: "ElevenLabs", developer: "ElevenLabs", category: "voice", logo: "https://elevenlabs.io/favicon.ico", wins: 35000, founded: "2022", price: "от $5/мес", desc: "Лучшая озвучка текста. Реалистичные голоса на десятках языков. Можно клонировать свой голос.", link: "https://elevenlabs.io" },
+        { id: "suno", name: "Suno AI", developer: "Suno", category: "voice", logo: "https://suno.ai/favicon.ico", wins: 31500, founded: "2023", price: "бесплатно / $10/мес", desc: "Генерация музыки с вокалом по текстовому описанию. Создайте полноценную песню за минуту.", link: "https://suno.ai" },
+        { id: "udio", name: "Udio", developer: "Udio", category: "voice", logo: "https://udio.com/favicon.ico", wins: 27800, founded: "2024", price: "бесплатно", desc: "Музыкальная модель от бывших разработчиков Google DeepMind. Высокое качество звучания.", link: "https://udio.com" }
     ];
     
     let currentModels = { A: null, B: null };
@@ -378,8 +494,17 @@
     let nextQuestionInterval = null;
     let totalVotesAll = 845200;
     let totalVotesToday = 2847;
-    let currentRatingCategory = 'all';
     
+    const questions = [
+        { text: "Какая нейросеть лучше пишет код?", category: "code" },
+        { text: "Какая нейросеть лучше генерирует изображения?", category: "image" },
+        { text: "Какая нейросеть лучше создаёт видео?", category: "video" },
+        { text: "Какая нейросеть лучше объясняет сложные темы?", category: "text" },
+        { text: "Какая нейросеть лучше пишет маркетинговые тексты?", category: "text" },
+        { text: "Какая нейросеть лучше создаёт музыку?", category: "voice" }
+    ];
+    
+    // Функции
     function showToast(message, isError = false) {
         const toast = document.getElementById('toastMessage');
         if (!toast) return;
@@ -391,49 +516,40 @@
         setTimeout(() => toast.classList.add('hidden'), 2000);
     }
     
-    async function initFirebaseData() {
-        // Показываем накрученные цифры сразу
-        document.getElementById("totalVotesAll").innerText = totalVotesAll.toLocaleString();
-        document.getElementById("totalVotesToday").innerText = totalVotesToday.toLocaleString();
+    function setLanguage(lang) {
+        currentLang = lang;
+        localStorage.setItem('ai_arena_lang', lang);
+        document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
+        document.getElementById(`lang${lang.toUpperCase()}`).classList.add('active');
         
-        if (db) {
-            try {
-                for (const model of models) {
-                    const docRef = db.collection("models").doc(model.id);
-                    const doc = await docRef.get();
-                    if (!doc.exists) {
-                        await docRef.set({ name: model.name, developer: model.developer, category: model.category, wins: model.wins, totalMatches: model.wins });
-                    }
-                }
-                const statsRef = db.collection("stats").doc("global");
-                const statsDoc = await statsRef.get();
-                if (!statsDoc.exists) {
-                    await statsRef.set({ totalVotes: totalVotesAll, totalVotesToday: totalVotesToday, lastResetDate: new Date().toDateString() });
-                }
-            } catch(e) { console.log("Firebase error:", e); }
-        }
-        
-        await loadOrCreateQuestionOfDay();
-        await updateTodayVotesCount();
-        startQuestionTimer();
-        updateUIText();
+        // Обновляем текст в навигации
+        document.querySelectorAll('.nav-btn').forEach(btn => {
+            const key = btn.id === 'tabBattleBtn' ? 'nav_battle' : (btn.id === 'tabRatingBtn' ? 'nav_rating' : 'nav_catalog');
+            if (translations[lang][key]) {
+                btn.innerHTML = translations[lang][key];
+            }
+        });
+    }
+    
+    function detectLanguage() {
+        const saved = localStorage.getItem('ai_arena_lang');
+        if (saved && translations[saved]) { currentLang = saved; return; }
+        const browserLang = navigator.language.split('-')[0];
+        if (translations[browserLang]) currentLang = browserLang;
+        else currentLang = 'en';
     }
     
     async function loadOrCreateQuestionOfDay() {
-        const today = new Date().toDateString();
-        
-        // Выбираем случайный вопрос
         const randomIndex = Math.floor(Math.random() * questions.length);
         currentQuestionObj = questions[randomIndex];
         
-        // Выбираем модели для баттла из правильной категории
         let candidates;
         if (currentQuestionObj.category === 'code' || currentQuestionObj.category === 'text') {
-            candidates = models.filter(m => m.category === 'text');
+            candidates = catalogModels.filter(m => m.category === 'text');
         } else {
-            candidates = models.filter(m => m.category === currentQuestionObj.category);
+            candidates = catalogModels.filter(m => m.category === currentQuestionObj.category);
         }
-        if (candidates.length < 2) candidates = models;
+        if (candidates.length < 2) candidates = catalogModels;
         
         const shuffled = [...candidates];
         for (let i = shuffled.length - 1; i > 0; i--) {
@@ -443,51 +559,23 @@
         currentModels.A = shuffled[0];
         currentModels.B = shuffled[1];
         
-        window.currentQuestionObj = currentQuestionObj;
-        
-        let qText = currentQuestionObj.text;
-        if (currentLang === 'en' && currentQuestionObj.textEn) qText = currentQuestionObj.textEn;
-        if (currentLang === 'uk' && currentQuestionObj.textUk) qText = currentQuestionObj.textUk;
-        const questionEl = document.getElementById("questionOfDay");
-        if (questionEl) questionEl.innerText = qText;
-        
+        document.getElementById("questionOfDay").innerText = currentQuestionObj.text;
         updateUI();
-        await loadModelStats();
-    }
-    
-    async function loadModelStats() {
-        if (currentModels.A) {
-            const winsEl = document.getElementById("modelAWins");
-            const logoEl = document.getElementById("modelALogo");
-            if (winsEl) winsEl.innerText = currentModels.A.wins.toLocaleString();
-            if (logoEl) logoEl.src = currentModels.A.logo;
-        }
-        if (currentModels.B) {
-            const winsEl = document.getElementById("modelBWins");
-            const logoEl = document.getElementById("modelBLogo");
-            if (winsEl) winsEl.innerText = currentModels.B.wins.toLocaleString();
-            if (logoEl) logoEl.src = currentModels.B.logo;
-        }
     }
     
     function updateUI() {
         if (currentModels.A) {
-            const nameEl = document.getElementById("modelAName");
-            const descEl = document.getElementById("modelADesc");
-            if (nameEl) nameEl.innerText = currentModels.A.name;
-            if (descEl) descEl.innerHTML = currentModels.A.developer;
+            document.getElementById("modelAName").innerText = currentModels.A.name;
+            document.getElementById("modelADesc").innerHTML = currentModels.A.developer;
+            document.getElementById("modelALogo").src = currentModels.A.logo;
+            document.getElementById("modelAWins").innerText = currentModels.A.wins.toLocaleString();
         }
         if (currentModels.B) {
-            const nameEl = document.getElementById("modelBName");
-            const descEl = document.getElementById("modelBDesc");
-            if (nameEl) nameEl.innerText = currentModels.B.name;
-            if (descEl) descEl.innerHTML = currentModels.B.developer;
+            document.getElementById("modelBName").innerText = currentModels.B.name;
+            document.getElementById("modelBDesc").innerHTML = currentModels.B.developer;
+            document.getElementById("modelBLogo").src = currentModels.B.logo;
+            document.getElementById("modelBWins").innerText = currentModels.B.wins.toLocaleString();
         }
-    }
-    
-    async function updateTodayVotesCount() {
-        const todayVotesEl = document.getElementById("totalVotesToday");
-        if (todayVotesEl) todayVotesEl.innerText = totalVotesToday.toLocaleString();
     }
     
     async function voteFor(side) {
@@ -497,39 +585,29 @@
         }
         lastVoteTimestamp = Date.now();
         
-        const winnerId = side === 'A' ? currentModels.A.id : currentModels.B.id;
-        const winnerName = side === 'A' ? currentModels.A.name : currentModels.B.name;
         const winner = side === 'A' ? currentModels.A : currentModels.B;
-        
-        // Увеличиваем счётчик побед у победителя
         winner.wins++;
         
-        // Обновляем отображение
         if (side === 'A') {
-            const winsEl = document.getElementById("modelAWins");
-            if (winsEl) winsEl.innerText = winner.wins.toLocaleString();
+            document.getElementById("modelAWins").innerText = winner.wins.toLocaleString();
         } else {
-            const winsEl = document.getElementById("modelBWins");
-            if (winsEl) winsEl.innerText = winner.wins.toLocaleString();
+            document.getElementById("modelBWins").innerText = winner.wins.toLocaleString();
         }
         
-        // Обновляем глобальные счётчики
         totalVotesAll++;
         totalVotesToday++;
         document.getElementById("totalVotesAll").innerText = totalVotesAll.toLocaleString();
         document.getElementById("totalVotesToday").innerText = totalVotesToday.toLocaleString();
         
-        // Показываем уведомление
-        showToast(`🎉 ${winnerName} +1 победа!`);
+        showToast(`🎉 ${winner.name} +1 победа!`);
         
-        // Выбираем нового соперника
         let candidates;
         if (currentQuestionObj.category === 'code' || currentQuestionObj.category === 'text') {
-            candidates = models.filter(m => m.category === 'text' && m.id !== winner.id);
+            candidates = catalogModels.filter(m => m.category === 'text' && m.id !== winner.id);
         } else {
-            candidates = models.filter(m => m.category === currentQuestionObj.category && m.id !== winner.id);
+            candidates = catalogModels.filter(m => m.category === currentQuestionObj.category && m.id !== winner.id);
         }
-        if (candidates.length === 0) candidates = models.filter(m => m.id !== winner.id);
+        if (candidates.length === 0) candidates = catalogModels.filter(m => m.id !== winner.id);
         
         const newChallenger = candidates[Math.floor(Math.random() * candidates.length)];
         
@@ -540,58 +618,6 @@
         }
         
         updateUI();
-        await loadModelStats();
-        
-        // Обновляем Firebase если доступен
-        if (db) {
-            try {
-                const winnerRef = db.collection("models").doc(winnerId);
-                await winnerRef.update({ wins: firebase.firestore.FieldValue.increment(1) });
-                const statsRef = db.collection("stats").doc("global");
-                await statsRef.update({ totalVotes: firebase.firestore.FieldValue.increment(1), totalVotesToday: firebase.firestore.FieldValue.increment(1) });
-            } catch(e) { console.log("Firebase update error:", e); }
-        }
-    }
-    
-    async function showRatingCategory(category) {
-        currentRatingCategory = category;
-        document.querySelectorAll('.category-tab').forEach(btn => btn.classList.remove('active'));
-        const activeBtn = document.getElementById(`cat${category === 'all' ? 'All' : category.charAt(0).toUpperCase() + category.slice(1)}`);
-        if (activeBtn) activeBtn.classList.add('active');
-        await updateRatingTable();
-    }
-    
-    async function updateRatingTable() {
-        let filteredModels = [...models];
-        if (currentRatingCategory !== 'all') {
-            filteredModels = models.filter(m => m.category === currentRatingCategory);
-        }
-        filteredModels.sort((a, b) => b.wins - a.wins);
-        
-        const tbody = document.getElementById("ratingTableBody");
-        if (!tbody) return;
-        tbody.innerHTML = "";
-        const maxWins = filteredModels[0]?.wins || 1;
-        
-        filteredModels.forEach((model, idx) => {
-            const winPercent = (model.wins / maxWins) * 100;
-            tbody.innerHTML += `
-                <tr class="border-b border-white/5 hover:bg-white/5 transition-all">
-                    <td class="py-3 px-4">${idx === 0 ? '<span class="rank-badge inline-block w-7 h-7 rounded-full text-center leading-7 text-black font-bold">1</span>' : idx+1}</td>
-                    <td class="py-3 px-4 font-medium">
-                        <img src="${model.logo}" class="w-6 h-6 inline mr-2 rounded" onerror="this.style.display='none'">
-                        ${model.name}
-                        <span class="text-xs text-slate-500 ml-2">${model.developer}</span>
-                    </td>
-                    <td class="py-3 px-4 text-center font-bold text-yellow-400">${model.wins.toLocaleString()}</td>
-                    <td class="py-3 px-4">
-                        <div class="w-full bg-white/10 rounded-full h-2">
-                            <div class="bg-gradient-to-r from-blue-500 to-purple-500 h-2 rounded-full" style="width: ${winPercent}%"></div>
-                        </div>
-                    </td>
-                </tr>
-            `;
-        });
     }
     
     function startQuestionTimer() {
@@ -610,29 +636,105 @@
             const hours = Math.floor(diff / (1000 * 60 * 60));
             const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
             const seconds = Math.floor((diff % (1000 * 60)) / 1000);
-            const timerEl = document.getElementById("nextQuestionTimer");
-            if (timerEl) timerEl.innerHTML = `${hours.toString().padStart(2,'0')}:${minutes.toString().padStart(2,'0')}:${seconds.toString().padStart(2,'0')}`;
+            document.getElementById("nextQuestionTimer").innerHTML = `${hours.toString().padStart(2,'0')}:${minutes.toString().padStart(2,'0')}:${seconds.toString().padStart(2,'0')}`;
         }, 1000);
     }
     
     function showTab(tab) {
-        const battleTab = document.getElementById("battleTab");
-        const ratingTab = document.getElementById("ratingTab");
-        const battleBtn = document.getElementById("tabBattleBtn");
-        const ratingBtn = document.getElementById("tabRatingBtn");
+        currentTab = tab;
+        document.getElementById("battleTab").classList.toggle("hidden", tab !== 'battle');
+        document.getElementById("ratingTab").classList.toggle("hidden", tab !== 'rating');
+        document.getElementById("catalogTab").classList.toggle("hidden", tab !== 'catalog');
         
-        if (battleTab) battleTab.classList.toggle("hidden", tab !== 'battle');
-        if (ratingTab) ratingTab.classList.toggle("hidden", tab !== 'rating');
-        if (battleBtn) battleBtn.classList.toggle("active", tab === 'battle');
-        if (ratingBtn) ratingBtn.classList.toggle("active", tab === 'rating');
+        document.getElementById("tabBattleBtn").classList.toggle("active", tab === 'battle');
+        document.getElementById("tabRatingBtn").classList.toggle("active", tab === 'rating');
+        document.getElementById("tabCatalogBtn").classList.toggle("active", tab === 'catalog');
+        
         if (tab === 'rating') updateRatingTable();
+        if (tab === 'catalog') renderCatalog();
+    }
+    
+    async function updateRatingTable() {
+        let filtered = [...catalogModels];
+        if (currentRatingCategory !== 'all') {
+            filtered = catalogModels.filter(m => m.category === currentRatingCategory);
+        }
+        filtered.sort((a, b) => b.wins - a.wins);
+        
+        const tbody = document.getElementById("ratingTableBody");
+        if (!tbody) return;
+        tbody.innerHTML = "";
+        const maxWins = filtered[0]?.wins || 1;
+        
+        filtered.forEach((model, idx) => {
+            const winPercent = (model.wins / maxWins) * 100;
+            tbody.innerHTML += `
+                <tr class="border-b border-white/5 hover:bg-white/5 transition-all">
+                    <td class="py-3 px-4">${idx === 0 ? '<span class="rank-badge inline-block w-7 h-7 rounded-full text-center leading-7 text-black font-bold">1</span>' : idx+1}</td>
+                    <td class="py-3 px-4 font-medium">
+                        <img src="${model.logo}" class="w-6 h-6 inline mr-2 rounded" onerror="this.style.display='none'">
+                        ${model.name}
+                        <span class="text-xs text-slate-500 ml-2">${model.developer}</span>
+                    </td>
+                    <td class="py-3 px-4 text-center font-bold text-yellow-400">${model.wins.toLocaleString()}</td>
+                    <td class="py-3 px-4"><div class="w-full bg-white/10 rounded-full h-2"><div class="bg-gradient-to-r from-blue-500 to-purple-500 h-2 rounded-full" style="width: ${winPercent}%"></div></div></td>
+                </tr>
+            `;
+        });
+    }
+    
+    function showRatingCategory(category) {
+        currentRatingCategory = category;
+        document.querySelectorAll('#ratingTab .catalog-cat').forEach(btn => btn.classList.remove('active'));
+        document.getElementById(`cat${category === 'all' ? 'All' : category.charAt(0).toUpperCase() + category.slice(1)}`).classList.add('active');
+        updateRatingTable();
+    }
+    
+    function renderCatalog() {
+        let filtered = [...catalogModels];
+        if (currentCatalogFilter !== 'all') {
+            filtered = catalogModels.filter(m => m.category === currentCatalogFilter);
+        }
+        
+        const grid = document.getElementById("catalogGrid");
+        if (!grid) return;
+        grid.innerHTML = filtered.map(model => `
+            <div class="catalog-item rounded-xl p-5 transition-all">
+                <div class="flex items-start gap-4">
+                    <img src="${model.logo}" class="ai-logo w-14 h-14" onerror="this.src='https://placehold.co/60x60/3b82f6/white?text=AI'">
+                    <div class="flex-1">
+                        <h3 class="font-bold text-lg text-white">${model.name}</h3>
+                        <p class="text-xs text-blue-400 mb-1">${model.developer}</p>
+                        <div class="flex flex-wrap gap-2 text-xs mt-2">
+                            <span class="px-2 py-0.5 rounded-full bg-white/10">${model.category === 'text' ? '💬 Текст' : model.category === 'image' ? '🎨 Арт' : model.category === 'video' ? '🎬 Видео' : model.category === 'code' ? '💻 Код' : '🎤 Голос'}</span>
+                            <span class="px-2 py-0.5 rounded-full bg-white/10">${model.price || 'Бесплатно'}</span>
+                        </div>
+                    </div>
+                </div>
+                <p class="text-sm text-slate-400 mt-3 leading-relaxed">${model.desc}</p>
+                <div class="flex gap-2 mt-4">
+                    <a href="${model.link}" target="_blank" class="flex-1 text-center text-sm py-2 rounded-lg bg-blue-600/20 hover:bg-blue-600 text-blue-400 hover:text-white transition-all">🔗 Открыть</a>
+                </div>
+            </div>
+        `).join('');
+    }
+    
+    function filterCatalog(category) {
+        currentCatalogFilter = category;
+        document.querySelectorAll('#catalogTab .catalog-cat').forEach(btn => btn.classList.remove('active'));
+        document.getElementById(`catalogCat${category.charAt(0).toUpperCase() + category.slice(1)}`).classList.add('active');
+        renderCatalog();
     }
     
     detectLanguage();
+    setLanguage(currentLang);
+    
     document.addEventListener('DOMContentLoaded', () => {
-        initFirebaseData();
+        document.getElementById("totalVotesAll").innerText = totalVotesAll.toLocaleString();
+        document.getElementById("totalVotesToday").innerText = totalVotesToday.toLocaleString();
+        loadOrCreateQuestionOfDay();
+        startQuestionTimer();
         showTab('battle');
-        updateUIText();
     });
 </script>
 </body>
