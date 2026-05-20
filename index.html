@@ -913,6 +913,61 @@
             document.getElementById('cookieConsent').classList.remove('hidden');
         }
     });
+    async function resetFirebaseData() {
+    console.log("🔄 Начинаем запись данных в Firebase...");
+    
+    const modelsList = [
+        { id: "gpt4", name: "GPT-4 Turbo", developer: "OpenAI", category: "text", wins: 45200 },
+        { id: "claude", name: "Claude 3.5 Sonnet", developer: "Anthropic", category: "text", wins: 41800 },
+        { id: "gemini", name: "Gemini 1.5 Pro", developer: "Google", category: "text", wins: 38500 },
+        { id: "deepseek", name: "DeepSeek V3", developer: "DeepSeek", category: "text", wins: 32100 },
+        { id: "llama3", name: "Llama 3 70B", developer: "Meta", category: "text", wins: 29400 },
+        { id: "mistral", name: "Mistral Large", developer: "Mistral AI", category: "text", wins: 26300 },
+        { id: "qwen", name: "Qwen 2.5 72B", developer: "Alibaba", category: "text", wins: 23700 },
+        { id: "grok", name: "Grok-2", developer: "xAI", category: "text", wins: 19800 },
+        { id: "perplexity", name: "Perplexity AI", developer: "Perplexity", category: "text", wins: 17200 },
+        { id: "midjourney", name: "Midjourney v6", developer: "Midjourney", category: "image", wins: 52000 },
+        { id: "dalle3", name: "DALL-E 3", developer: "OpenAI", category: "image", wins: 44300 },
+        { id: "flux", name: "Flux.1", developer: "Black Forest Labs", category: "image", wins: 38700 },
+        { id: "sd3", name: "Stable Diffusion 3", developer: "Stability AI", category: "image", wins: 33200 },
+        { id: "leonardo", name: "Leonardo.ai", developer: "Leonardo", category: "image", wins: 27800 },
+        { id: "sora", name: "Sora", developer: "OpenAI", category: "video", wins: 31000 },
+        { id: "runway", name: "Runway Gen-3", developer: "Runway ML", category: "video", wins: 27400 },
+        { id: "kling", name: "Kling AI", developer: "Kling", category: "video", wins: 23900 },
+        { id: "pika", name: "Pika 2.0", developer: "Pika Labs", category: "video", wins: 19500 },
+        { id: "copilot", name: "GitHub Copilot", developer: "GitHub", category: "code", wins: 48000 },
+        { id: "cursor", name: "Cursor AI", developer: "Cursor", category: "code", wins: 42500 },
+        { id: "replit", name: "Replit Agent", developer: "Replit", category: "code", wins: 33200 },
+        { id: "v0", name: "v0.dev", developer: "Vercel", category: "code", wins: 28700 },
+        { id: "elevenlabs", name: "ElevenLabs", developer: "ElevenLabs", category: "voice", wins: 35000 },
+        { id: "suno", name: "Suno AI", developer: "Suno", category: "voice", wins: 31500 },
+        { id: "udio", name: "Udio", developer: "Udio", category: "voice", wins: 27800 }
+    ];
+    
+    for (const model of modelsList) {
+        const docRef = db.collection("models").doc(model.id);
+        await docRef.set({
+            wins: model.wins,
+            name: model.name,
+            developer: model.developer,
+            category: model.category
+        });
+        console.log(`✅ ${model.name}: ${model.wins} побед`);
+    }
+    
+    let total = 0;
+    for (const model of modelsList) total += model.wins;
+    
+    const statsRef = db.collection("stats").doc("global");
+    await statsRef.set({
+        totalVotes: total,
+        totalVotesToday: Math.floor(total * 0.003),
+        lastResetDate: new Date().toDateString()
+    });
+    
+    console.log(`📊 ВСЕГО ГОЛОСОВ: ${total.toLocaleString()}`);
+    alert(`✅ Готово! Записано ${modelsList.length} моделей, всего голосов: ${total.toLocaleString()}`);
+}
 </script>
 </body>
 </html>
