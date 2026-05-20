@@ -141,17 +141,17 @@
         }
         
         .catalog-item {
-            background: rgba(20, 25, 45, 0.85);
-            backdrop-filter: blur(12px);
+            background: rgba(20, 25, 45, 0.8);
+            backdrop-filter: blur(10px);
             border: 1px solid rgba(255,255,255,0.08);
             transition: all 0.3s;
-            min-height: 290px;
+            min-height: 280px;
         }
         
         .catalog-item:hover {
-            transform: translateY(-6px);
+            transform: translateY(-5px);
             border-color: #3b82f6;
-            box-shadow: 0 15px 35px rgba(59,130,246,0.25);
+            box-shadow: 0 10px 30px rgba(59,130,246,0.2);
         }
         
         .ai-logo {
@@ -169,7 +169,7 @@
         }
         
         .vs-neon {
-            font-size: 3.8rem;
+            font-size: 3.5rem;
             font-weight: 800;
             background: linear-gradient(135deg, #3b82f6, #ec4899, #8b5cf6);
             -webkit-background-clip: text;
@@ -233,7 +233,7 @@
 
 <main class="container mx-auto px-4 pt-24 pb-20 relative z-10 flex-1">
     
-    <!-- БАТТЛ -->
+    <!-- ВКЛАДКА БАТТЛ -->
     <div id="battleTab" class="fade-in-up">
         <div class="text-center max-w-3xl mx-auto mb-12">
             <div class="inline-flex items-center gap-2 bg-gradient-to-r from-blue-500/20 to-purple-500/20 px-5 py-2 rounded-full mb-4 border border-blue-500/30">
@@ -248,7 +248,7 @@
 
         <div class="max-w-6xl mx-auto">
             <div class="arena-container">
-                <div id="modelACard" class="model-card p-8 text-center flex-1 min-w-[290px] max-w-[420px]" onclick="voteFor('A')">
+                <div id="modelACard" class="model-card p-8 text-center flex-1 min-w-[300px] max-w-md" onclick="voteFor('A')">
                     <div class="w-28 h-28 mx-auto mb-6 bg-gradient-to-br from-blue-500/30 to-purple-500/30 rounded-2xl flex items-center justify-center">
                         <img id="modelALogo" class="ai-logo w-20 h-20" src="" alt="logo" onerror="this.src='https://placehold.co/80x80/3b82f6/white?text=AI'">
                     </div>
@@ -266,7 +266,7 @@
                     <div class="vs-neon">VS</div>
                 </div>
 
-                <div id="modelBCard" class="model-card p-8 text-center flex-1 min-w-[290px] max-w-[420px]" onclick="voteFor('B')">
+                <div id="modelBCard" class="model-card p-8 text-center flex-1 min-w-[300px] max-w-md" onclick="voteFor('B')">
                     <div class="w-28 h-28 mx-auto mb-6 bg-gradient-to-br from-purple-500/30 to-pink-500/30 rounded-2xl flex items-center justify-center">
                         <img id="modelBLogo" class="ai-logo w-20 h-20" src="" alt="logo" onerror="this.src='https://placehold.co/80x80/8b5cf6/white?text=AI'">
                     </div>
@@ -367,6 +367,7 @@
             </h2>
             <p class="text-slate-400 mt-3">Свежие статьи, сравнения и новости из мира нейросетей</p>
         </div>
+
         <div id="blogGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
     </div>
 
@@ -483,25 +484,6 @@
         text.innerText = message;
         toast.classList.remove('hidden');
         setTimeout(() => toast.classList.add('hidden'), 2000);
-    }
-
-    async function resetFirebaseData() {
-        console.log("🔄 Начинаем запись данных...");
-        for (const model of modelsList) {
-            await db.collection("models").doc(model.id).set({
-                wins: model.wins,
-                name: model.name,
-                developer: model.developer,
-                category: model.category
-            });
-        }
-        let total = modelsList.reduce((sum, m) => sum + m.wins, 0);
-        await db.collection("stats").doc("global").set({
-            totalVotes: total,
-            totalVotesToday: Math.floor(total * 0.003),
-            lastResetDate: new Date().toDateString()
-        });
-        showToast("✅ Данные обновлены!", false);
     }
 
     async function loadFromFirebase() {
@@ -623,7 +605,7 @@
             tbody.innerHTML += `
                 <tr class="border-b border-white/5 hover:bg-white/5">
                     <td class="py-3 px-4">${idx === 0 ? '<span class="rank-badge inline-block w-7 h-7 rounded-full text-center leading-7 text-black font-bold">1</span>' : idx+1}</td>
-                    <td class="py-3 px-4">${model.name}</td>
+                    <td class="py-3 px-4 font-medium">${model.name}</td>
                     <td class="py-3 px-4 text-center font-bold text-yellow-400">${model.wins.toLocaleString()}</td>
                     <td class="py-3 px-4">
                         <div class="w-full bg-white/10 rounded-full h-2">
@@ -648,15 +630,15 @@
         const grid = document.getElementById("catalogGrid");
         grid.innerHTML = filtered.map(model => `
             <div class="catalog-item rounded-2xl p-5 cursor-pointer" onclick="window.open('${model.link}', '_blank')">
-                <div class="flex items-center gap-4">
-                    <img src="${model.logo}" class="ai-logo w-16 h-16" onerror="this.src='https://placehold.co/60x60/3b82f6/white?text=AI'">
-                    <div>
+                <div class="flex items-start gap-4">
+                    <img src="${model.logo}" class="ai-logo w-14 h-14" onerror="this.src='https://placehold.co/60x60/3b82f6/white?text=AI'">
+                    <div class="flex-1">
                         <h3 class="font-bold text-lg">${model.name}</h3>
-                        <p class="text-blue-400">${model.developer}</p>
+                        <p class="text-blue-400 text-sm">${model.developer}</p>
+                        <p class="text-xs text-slate-400 mt-1">${model.price}</p>
                     </div>
                 </div>
-                <p class="text-sm text-slate-400 mt-4 line-clamp-3">${model.desc}</p>
-                <div class="mt-4 text-xs text-slate-400">${model.price}</div>
+                <p class="text-sm text-slate-400 mt-4">${model.desc}</p>
             </div>
         `).join('');
     }
@@ -673,10 +655,12 @@
         const grid = document.getElementById("blogGrid");
         grid.innerHTML = blogPosts.map(post => `
             <div class="catalog-item rounded-2xl p-5 cursor-pointer" onclick="window.open('${post.link}', '_blank')">
-                <span class="text-xs text-blue-400">${post.category}</span>
-                <h3 class="font-bold text-lg mt-3">${post.title}</h3>
-                <p class="text-sm text-slate-400 mt-2">${post.desc}</p>
-                <p class="text-xs text-slate-500 mt-4">${post.date}</p>
+                <div class="flex justify-between items-start mb-2">
+                    <span class="text-xs text-blue-400">${post.category}</span>
+                    <span class="text-xs text-slate-500">${post.date}</span>
+                </div>
+                <h3 class="font-bold text-lg mb-2">${post.title}</h3>
+                <p class="text-sm text-slate-400">${post.desc}</p>
             </div>
         `).join('');
     }
