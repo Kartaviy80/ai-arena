@@ -6,6 +6,13 @@
     <title>AI Arena | Глобальный рейтинг нейросетей 2026</title>
     <meta name="description" content="Голосуйте за лучшие нейросети мира. Ежедневные баттлы 50+ ИИ моделей. Глобальный рейтинг и топы по категориям.">
     <meta name="keywords" content="нейросети, ИИ баттл, сравнение ИИ, GPT-4, Claude, Gemini, Midjourney">
+    <meta name="author" content="AI Arena">
+    <meta name="robots" content="index, follow">
+    <meta property="og:title" content="AI Arena | Рейтинг нейросетей 2026">
+    <meta property="og:description" content="Голосуйте за лучшие нейросети мира. Сравните GPT-4, Claude, Gemini и другие ИИ в реальном баттле.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://ai-arena-self.vercel.app">
+    <link rel="canonical" href="https://ai-arena-self.vercel.app">
     
     <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
@@ -263,6 +270,15 @@
         footer a:hover {
             color: #3b82f6;
         }
+        
+        .lang-btn {
+            cursor: pointer;
+        }
+        
+        .lang-btn.active {
+            background: rgba(59,130,246,0.3);
+            color: #3b82f6;
+        }
     </style>
 </head>
 <body>
@@ -295,7 +311,7 @@
 
 <main class="container mx-auto px-4 pt-24 pb-12 relative z-10">
     
-    <!-- ==================== ВКЛАДКА БАТТЛ ==================== -->
+    <!-- ВКЛАДКА БАТТЛ -->
     <div id="battleTab" class="fade-in-up">
         <div class="text-center max-w-3xl mx-auto mb-12">
             <div class="inline-flex items-center gap-2 bg-gradient-to-r from-blue-500/20 to-purple-500/20 px-5 py-2 rounded-full mb-4 border border-blue-500/30">
@@ -371,7 +387,7 @@
         </div>
     </div>
 
-    <!-- ==================== ВКЛАДКА РЕЙТИНГ ==================== -->
+    <!-- ВКЛАДКА РЕЙТИНГ -->
     <div id="ratingTab" class="hidden fade-in-up">
         <div class="text-center max-w-3xl mx-auto mb-10">
             <h2 class="text-4xl md:text-5xl font-bold bg-gradient-to-r from-yellow-400 via-orange-400 to-pink-400 bg-clip-text text-transparent">
@@ -406,7 +422,7 @@
         </div>
     </div>
 
-    <!-- ==================== ВКЛАДКА КАТАЛОГ ==================== -->
+    <!-- ВКЛАДКА КАТАЛОГ -->
     <div id="catalogTab" class="hidden fade-in-up">
         <div class="text-center max-w-3xl mx-auto mb-10">
             <h2 class="text-4xl md:text-5xl font-bold bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
@@ -427,7 +443,7 @@
         <div id="catalogGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"></div>
     </div>
 
-    <!-- ==================== ВКЛАДКА БЛОГ ==================== -->
+    <!-- ВКЛАДКА БЛОГ -->
     <div id="blogTab" class="hidden fade-in-up">
         <div class="text-center max-w-3xl mx-auto mb-10">
             <h2 class="text-4xl md:text-5xl font-bold bg-gradient-to-r from-green-400 to-emerald-400 bg-clip-text text-transparent">
@@ -439,7 +455,7 @@
         <div id="blogGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
     </div>
 
-    <!-- ==================== ВКЛАДКА О НАС ==================== -->
+    <!-- ВКЛАДКА О НАС -->
     <div id="aboutTab" class="hidden fade-in-up">
         <div class="max-w-4xl mx-auto">
             <div class="glass-card rounded-2xl p-8">
@@ -455,7 +471,7 @@
                 <h3 class="text-xl font-bold mb-3 text-white">📜 Политика конфиденциальности</h3>
                 <p class="text-slate-300 mb-2">Мы собираем только анонимную статистику голосов. Данные не передаются третьим лицам.</p>
                 <p class="text-slate-300 mb-2">Cookie используются для сохранения настроек. Вы можете отключить их в настройках браузера.</p>
-                <p class="text-slate-300 text-sm mt-4">Последнее обновление: 18 мая 2026</p>
+                <p class="text-slate-300 text-sm mt-4">Последнее обновление: 20 мая 2026</p>
             </div>
         </div>
     </div>
@@ -505,62 +521,47 @@
     firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
     
-    // ==================== СПИСОК ВСЕХ ИИ МОДЕЛЕЙ С ПРАВИЛЬНЫМИ СТАРТОВЫМИ ГОЛОСАМИ ====================
-    // Все цифры основаны на реальной популярности и рыночной доле в 2026 году
+    // ==================== МОДЕЛИ ====================
     const modelsList = [
-        // ТЕКСТОВЫЕ МОДЕЛИ (лидеры рынка)
-        { id: "gpt4", name: "GPT-4 Turbo", developer: "OpenAI", category: "text", logo: "https://placehold.co/80x80/10a37f/white?text=GPT", wins: 45200, price: "от $20/мес", desc: "Самая мощная модель от OpenAI.", link: "https://chat.openai.com" },
-        { id: "claude", name: "Claude 3.5 Sonnet", developer: "Anthropic", category: "text", logo: "https://placehold.co/80x80/d97706/white?text=CL", wins: 41800, price: "от $20/мес", desc: "Лучшая модель для написания кода.", link: "https://claude.ai" },
-        { id: "gemini", name: "Gemini 1.5 Pro", developer: "Google", category: "text", logo: "https://placehold.co/80x80/4285f4/white?text=GE", wins: 38500, price: "бесплатно", desc: "Мультимодальная модель от Google.", link: "https://gemini.google.com" },
+        { id: "gpt4", name: "GPT-4 Turbo", developer: "OpenAI", category: "text", logo: "https://placehold.co/80x80/10a37f/white?text=GPT", wins: 45200, price: "от $20/мес", desc: "Самая мощная модель от OpenAI. Поддерживает анализ изображений, написание кода, решение сложных задач.", link: "https://chat.openai.com" },
+        { id: "claude", name: "Claude 3.5 Sonnet", developer: "Anthropic", category: "text", logo: "https://placehold.co/80x80/d97706/white?text=CL", wins: 41800, price: "от $20/мес", desc: "Лучшая модель для написания кода и анализа документов.", link: "https://claude.ai" },
+        { id: "gemini", name: "Gemini 1.5 Pro", developer: "Google", category: "text", logo: "https://placehold.co/80x80/4285f4/white?text=GE", wins: 38500, price: "бесплатно", desc: "Мультимодальная модель от Google. Контекст 1M токенов.", link: "https://gemini.google.com" },
         { id: "deepseek", name: "DeepSeek V3", developer: "DeepSeek", category: "text", logo: "https://placehold.co/80x80/00a67c/white?text=DS", wins: 32100, price: "бесплатно", desc: "Китайский конкурент GPT-4.", link: "https://deepseek.com" },
-        { id: "llama3", name: "Llama 3 70B", developer: "Meta", category: "text", logo: "https://placehold.co/80x80/1877f2/white?text=LL", wins: 29400, price: "бесплатно", desc: "Open-source модель от Meta.", link: "https://llama.meta.com" },
+        { id: "llama3", name: "Llama 3 70B", developer: "Meta", category: "text", logo: "https://placehold.co/80x80/1877f2/white?text=LL", wins: 29400, price: "бесплатно", desc: "Open-source модель от Meta. Можно запускать локально.", link: "https://llama.meta.com" },
         { id: "mistral", name: "Mistral Large", developer: "Mistral AI", category: "text", logo: "https://placehold.co/80x80/6b21a8/white?text=MI", wins: 26300, price: "от $8/мес", desc: "Европейский лидер.", link: "https://mistral.ai" },
-        { id: "qwen", name: "Qwen 2.5 72B", developer: "Alibaba", category: "text", logo: "https://placehold.co/80x80/0284c7/white?text=QW", wins: 23700, price: "бесплатно", desc: "Мультиязычная модель от Alibaba.", link: "https://qwenlm.github.io" },
+        { id: "qwen", name: "Qwen 2.5 72B", developer: "Alibaba", category: "text", logo: "https://placehold.co/80x80/0284c7/white?text=QW", wins: 23700, price: "бесплатно", desc: "Мультиязычная модель.", link: "https://qwenlm.github.io" },
         { id: "grok", name: "Grok-2", developer: "xAI", category: "text", logo: "https://placehold.co/80x80/000000/white?text=GR", wins: 19800, price: "$16/мес", desc: "ИИ от Илона Маска.", link: "https://x.ai" },
-        { id: "perplexity", name: "Perplexity AI", developer: "Perplexity", category: "text", logo: "https://placehold.co/80x80/1a202c/white?text=PE", wins: 17200, price: "бесплатно / $20/мес", desc: "ИИ-поисковик с ссылками.", link: "https://perplexity.ai" },
-        
-        // ГЕНЕРАЦИЯ ИЗОБРАЖЕНИЙ
+        { id: "perplexity", name: "Perplexity AI", developer: "Perplexity", category: "text", logo: "https://placehold.co/80x80/1a202c/white?text=PE", wins: 17200, price: "бесплатно", desc: "ИИ-поисковик с ссылками.", link: "https://perplexity.ai" },
         { id: "midjourney", name: "Midjourney v6", developer: "Midjourney", category: "image", logo: "https://placehold.co/80x80/4c1d95/white?text=MJ", wins: 52000, price: "от $10/мес", desc: "Лучшая нейросеть для генерации арта.", link: "https://midjourney.com" },
         { id: "dalle3", name: "DALL-E 3", developer: "OpenAI", category: "image", logo: "https://placehold.co/80x80/10a37f/white?text=DE", wins: 44300, price: "ChatGPT Plus", desc: "Генерация изображений от OpenAI.", link: "https://openai.com/dall-e-3" },
         { id: "flux", name: "Flux.1", developer: "Black Forest Labs", category: "image", logo: "https://placehold.co/80x80/0284c7/white?text=FL", wins: 38700, price: "бесплатно", desc: "Новая модель с невероятной детализацией.", link: "https://blackforestlabs.ai" },
         { id: "sd3", name: "Stable Diffusion 3", developer: "Stability AI", category: "image", logo: "https://placehold.co/80x80/000000/white?text=SD", wins: 33200, price: "бесплатно", desc: "Самая популярная open-source модель.", link: "https://stability.ai" },
-        { id: "leonardo", name: "Leonardo.ai", developer: "Leonardo", category: "image", logo: "https://placehold.co/80x80/8b5cf6/white?text=LE", wins: 27800, price: "бесплатно / $12/мес", desc: "Отличная модель для игровых ассетов.", link: "https://leonardo.ai" },
-        
-        // ГЕНЕРАЦИЯ ВИДЕО
+        { id: "leonardo", name: "Leonardo.ai", developer: "Leonardo", category: "image", logo: "https://placehold.co/80x80/8b5cf6/white?text=LE", wins: 27800, price: "бесплатно", desc: "Отличная модель для игровых ассетов.", link: "https://leonardo.ai" },
         { id: "sora", name: "Sora", developer: "OpenAI", category: "video", logo: "https://placehold.co/80x80/10a37f/white?text=SO", wins: 31000, price: "ожидается", desc: "Текст в видео от OpenAI.", link: "https://openai.com/sora" },
         { id: "runway", name: "Runway Gen-3", developer: "Runway ML", category: "video", logo: "https://placehold.co/80x80/ec4899/white?text=RW", wins: 27400, price: "от $12/мес", desc: "Киношное качество генерации видео.", link: "https://runwayml.com" },
         { id: "kling", name: "Kling AI", developer: "Kling", category: "video", logo: "https://placehold.co/80x80/ef4444/white?text=KL", wins: 23900, price: "бесплатно", desc: "Лучшая физика движений тела.", link: "https://klingai.com" },
         { id: "pika", name: "Pika 2.0", developer: "Pika Labs", category: "video", logo: "https://placehold.co/80x80/f59e0b/white?text=PI", wins: 19500, price: "бесплатно", desc: "Анимация любых объектов.", link: "https://pika.art" },
-        
-        // ПОМОЩЬ В КОДЕ
         { id: "copilot", name: "GitHub Copilot", developer: "GitHub", category: "code", logo: "https://placehold.co/80x80/181717/white?text=CP", wins: 48000, price: "$10/мес", desc: "Стандарт для разработчиков.", link: "https://github.com/features/copilot" },
-        { id: "cursor", name: "Cursor AI", developer: "Cursor", category: "code", logo: "https://placehold.co/80x80/0f172a/white?text=CU", wins: 42500, price: "бесплатно / $20/мес", desc: "Редактор кода будущего.", link: "https://cursor.sh" },
+        { id: "cursor", name: "Cursor AI", developer: "Cursor", category: "code", logo: "https://placehold.co/80x80/0f172a/white?text=CU", wins: 42500, price: "бесплатно", desc: "Редактор кода будущего.", link: "https://cursor.sh" },
         { id: "replit", name: "Replit Agent", developer: "Replit", category: "code", logo: "https://placehold.co/80x80/000000/white?text=RE", wins: 33200, price: "$7/мес", desc: "Пишет и деплоит приложения.", link: "https://replit.com" },
         { id: "v0", name: "v0.dev", developer: "Vercel", category: "code", logo: "https://placehold.co/80x80/000000/white?text=V0", wins: 28700, price: "бесплатно", desc: "Генерация фронтенд-компонентов.", link: "https://v0.dev" },
-        
-        // ГОЛОС И МУЗЫКА
         { id: "elevenlabs", name: "ElevenLabs", developer: "ElevenLabs", category: "voice", logo: "https://placehold.co/80x80/8b5cf6/white?text=EL", wins: 35000, price: "от $5/мес", desc: "Лучшая озвучка текста.", link: "https://elevenlabs.io" },
-        { id: "suno", name: "Suno AI", developer: "Suno", category: "voice", logo: "https://placehold.co/80x80/0ea5e9/white?text=SU", wins: 31500, price: "бесплатно / $10/мес", desc: "Генерация музыки с вокалом.", link: "https://suno.ai" },
+        { id: "suno", name: "Suno AI", developer: "Suno", category: "voice", logo: "https://placehold.co/80x80/0ea5e9/white?text=SU", wins: 31500, price: "бесплатно", desc: "Генерация музыки с вокалом.", link: "https://suno.ai" },
         { id: "udio", name: "Udio", developer: "Udio", category: "voice", logo: "https://placehold.co/80x80/0284c7/white?text=UD", wins: 27800, price: "бесплатно", desc: "Музыкальная модель.", link: "https://udio.com" }
     ];
     
-    // ==================== СПИСОК ВОПРОСОВ ДНЯ ====================
+    // ==================== ВОПРОСЫ ====================
     const questionsList = [
         { text: "Какая нейросеть лучше пишет программный код?", category: "code" },
         { text: "Какая нейросеть лучше генерирует изображения?", category: "image" },
         { text: "Какая нейросеть лучше создаёт видео?", category: "video" },
         { text: "Какая нейросеть лучше объясняет сложные темы?", category: "text" },
         { text: "Какая нейросеть лучше пишет маркетинговые тексты?", category: "text" },
-        { text: "Какая нейросеть лучше обрабатывает изображения?", category: "image" },
         { text: "Какая нейросеть лучше переводит тексты?", category: "text" },
-        { text: "Какая нейросеть лучше создаёт музыку?", category: "voice" },
-        { text: "Какая нейросеть лучше пишет стихи?", category: "text" },
-        { text: "Какая нейросеть лучше анализирует данные?", category: "text" },
-        { text: "Какая нейросеть лучше для начинающих?", category: "text" },
-        { text: "Какая нейросеть лучше для профессионалов?", category: "text" }
+        { text: "Какая нейросеть лучше создаёт музыку?", category: "voice" }
     ];
     
-    // ==================== СТАТЬИ БЛОГА ====================
+    // ==================== БЛОГ ====================
     const blogPosts = [
         { title: "GPT-4 vs Claude 3.5: сравнение лидеров", date: "15 мая 2026", desc: "Подробный анализ двух самых мощных нейросетей.", link: "blog-gpt-vs-claude.html", category: "Сравнение" },
         { title: "Топ-10 нейросетей для генерации изображений в 2026", date: "12 мая 2026", desc: "Midjourney, DALL-E 3, Flux — какие инструменты дают лучший результат?", link: "blog-top-10-image-ai.html", category: "Изображения" },
@@ -580,7 +581,6 @@
     let currentRatingCategory = 'all';
     let currentCatalogFilter = 'all';
     
-    // ==================== ФУНКЦИЯ ДЛЯ ПОКАЗА УВЕДОМЛЕНИЙ ====================
     function showToast(message, isError = false) {
         const toast = document.getElementById('toastMessage');
         if (!toast) return;
@@ -592,98 +592,82 @@
         setTimeout(() => toast.classList.add('hidden'), 2000);
     }
     
-    // ==================== ЗАГРУЗКА ДАННЫХ ИЗ FIREBASE (С ПРОВЕРКОЙ) ====================
-    async function loadFromFirebase() {
-        try {
-            // Для каждой модели проверяем и обновляем данные в Firebase
-            for (const model of modelsList) {
-                const docRef = db.collection("models").doc(model.id);
-                const doc = await docRef.get();
-                
-                if (doc.exists) {
-                    // Если запись существует, загружаем актуальные голоса
-                    model.wins = doc.data().wins;
-                } else {
-                    // Если записи нет, создаём её с правильными стартовыми голосами
-                    await docRef.set({ 
-                        wins: model.wins,
-                        name: model.name,
-                        developer: model.developer,
-                        category: model.category
-                    });
-                    console.log(`Создана запись для ${model.name} с ${model.wins} победами`);
-                }
-            }
-            
-            // Загружаем общую статистику
-            const statsRef = db.collection("stats").doc("global");
-            const statsDoc = await statsRef.get();
-            
-            // Подсчитываем общее количество голосов
-            let calculatedTotalVotes = 0;
-            for (const model of modelsList) {
-                calculatedTotalVotes += model.wins;
-            }
-            
-            if (statsDoc.exists) {
-                totalVotesAll = statsDoc.data().totalVotes || calculatedTotalVotes;
-                totalVotesToday = statsDoc.data().totalVotesToday || Math.floor(calculatedTotalVotes * 0.003); // ~0.3% голосов за сегодня
-            } else {
-                totalVotesAll = calculatedTotalVotes;
-                totalVotesToday = Math.floor(calculatedTotalVotes * 0.003);
-                await statsRef.set({ 
-                    totalVotes: totalVotesAll, 
-                    totalVotesToday: totalVotesToday,
-                    lastResetDate: new Date().toDateString()
-                });
-            }
-            
-            document.getElementById("totalVotesAll").innerText = totalVotesAll.toLocaleString();
-            document.getElementById("totalVotesToday").innerText = totalVotesToday.toLocaleString();
-            
-            // Обновляем текущие модели баттла
-            if (currentModels.A) {
-                const updatedA = modelsList.find(m => m.id === currentModels.A.id);
-                const updatedB = modelsList.find(m => m.id === currentModels.B.id);
-                if (updatedA) currentModels.A = updatedA;
-                if (updatedB) currentModels.B = updatedB;
-                updateBattleUI();
-            }
-        } catch(e) {
-            console.log("Ошибка загрузки из Firebase:", e);
-            // В случае ошибки используем локальные данные
-            let localTotal = 0;
-            for (const model of modelsList) localTotal += model.wins;
-            document.getElementById("totalVotesAll").innerText = localTotal.toLocaleString();
-            document.getElementById("totalVotesToday").innerText = Math.floor(localTotal * 0.003).toLocaleString();
-        }
-    }
-    
-    // ==================== СОХРАНЕНИЕ ГОЛОСА В FIREBASE ====================
-    async function saveVoteToFirebase(modelId, winnerName) {
-        try {
-            const modelRef = db.collection("models").doc(modelId);
-            await modelRef.update({ wins: firebase.firestore.FieldValue.increment(1) });
-            
-            const statsRef = db.collection("stats").doc("global");
-            await statsRef.update({ 
-                totalVotes: firebase.firestore.FieldValue.increment(1),
-                totalVotesToday: firebase.firestore.FieldValue.increment(1)
+    async function resetFirebaseData() {
+        console.log("🔄 Начинаем запись данных в Firebase...");
+        
+        for (const model of modelsList) {
+            const docRef = db.collection("models").doc(model.id);
+            await docRef.set({
+                wins: model.wins,
+                name: model.name,
+                developer: model.developer,
+                category: model.category
             });
-            
-            totalVotesAll++;
-            totalVotesToday++;
-            document.getElementById("totalVotesAll").innerText = totalVotesAll.toLocaleString();
-            document.getElementById("totalVotesToday").innerText = totalVotesToday.toLocaleString();
-            
-            showToast(`🎉 ${winnerName} +1 победа!`);
-        } catch(e) {
-            console.log("Ошибка сохранения голоса:", e);
-            showToast("❌ Ошибка при голосовании", true);
+            console.log(`✅ Записано: ${model.name} → ${model.wins} побед`);
+        }
+        
+        let total = 0;
+        for (const model of modelsList) total += model.wins;
+        totalVotesAll = total;
+        totalVotesToday = Math.floor(total * 0.003);
+        
+        const statsRef = db.collection("stats").doc("global");
+        await statsRef.set({
+            totalVotes: totalVotesAll,
+            totalVotesToday: totalVotesToday,
+            lastResetDate: new Date().toDateString()
+        });
+        
+        console.log(`📊 Итого: ${totalVotesAll.toLocaleString()} голосов, сегодня: ${totalVotesToday.toLocaleString()}`);
+        
+        document.getElementById("totalVotesAll").innerText = totalVotesAll.toLocaleString();
+        document.getElementById("totalVotesToday").innerText = totalVotesToday.toLocaleString();
+        
+        showToast("✅ Данные Firebase обновлены!", false);
+    }
+    
+    async function loadFromFirebase() {
+        for (const model of modelsList) {
+            const doc = await db.collection("models").doc(model.id).get();
+            if (doc.exists) {
+                model.wins = doc.data().wins;
+            }
+        }
+        
+        const statsDoc = await db.collection("stats").doc("global").get();
+        if (statsDoc.exists) {
+            totalVotesAll = statsDoc.data().totalVotes;
+            totalVotesToday = statsDoc.data().totalVotesToday;
+        }
+        
+        document.getElementById("totalVotesAll").innerText = (totalVotesAll || 0).toLocaleString();
+        document.getElementById("totalVotesToday").innerText = (totalVotesToday || 0).toLocaleString();
+        
+        if (currentModels.A) {
+            const updatedA = modelsList.find(m => m.id === currentModels.A.id);
+            const updatedB = modelsList.find(m => m.id === currentModels.B.id);
+            if (updatedA) currentModels.A = updatedA;
+            if (updatedB) currentModels.B = updatedB;
+            updateBattleUI();
         }
     }
     
-    // ==================== ЗАГРУЗКА ВОПРОСА ДНЯ ====================
+    async function saveVoteToFirebase(modelId) {
+        const modelRef = db.collection("models").doc(modelId);
+        await modelRef.update({ wins: firebase.firestore.FieldValue.increment(1) });
+        
+        const statsRef = db.collection("stats").doc("global");
+        await statsRef.update({ 
+            totalVotes: firebase.firestore.FieldValue.increment(1),
+            totalVotesToday: firebase.firestore.FieldValue.increment(1)
+        });
+        
+        totalVotesAll++;
+        totalVotesToday++;
+        document.getElementById("totalVotesAll").innerText = totalVotesAll.toLocaleString();
+        document.getElementById("totalVotesToday").innerText = totalVotesToday.toLocaleString();
+    }
+    
     function loadQuestionOfDay() {
         const randomIndex = Math.floor(Math.random() * questionsList.length);
         currentQuestionObj = questionsList[randomIndex];
@@ -710,7 +694,6 @@
         updateBattleUI();
     }
     
-    // ==================== ОБНОВЛЕНИЕ UI БАТТЛА ====================
     function updateBattleUI() {
         if (currentModels.A) {
             document.getElementById("modelAName").innerText = currentModels.A.name;
@@ -726,7 +709,6 @@
         }
     }
     
-    // ==================== ГОЛОСОВАНИЕ ====================
     async function voteFor(side) {
         if (Date.now() - lastVoteTimestamp < 2000) {
             showToast("⏳ Подождите 2 секунды!", true);
@@ -735,10 +717,7 @@
         lastVoteTimestamp = Date.now();
         
         const winner = side === 'A' ? currentModels.A : currentModels.B;
-        const winnerId = winner.id;
-        const winnerName = winner.name;
-        
-        await saveVoteToFirebase(winnerId, winnerName);
+        await saveVoteToFirebase(winner.id);
         
         winner.wins++;
         updateBattleUI();
@@ -761,9 +740,9 @@
         
         updateBattleUI();
         await updateRatingTable();
+        showToast(`🎉 ${winner.name} +1 победа!`, false);
     }
     
-    // ==================== ТАЙМЕР ДО НОВОГО ВОПРОСА ====================
     function startQuestionTimer() {
         if (nextQuestionInterval) clearInterval(nextQuestionInterval);
         nextQuestionInterval = setInterval(() => {
@@ -786,7 +765,6 @@
         }, 1000);
     }
     
-    // ==================== ПЕРЕКЛЮЧЕНИЕ ВКЛАДОК ====================
     function showTab(tab) {
         currentTab = tab;
         const tabs = ['battle', 'rating', 'catalog', 'blog', 'about'];
@@ -806,14 +784,10 @@
         if (tab === 'blog') renderBlog();
     }
     
-    // ==================== ОБНОВЛЕНИЕ ТАБЛИЦЫ РЕЙТИНГА ====================
     async function updateRatingTable() {
-        // Загружаем актуальные данные из Firebase для всех моделей
         for (const model of modelsList) {
             const doc = await db.collection("models").doc(model.id).get();
-            if (doc.exists) {
-                model.wins = doc.data().wins;
-            }
+            if (doc.exists) model.wins = doc.data().wins;
         }
         
         let filtered = [...modelsList];
@@ -857,7 +831,6 @@
         updateRatingTable();
     }
     
-    // ==================== КАТАЛОГ ====================
     function renderCatalog() {
         let filtered = [...modelsList];
         if (currentCatalogFilter !== 'all') {
@@ -896,7 +869,6 @@
         renderCatalog();
     }
     
-    // ==================== БЛОГ ====================
     function renderBlog() {
         const grid = document.getElementById("blogGrid");
         if (!grid) return;
@@ -913,7 +885,6 @@
         `).join('');
     }
     
-    // ==================== COOKIE ====================
     function acceptCookies() {
         localStorage.setItem('cookies_accepted', 'true');
         document.getElementById('cookieConsent').classList.add('hidden');
@@ -924,8 +895,13 @@
         document.getElementById('cookieConsent').classList.add('hidden');
     }
     
-    // ==================== ИНИЦИАЛИЗАЦИЯ ====================
     document.addEventListener('DOMContentLoaded', async () => {
+        document.getElementById("totalVotesAll").innerText = "загрузка...";
+        
+        // ПРИНУДИТЕЛЬНО ЗАПИСЫВАЕМ ДАННЫЕ В FIREBASE (только при первом запуске)
+        // Если хотите перезаписать данные, раскомментируйте следующую строку:
+        // await resetFirebaseData();
+        
         await loadFromFirebase();
         loadQuestionOfDay();
         startQuestionTimer();
