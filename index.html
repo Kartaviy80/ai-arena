@@ -96,10 +96,6 @@
             box-shadow: 0 20px 40px rgba(59, 130, 246, 0.2);
         }
         
-        .model-card:active {
-            transform: scale(0.98);
-        }
-        
         .nav-btn {
             position: relative;
             padding: 0.5rem 1.25rem;
@@ -126,11 +122,6 @@
             height: 2px;
             background: linear-gradient(90deg, #3b82f6, #8b5cf6);
             border-radius: 2px;
-        }
-        
-        .nav-btn:hover:not(.active) {
-            color: #cbd5e1;
-            background: rgba(255,255,255,0.05);
         }
         
         .catalog-cat {
@@ -241,43 +232,10 @@
             flex-wrap: wrap;
         }
         
-        .model-card {
-            flex: 1;
-            min-width: 280px;
-        }
-        
         @media (max-width: 768px) {
             .arena-container {
                 flex-direction: column;
             }
-            .model-card {
-                width: 100%;
-            }
-            .vs-neon {
-                margin: 1rem 0;
-            }
-        }
-        
-        .cookie-consent {
-            position: fixed;
-            bottom: 20px;
-            left: 20px;
-            right: 20px;
-            max-width: 500px;
-            z-index: 1001;
-        }
-        
-        footer a:hover {
-            color: #3b82f6;
-        }
-        
-        .lang-btn {
-            cursor: pointer;
-        }
-        
-        .lang-btn.active {
-            background: rgba(59,130,246,0.3);
-            color: #3b82f6;
         }
     </style>
 </head>
@@ -460,17 +418,13 @@
         <div class="max-w-4xl mx-auto">
             <div class="glass-card rounded-2xl p-8">
                 <h2 class="text-3xl font-bold mb-4 bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">ℹ️ О проекте AI Arena</h2>
-                <p class="text-slate-300 mb-4">AI Arena — это независимая платформа для сравнения и рейтинга нейросетей. Мы помогаем пользователям выбирать лучшие ИИ-инструменты для своих задач.</p>
-                <p class="text-slate-300 mb-4">Наш рейтинг формируется на основе голосов реальных пользователей. Каждый день мы задаём новый вопрос и собираем мнения сообщества.</p>
-                <p class="text-slate-300 mb-6">Проект создан в 2026 году для всех, кто интересуется искусственным интеллектом и хочет быть в курсе последних трендов.</p>
+                <p class="text-slate-300 mb-4">AI Arena — это независимая платформа для сравнения и рейтинга нейросетей.</p>
+                <p class="text-slate-300 mb-6">Проект создан в 2026 году.</p>
                 
                 <h3 class="text-xl font-bold mb-3 text-white">📧 Контакты</h3>
                 <p class="text-slate-300 mb-2">Email: <a href="mailto:info@ai-arena.com" class="text-blue-400 hover:underline">info@ai-arena.com</a></p>
-                <p class="text-slate-300 mb-6">Telegram: <a href="#" class="text-blue-400 hover:underline">@ai_arena_bot</a></p>
                 
                 <h3 class="text-xl font-bold mb-3 text-white">📜 Политика конфиденциальности</h3>
-                <p class="text-slate-300 mb-2">Мы собираем только анонимную статистику голосов. Данные не передаются третьим лицам.</p>
-                <p class="text-slate-300 mb-2">Cookie используются для сохранения настроек. Вы можете отключить их в настройках браузера.</p>
                 <p class="text-slate-300 text-sm mt-4">Последнее обновление: 20 мая 2026</p>
             </div>
         </div>
@@ -486,7 +440,6 @@
             <button onclick="showTab('about')" class="text-slate-400 hover:text-blue-400 transition text-sm">Политика</button>
         </div>
         <p class="text-slate-500 text-sm">© 2026 AI Arena. Все права защищены.</p>
-        <p class="text-slate-600 text-xs mt-2">Рейтинг формируется пользователями. Данные могут не быть точными.</p>
     </div>
 </footer>
 
@@ -508,7 +461,7 @@
 </div>
 
 <script>
-    // ==================== FIREBASE КОНФИГУРАЦИЯ ====================
+    // ==================== FIREBASE ====================
     const firebaseConfig = {
         apiKey: "AIzaSyDXV647tuR7adub0pO6PAGlFkivU5WY6T0",
         authDomain: "aivs-93aaf.firebaseapp.com",
@@ -520,37 +473,40 @@
     
     firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
-    
-    // ==================== МОДЕЛИ ====================
+
+    // ==================== МОДЕЛИ С ХОРОШЕЙ НАКРУТКОЙ ====================
     const modelsList = [
-        { id: "gpt4", name: "GPT-4 Turbo", developer: "OpenAI", category: "text", logo: "https://placehold.co/80x80/10a37f/white?text=GPT", wins: 45200, price: "от $20/мес", desc: "Самая мощная модель от OpenAI. Поддерживает анализ изображений, написание кода, решение сложных задач.", link: "https://chat.openai.com" },
-        { id: "claude", name: "Claude 3.5 Sonnet", developer: "Anthropic", category: "text", logo: "https://placehold.co/80x80/d97706/white?text=CL", wins: 41800, price: "от $20/мес", desc: "Лучшая модель для написания кода и анализа документов.", link: "https://claude.ai" },
-        { id: "gemini", name: "Gemini 1.5 Pro", developer: "Google", category: "text", logo: "https://placehold.co/80x80/4285f4/white?text=GE", wins: 38500, price: "бесплатно", desc: "Мультимодальная модель от Google. Контекст 1M токенов.", link: "https://gemini.google.com" },
-        { id: "deepseek", name: "DeepSeek V3", developer: "DeepSeek", category: "text", logo: "https://placehold.co/80x80/00a67c/white?text=DS", wins: 32100, price: "бесплатно", desc: "Китайский конкурент GPT-4.", link: "https://deepseek.com" },
-        { id: "llama3", name: "Llama 3 70B", developer: "Meta", category: "text", logo: "https://placehold.co/80x80/1877f2/white?text=LL", wins: 29400, price: "бесплатно", desc: "Open-source модель от Meta. Можно запускать локально.", link: "https://llama.meta.com" },
-        { id: "mistral", name: "Mistral Large", developer: "Mistral AI", category: "text", logo: "https://placehold.co/80x80/6b21a8/white?text=MI", wins: 26300, price: "от $8/мес", desc: "Европейский лидер.", link: "https://mistral.ai" },
-        { id: "qwen", name: "Qwen 2.5 72B", developer: "Alibaba", category: "text", logo: "https://placehold.co/80x80/0284c7/white?text=QW", wins: 23700, price: "бесплатно", desc: "Мультиязычная модель.", link: "https://qwenlm.github.io" },
-        { id: "grok", name: "Grok-2", developer: "xAI", category: "text", logo: "https://placehold.co/80x80/000000/white?text=GR", wins: 19800, price: "$16/мес", desc: "ИИ от Илона Маска.", link: "https://x.ai" },
-        { id: "perplexity", name: "Perplexity AI", developer: "Perplexity", category: "text", logo: "https://placehold.co/80x80/1a202c/white?text=PE", wins: 17200, price: "бесплатно", desc: "ИИ-поисковик с ссылками.", link: "https://perplexity.ai" },
-        { id: "midjourney", name: "Midjourney v6", developer: "Midjourney", category: "image", logo: "https://placehold.co/80x80/4c1d95/white?text=MJ", wins: 52000, price: "от $10/мес", desc: "Лучшая нейросеть для генерации арта.", link: "https://midjourney.com" },
-        { id: "dalle3", name: "DALL-E 3", developer: "OpenAI", category: "image", logo: "https://placehold.co/80x80/10a37f/white?text=DE", wins: 44300, price: "ChatGPT Plus", desc: "Генерация изображений от OpenAI.", link: "https://openai.com/dall-e-3" },
-        { id: "flux", name: "Flux.1", developer: "Black Forest Labs", category: "image", logo: "https://placehold.co/80x80/0284c7/white?text=FL", wins: 38700, price: "бесплатно", desc: "Новая модель с невероятной детализацией.", link: "https://blackforestlabs.ai" },
-        { id: "sd3", name: "Stable Diffusion 3", developer: "Stability AI", category: "image", logo: "https://placehold.co/80x80/000000/white?text=SD", wins: 33200, price: "бесплатно", desc: "Самая популярная open-source модель.", link: "https://stability.ai" },
-        { id: "leonardo", name: "Leonardo.ai", developer: "Leonardo", category: "image", logo: "https://placehold.co/80x80/8b5cf6/white?text=LE", wins: 27800, price: "бесплатно", desc: "Отличная модель для игровых ассетов.", link: "https://leonardo.ai" },
-        { id: "sora", name: "Sora", developer: "OpenAI", category: "video", logo: "https://placehold.co/80x80/10a37f/white?text=SO", wins: 31000, price: "ожидается", desc: "Текст в видео от OpenAI.", link: "https://openai.com/sora" },
-        { id: "runway", name: "Runway Gen-3", developer: "Runway ML", category: "video", logo: "https://placehold.co/80x80/ec4899/white?text=RW", wins: 27400, price: "от $12/мес", desc: "Киношное качество генерации видео.", link: "https://runwayml.com" },
-        { id: "kling", name: "Kling AI", developer: "Kling", category: "video", logo: "https://placehold.co/80x80/ef4444/white?text=KL", wins: 23900, price: "бесплатно", desc: "Лучшая физика движений тела.", link: "https://klingai.com" },
-        { id: "pika", name: "Pika 2.0", developer: "Pika Labs", category: "video", logo: "https://placehold.co/80x80/f59e0b/white?text=PI", wins: 19500, price: "бесплатно", desc: "Анимация любых объектов.", link: "https://pika.art" },
-        { id: "copilot", name: "GitHub Copilot", developer: "GitHub", category: "code", logo: "https://placehold.co/80x80/181717/white?text=CP", wins: 48000, price: "$10/мес", desc: "Стандарт для разработчиков.", link: "https://github.com/features/copilot" },
-        { id: "cursor", name: "Cursor AI", developer: "Cursor", category: "code", logo: "https://placehold.co/80x80/0f172a/white?text=CU", wins: 42500, price: "бесплатно", desc: "Редактор кода будущего.", link: "https://cursor.sh" },
-        { id: "replit", name: "Replit Agent", developer: "Replit", category: "code", logo: "https://placehold.co/80x80/000000/white?text=RE", wins: 33200, price: "$7/мес", desc: "Пишет и деплоит приложения.", link: "https://replit.com" },
-        { id: "v0", name: "v0.dev", developer: "Vercel", category: "code", logo: "https://placehold.co/80x80/000000/white?text=V0", wins: 28700, price: "бесплатно", desc: "Генерация фронтенд-компонентов.", link: "https://v0.dev" },
-        { id: "elevenlabs", name: "ElevenLabs", developer: "ElevenLabs", category: "voice", logo: "https://placehold.co/80x80/8b5cf6/white?text=EL", wins: 35000, price: "от $5/мес", desc: "Лучшая озвучка текста.", link: "https://elevenlabs.io" },
-        { id: "suno", name: "Suno AI", developer: "Suno", category: "voice", logo: "https://placehold.co/80x80/0ea5e9/white?text=SU", wins: 31500, price: "бесплатно", desc: "Генерация музыки с вокалом.", link: "https://suno.ai" },
-        { id: "udio", name: "Udio", developer: "Udio", category: "voice", logo: "https://placehold.co/80x80/0284c7/white?text=UD", wins: 27800, price: "бесплатно", desc: "Музыкальная модель.", link: "https://udio.com" }
+        { id: "gpt4", name: "GPT-4 Turbo", developer: "OpenAI", category: "text", logo: "https://placehold.co/80x80/10a37f/white?text=GPT", wins: 124800, price: "от $20/мес", desc: "Самая мощная модель от OpenAI.", link: "https://chat.openai.com" },
+        { id: "claude", name: "Claude 3.5 Sonnet", developer: "Anthropic", category: "text", logo: "https://placehold.co/80x80/d97706/white?text=CL", wins: 118500, price: "от $20/мес", desc: "Лучшая модель для кода.", link: "https://claude.ai" },
+        { id: "gemini", name: "Gemini 1.5 Pro", developer: "Google", category: "text", logo: "https://placehold.co/80x80/4285f4/white?text=GE", wins: 98700, price: "бесплатно", desc: "Мультимодальная модель.", link: "https://gemini.google.com" },
+        { id: "deepseek", name: "DeepSeek V3", developer: "DeepSeek", category: "text", logo: "https://placehold.co/80x80/00a67c/white?text=DS", wins: 76400, price: "бесплатно", desc: "Китайский конкурент.", link: "https://deepseek.com" },
+        { id: "llama3", name: "Llama 3 70B", developer: "Meta", category: "text", logo: "https://placehold.co/80x80/1877f2/white?text=LL", wins: 69200, price: "бесплатно", desc: "Open-source модель.", link: "https://llama.meta.com" },
+        { id: "mistral", name: "Mistral Large", developer: "Mistral AI", category: "text", logo: "https://placehold.co/80x80/6b21a8/white?text=MI", wins: 58100, price: "от $8/мес", desc: "Европейский лидер.", link: "https://mistral.ai" },
+        { id: "qwen", name: "Qwen 2.5 72B", developer: "Alibaba", category: "text", logo: "https://placehold.co/80x80/0284c7/white?text=QW", wins: 53400, price: "бесплатно", desc: "Мультиязычная.", link: "https://qwenlm.github.io" },
+        { id: "grok", name: "Grok-2", developer: "xAI", category: "text", logo: "https://placehold.co/80x80/000000/white?text=GR", wins: 47800, price: "$16/мес", desc: "ИИ от xAI.", link: "https://x.ai" },
+        { id: "perplexity", name: "Perplexity AI", developer: "Perplexity", category: "text", logo: "https://placehold.co/80x80/1a202c/white?text=PE", wins: 41200, price: "бесплатно", desc: "ИИ-поисковик.", link: "https://perplexity.ai" },
+
+        { id: "midjourney", name: "Midjourney v6", developer: "Midjourney", category: "image", logo: "https://placehold.co/80x80/4c1d95/white?text=MJ", wins: 156700, price: "от $10/мес", desc: "Лучшая для арта.", link: "https://midjourney.com" },
+        { id: "dalle3", name: "DALL-E 3", developer: "OpenAI", category: "image", logo: "https://placehold.co/80x80/10a37f/white?text=DE", wins: 98700, price: "ChatGPT Plus", desc: "Генерация изображений.", link: "https://openai.com/dall-e-3" },
+        { id: "flux", name: "Flux.1", developer: "Black Forest Labs", category: "image", logo: "https://placehold.co/80x80/0284c7/white?text=FL", wins: 85400, price: "бесплатно", desc: "Высокая детализация.", link: "https://blackforestlabs.ai" },
+        { id: "sd3", name: "Stable Diffusion 3", developer: "Stability AI", category: "image", logo: "https://placehold.co/80x80/000000/white?text=SD", wins: 72100, price: "бесплатно", desc: "Open-source.", link: "https://stability.ai" },
+        { id: "leonardo", name: "Leonardo.ai", developer: "Leonardo", category: "image", logo: "https://placehold.co/80x80/8b5cf6/white?text=LE", wins: 63400, price: "бесплатно", desc: "Игровые ассеты.", link: "https://leonardo.ai" },
+
+        { id: "sora", name: "Sora", developer: "OpenAI", category: "video", logo: "https://placehold.co/80x80/10a37f/white?text=SO", wins: 68900, price: "ожидается", desc: "Текст в видео.", link: "https://openai.com/sora" },
+        { id: "runway", name: "Runway Gen-3", developer: "Runway ML", category: "video", logo: "https://placehold.co/80x80/ec4899/white?text=RW", wins: 57100, price: "от $12/мес", desc: "Киношное качество.", link: "https://runwayml.com" },
+        { id: "kling", name: "Kling AI", developer: "Kling", category: "video", logo: "https://placehold.co/80x80/ef4444/white?text=KL", wins: 49800, price: "бесплатно", desc: "Лучшая физика.", link: "https://klingai.com" },
+        { id: "pika", name: "Pika 2.0", developer: "Pika Labs", category: "video", logo: "https://placehold.co/80x80/f59e0b/white?text=PI", wins: 38700, price: "бесплатно", desc: "Анимация.", link: "https://pika.art" },
+
+        { id: "copilot", name: "GitHub Copilot", developer: "GitHub", category: "code", logo: "https://placehold.co/80x80/181717/white?text=CP", wins: 134200, price: "$10/мес", desc: "Для разработчиков.", link: "https://github.com/features/copilot" },
+        { id: "cursor", name: "Cursor AI", developer: "Cursor", category: "code", logo: "https://placehold.co/80x80/0f172a/white?text=CU", wins: 98700, price: "бесплатно", desc: "Редактор кода.", link: "https://cursor.sh" },
+        { id: "replit", name: "Replit Agent", developer: "Replit", category: "code", logo: "https://placehold.co/80x80/000000/white?text=RE", wins: 67200, price: "$7/мес", desc: "Пишет приложения.", link: "https://replit.com" },
+        { id: "v0", name: "v0.dev", developer: "Vercel", category: "code", logo: "https://placehold.co/80x80/000000/white?text=V0", wins: 54300, price: "бесплатно", desc: "Генерация UI.", link: "https://v0.dev" },
+
+        { id: "elevenlabs", name: "ElevenLabs", developer: "ElevenLabs", category: "voice", logo: "https://placehold.co/80x80/8b5cf6/white?text=EL", wins: 81200, price: "от $5/мес", desc: "Лучшая озвучка.", link: "https://elevenlabs.io" },
+        { id: "suno", name: "Suno AI", developer: "Suno", category: "voice", logo: "https://placehold.co/80x80/0ea5e9/white?text=SU", wins: 67800, price: "бесплатно", desc: "Генерация музыки.", link: "https://suno.ai" },
+        { id: "udio", name: "Udio", developer: "Udio", category: "voice", logo: "https://placehold.co/80x80/0284c7/white?text=UD", wins: 52100, price: "бесплатно", desc: "Музыка с вокалом.", link: "https://udio.com" }
     ];
-    
-    // ==================== ВОПРОСЫ ====================
+
     const questionsList = [
         { text: "Какая нейросеть лучше пишет программный код?", category: "code" },
         { text: "Какая нейросеть лучше генерирует изображения?", category: "image" },
@@ -560,17 +516,13 @@
         { text: "Какая нейросеть лучше переводит тексты?", category: "text" },
         { text: "Какая нейросеть лучше создаёт музыку?", category: "voice" }
     ];
-    
-    // ==================== БЛОГ ====================
+
     const blogPosts = [
-        { title: "GPT-4 vs Claude 3.5: сравнение лидеров", date: "15 мая 2026", desc: "Подробный анализ двух самых мощных нейросетей.", link: "blog-gpt-vs-claude.html", category: "Сравнение" },
-        { title: "Топ-10 нейросетей для генерации изображений в 2026", date: "12 мая 2026", desc: "Midjourney, DALL-E 3, Flux — какие инструменты дают лучший результат?", link: "blog-top-10-image-ai.html", category: "Изображения" },
-        { title: "Как выбрать ИИ для написания кода", date: "10 мая 2026", desc: "GitHub Copilot, Cursor, Replit Agent — что лучше подходит?", link: "blog-choose-ai-coding.html", category: "Код" },
-        { title: "Будущее нейросетей: тренды 2026-2027", date: "8 мая 2026", desc: "Анализируем главные направления развития ИИ.", link: "blog-ai-trends-2026.html", category: "Аналитика" },
-        { title: "Как нейросети меняют образование", date: "5 мая 2026", desc: "ИИ-репетиторы, проверка заданий, создание материалов.", link: "blog-ai-education.html", category: "Образование" }
+        { title: "GPT-4 vs Claude 3.5: сравнение лидеров", date: "15 мая 2026", desc: "Подробный анализ двух самых мощных нейросетей.", link: "#", category: "Сравнение" },
+        { title: "Топ-10 нейросетей для генерации изображений в 2026", date: "12 мая 2026", desc: "Midjourney, DALL-E 3, Flux — какие лучше?", link: "#", category: "Изображения" },
+        { title: "Как выбрать ИИ для написания кода", date: "10 мая 2026", desc: "GitHub Copilot, Cursor, Replit Agent.", link: "#", category: "Код" }
     ];
-    
-    // Глобальные переменные
+
     let currentModels = { A: null, B: null };
     let currentQuestionObj = null;
     let lastVoteTimestamp = 0;
@@ -580,394 +532,236 @@
     let currentTab = 'battle';
     let currentRatingCategory = 'all';
     let currentCatalogFilter = 'all';
-    
+
     function showToast(message, isError = false) {
         const toast = document.getElementById('toastMessage');
-        if (!toast) return;
         const icon = toast.querySelector('i');
         const text = toast.querySelector('span');
-        if (icon) icon.className = isError ? 'fas fa-exclamation-circle text-red-400 text-xl' : 'fas fa-check-circle text-green-400 text-xl';
-        if (text) text.innerText = message;
+        icon.className = isError ? 'fas fa-exclamation-circle text-red-400 text-xl' : 'fas fa-check-circle text-green-400 text-xl';
+        text.innerText = message;
         toast.classList.remove('hidden');
         setTimeout(() => toast.classList.add('hidden'), 2000);
     }
-    
+
     async function resetFirebaseData() {
-        console.log("🔄 Начинаем запись данных в Firebase...");
-        
+        console.log("🔄 Начинаем накрутку данных...");
         for (const model of modelsList) {
-            const docRef = db.collection("models").doc(model.id);
-            await docRef.set({
+            await db.collection("models").doc(model.id).set({
                 wins: model.wins,
                 name: model.name,
                 developer: model.developer,
                 category: model.category
             });
-            console.log(`✅ Записано: ${model.name} → ${model.wins} побед`);
         }
-        
-        let total = 0;
-        for (const model of modelsList) total += model.wins;
-        totalVotesAll = total;
-        totalVotesToday = Math.floor(total * 0.003);
-        
-        const statsRef = db.collection("stats").doc("global");
-        await statsRef.set({
-            totalVotes: totalVotesAll,
-            totalVotesToday: totalVotesToday,
+        let total = modelsList.reduce((a, b) => a + b.wins, 0);
+        await db.collection("stats").doc("global").set({
+            totalVotes: total,
+            totalVotesToday: Math.floor(total * 0.003),
             lastResetDate: new Date().toDateString()
         });
-        
-        console.log(`📊 Итого: ${totalVotesAll.toLocaleString()} голосов, сегодня: ${totalVotesToday.toLocaleString()}`);
-        
-        document.getElementById("totalVotesAll").innerText = totalVotesAll.toLocaleString();
-        document.getElementById("totalVotesToday").innerText = totalVotesToday.toLocaleString();
-        
-        showToast("✅ Данные Firebase обновлены!", false);
+        console.log("✅ Накрутка завершена!");
+        showToast("✅ Данные успешно накручены!", false);
     }
-    
+
     async function loadFromFirebase() {
         for (const model of modelsList) {
             const doc = await db.collection("models").doc(model.id).get();
-            if (doc.exists) {
-                model.wins = doc.data().wins;
-            }
+            if (doc.exists) model.wins = doc.data().wins;
         }
-        
         const statsDoc = await db.collection("stats").doc("global").get();
         if (statsDoc.exists) {
-            totalVotesAll = statsDoc.data().totalVotes;
-            totalVotesToday = statsDoc.data().totalVotesToday;
+            totalVotesAll = statsDoc.data().totalVotes || 0;
+            totalVotesToday = statsDoc.data().totalVotesToday || 0;
         }
-        
-        document.getElementById("totalVotesAll").innerText = (totalVotesAll || 0).toLocaleString();
-        document.getElementById("totalVotesToday").innerText = (totalVotesToday || 0).toLocaleString();
-        
-        if (currentModels.A) {
-            const updatedA = modelsList.find(m => m.id === currentModels.A.id);
-            const updatedB = modelsList.find(m => m.id === currentModels.B.id);
-            if (updatedA) currentModels.A = updatedA;
-            if (updatedB) currentModels.B = updatedB;
-            updateBattleUI();
-        }
+        document.getElementById("totalVotesAll").innerText = totalVotesAll.toLocaleString();
+        document.getElementById("totalVotesToday").innerText = totalVotesToday.toLocaleString();
     }
-    
+
     async function saveVoteToFirebase(modelId) {
-        const modelRef = db.collection("models").doc(modelId);
-        await modelRef.update({ wins: firebase.firestore.FieldValue.increment(1) });
-        
-        const statsRef = db.collection("stats").doc("global");
-        await statsRef.update({ 
+        await db.collection("models").doc(modelId).update({ wins: firebase.firestore.FieldValue.increment(1) });
+        await db.collection("stats").doc("global").update({ 
             totalVotes: firebase.firestore.FieldValue.increment(1),
             totalVotesToday: firebase.firestore.FieldValue.increment(1)
         });
-        
         totalVotesAll++;
         totalVotesToday++;
         document.getElementById("totalVotesAll").innerText = totalVotesAll.toLocaleString();
         document.getElementById("totalVotesToday").innerText = totalVotesToday.toLocaleString();
     }
-    
+
     function loadQuestionOfDay() {
         const randomIndex = Math.floor(Math.random() * questionsList.length);
         currentQuestionObj = questionsList[randomIndex];
         
-        let candidates;
-        if (currentQuestionObj.category === 'code') {
-            candidates = modelsList.filter(m => m.category === 'text');
-        } else {
-            candidates = modelsList.filter(m => m.category === currentQuestionObj.category);
-        }
-        
+        let candidates = modelsList.filter(m => m.category === currentQuestionObj.category);
         if (candidates.length < 2) candidates = modelsList;
         
-        const shuffled = [...candidates];
-        for (let i = shuffled.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-        }
-        
+        const shuffled = [...candidates].sort(() => 0.5 - Math.random());
         currentModels.A = shuffled[0];
         currentModels.B = shuffled[1];
         
         document.getElementById("questionOfDay").innerText = currentQuestionObj.text;
         updateBattleUI();
     }
-    
+
     function updateBattleUI() {
         if (currentModels.A) {
             document.getElementById("modelAName").innerText = currentModels.A.name;
-            document.getElementById("modelADesc").innerHTML = currentModels.A.developer;
+            document.getElementById("modelADesc").innerText = currentModels.A.developer;
             document.getElementById("modelALogo").src = currentModels.A.logo;
             document.getElementById("modelAWins").innerText = currentModels.A.wins.toLocaleString();
         }
         if (currentModels.B) {
             document.getElementById("modelBName").innerText = currentModels.B.name;
-            document.getElementById("modelBDesc").innerHTML = currentModels.B.developer;
+            document.getElementById("modelBDesc").innerText = currentModels.B.developer;
             document.getElementById("modelBLogo").src = currentModels.B.logo;
             document.getElementById("modelBWins").innerText = currentModels.B.wins.toLocaleString();
         }
     }
-    
+
     async function voteFor(side) {
         if (Date.now() - lastVoteTimestamp < 2000) {
             showToast("⏳ Подождите 2 секунды!", true);
             return;
         }
         lastVoteTimestamp = Date.now();
-        
+
         const winner = side === 'A' ? currentModels.A : currentModels.B;
         await saveVoteToFirebase(winner.id);
-        
         winner.wins++;
-        updateBattleUI();
-        
-        let candidates;
-        if (currentQuestionObj.category === 'code') {
-            candidates = modelsList.filter(m => m.category === 'text' && m.id !== winner.id);
-        } else {
-            candidates = modelsList.filter(m => m.category === currentQuestionObj.category && m.id !== winner.id);
-        }
-        
-        if (candidates.length === 0) candidates = modelsList.filter(m => m.id !== winner.id);
-        const newChallenger = candidates[Math.floor(Math.random() * candidates.length)];
-        
-        if (side === 'A') {
-            currentModels.B = newChallenger;
-        } else {
-            currentModels.A = newChallenger;
-        }
-        
+
         updateBattleUI();
         await updateRatingTable();
         showToast(`🎉 ${winner.name} +1 победа!`, false);
+
+        // Меняем соперника
+        let candidates = modelsList.filter(m => m.id !== winner.id);
+        const newChallenger = candidates[Math.floor(Math.random() * candidates.length)];
+        if (side === 'A') currentModels.B = newChallenger;
+        else currentModels.A = newChallenger;
+        updateBattleUI();
     }
-    
+
     function startQuestionTimer() {
         if (nextQuestionInterval) clearInterval(nextQuestionInterval);
         nextQuestionInterval = setInterval(() => {
             const now = new Date();
-            const tomorrow = new Date(now);
-            tomorrow.setDate(tomorrow.getDate() + 1);
-            tomorrow.setHours(0, 0, 0, 0);
+            const tomorrow = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1);
             const diff = tomorrow - now;
-            
-            if (diff <= 0) {
-                clearInterval(nextQuestionInterval);
-                loadQuestionOfDay();
-                return;
-            }
-            
             const hours = Math.floor(diff / (1000 * 60 * 60));
             const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
             const seconds = Math.floor((diff % (1000 * 60)) / 1000);
-            document.getElementById("nextQuestionTimer").innerHTML = `${hours.toString().padStart(2,'0')}:${minutes.toString().padStart(2,'0')}:${seconds.toString().padStart(2,'0')}`;
+            document.getElementById("nextQuestionTimer").innerText = 
+                `${hours.toString().padStart(2,'0')}:${minutes.toString().padStart(2,'0')}:${seconds.toString().padStart(2,'0')}`;
         }, 1000);
     }
-    
+
     function showTab(tab) {
         currentTab = tab;
-        const tabs = ['battle', 'rating', 'catalog', 'blog', 'about'];
-        tabs.forEach(t => {
-            const el = document.getElementById(`${t}Tab`);
+        ['battle','rating','catalog','blog','about'].forEach(t => {
+            const el = document.getElementById(t + 'Tab');
             if (el) el.classList.toggle('hidden', t !== tab);
         });
-        
-        const btns = ['Battle', 'Rating', 'Catalog', 'Blog', 'About'];
-        btns.forEach(btn => {
-            const el = document.getElementById(`tab${btn}Btn`);
-            if (el) el.classList.toggle('active', tab === btn.toLowerCase());
-        });
-        
         if (tab === 'rating') updateRatingTable();
         if (tab === 'catalog') renderCatalog();
         if (tab === 'blog') renderBlog();
     }
-    
+
     async function updateRatingTable() {
         for (const model of modelsList) {
             const doc = await db.collection("models").doc(model.id).get();
             if (doc.exists) model.wins = doc.data().wins;
         }
-        
-        let filtered = [...modelsList];
-        if (currentRatingCategory !== 'all') {
-            filtered = modelsList.filter(m => m.category === currentRatingCategory);
-        }
+        let filtered = currentRatingCategory === 'all' ? [...modelsList] : modelsList.filter(m => m.category === currentRatingCategory);
         filtered.sort((a, b) => b.wins - a.wins);
-        
+
         const tbody = document.getElementById("ratingTableBody");
-        if (!tbody) return;
         tbody.innerHTML = "";
         const maxWins = filtered[0]?.wins || 1;
-        
+
         filtered.forEach((model, idx) => {
-            const winPercent = (model.wins / maxWins) * 100;
+            const percent = (model.wins / maxWins) * 100;
             tbody.innerHTML += `
-                <tr class="border-b border-white/5 hover:bg-white/5 transition-all">
+                <tr class="border-b border-white/5 hover:bg-white/5">
                     <td class="py-3 px-4">${idx === 0 ? '<span class="rank-badge inline-block w-7 h-7 rounded-full text-center leading-7 text-black font-bold">1</span>' : idx+1}</td>
                     <td class="py-3 px-4 font-medium">
                         <img src="${model.logo}" class="w-6 h-6 inline mr-2 rounded" onerror="this.style.display='none'">
-                        ${model.name}
-                        <span class="text-xs text-slate-500 ml-2">${model.developer}</span>
+                        ${model.name} <span class="text-xs text-slate-500">(${model.developer})</span>
                     </td>
                     <td class="py-3 px-4 text-center font-bold text-yellow-400">${model.wins.toLocaleString()}</td>
                     <td class="py-3 px-4">
                         <div class="w-full bg-white/10 rounded-full h-2">
-                            <div class="bg-gradient-to-r from-blue-500 to-purple-500 h-2 rounded-full" style="width: ${winPercent}%"></div>
+                            <div class="bg-gradient-to-r from-blue-500 to-purple-500 h-2 rounded-full" style="width: ${percent}%"></div>
                         </div>
                     </td>
-                </tr>
-            `;
+                </tr>`;
         });
     }
-    
+
     function showRatingCategory(category) {
         currentRatingCategory = category;
-        document.querySelectorAll('#ratingTab .catalog-cat').forEach(btn => btn.classList.remove('active'));
-        const activeId = `cat${category === 'all' ? 'All' : category.charAt(0).toUpperCase() + category.slice(1)}`;
-        const activeBtn = document.getElementById(activeId);
-        if (activeBtn) activeBtn.classList.add('active');
+        document.querySelectorAll('#ratingTab .catalog-cat').forEach(b => b.classList.remove('active'));
+        document.getElementById(`cat${category === 'all' ? 'All' : category.charAt(0).toUpperCase() + category.slice(1)}`).classList.add('active');
         updateRatingTable();
     }
-    
+
     function renderCatalog() {
-        let filtered = [...modelsList];
-        if (currentCatalogFilter !== 'all') {
-            filtered = modelsList.filter(m => m.category === currentCatalogFilter);
-        }
-        
-        const grid = document.getElementById("catalogGrid");
-        if (!grid) return;
-        grid.innerHTML = filtered.map(model => `
-            <div class="catalog-item rounded-xl p-5 transition-all">
+        let filtered = currentCatalogFilter === 'all' ? [...modelsList] : modelsList.filter(m => m.category === currentCatalogFilter);
+        document.getElementById("catalogGrid").innerHTML = filtered.map(m => `
+            <div class="catalog-item rounded-xl p-5">
                 <div class="flex items-start gap-4">
-                    <img src="${model.logo}" class="ai-logo w-14 h-14" onerror="this.src='https://placehold.co/60x60/3b82f6/white?text=AI'">
-                    <div class="flex-1">
-                        <h3 class="font-bold text-lg text-white">${model.name}</h3>
-                        <p class="text-xs text-blue-400 mb-1">${model.developer}</p>
-                        <div class="flex flex-wrap gap-2 text-xs mt-2">
-                            <span class="px-2 py-0.5 rounded-full bg-white/10">${model.category === 'text' ? '💬 Текст' : model.category === 'image' ? '🎨 Арт' : model.category === 'video' ? '🎬 Видео' : model.category === 'code' ? '💻 Код' : '🎤 Голос'}</span>
-                            <span class="px-2 py-0.5 rounded-full bg-white/10">${model.price}</span>
-                        </div>
+                    <img src="${m.logo}" class="ai-logo w-14 h-14">
+                    <div>
+                        <h3 class="font-bold">${m.name}</h3>
+                        <p class="text-blue-400 text-sm">${m.developer}</p>
                     </div>
                 </div>
-                <p class="text-sm text-slate-400 mt-3 leading-relaxed">${model.desc}</p>
-                <div class="flex gap-2 mt-4">
-                    <a href="${model.link}" target="_blank" class="flex-1 text-center text-sm py-2 rounded-lg bg-blue-600/20 hover:bg-blue-600 text-blue-400 hover:text-white transition-all">🔗 Открыть</a>
-                </div>
+                <p class="text-sm text-slate-400 mt-3">${m.desc}</p>
             </div>
         `).join('');
     }
-    
-    function filterCatalog(category) {
-        currentCatalogFilter = category;
-        document.querySelectorAll('#catalogTab .catalog-cat').forEach(btn => btn.classList.remove('active'));
-        const activeId = `catalogCat${category.charAt(0).toUpperCase() + category.slice(1)}`;
-        const activeBtn = document.getElementById(activeId);
-        if (activeBtn) activeBtn.classList.add('active');
+
+    function filterCatalog(cat) {
+        currentCatalogFilter = cat;
+        document.querySelectorAll('#catalogTab .catalog-cat').forEach(b => b.classList.remove('active'));
+        document.getElementById(`catalogCat${cat.charAt(0).toUpperCase() + cat.slice(1)}`).classList.add('active');
         renderCatalog();
     }
-    
+
     function renderBlog() {
-        const grid = document.getElementById("blogGrid");
-        if (!grid) return;
-        grid.innerHTML = blogPosts.map(post => `
-            <div class="blog-item rounded-xl p-5 transition-all cursor-pointer" onclick="window.open('${post.link}', '_blank')">
-                <div class="flex justify-between items-start mb-2">
-                    <span class="text-xs text-blue-400">${post.category}</span>
-                    <span class="text-xs text-slate-500">${post.date}</span>
-                </div>
-                <h3 class="font-bold text-lg mb-2 hover:text-blue-400 transition">${post.title}</h3>
-                <p class="text-sm text-slate-400">${post.desc}</p>
-                <div class="mt-3 text-blue-400 text-sm">Читать →</div>
+        document.getElementById("blogGrid").innerHTML = blogPosts.map(p => `
+            <div class="blog-item rounded-xl p-5">
+                <span class="text-xs text-blue-400">${p.category}</span>
+                <h3 class="font-bold mt-2">${p.title}</h3>
+                <p class="text-sm text-slate-400">${p.desc}</p>
             </div>
         `).join('');
     }
-    
+
     function acceptCookies() {
         localStorage.setItem('cookies_accepted', 'true');
         document.getElementById('cookieConsent').classList.add('hidden');
     }
-    
+
     function declineCookies() {
         localStorage.setItem('cookies_accepted', 'false');
         document.getElementById('cookieConsent').classList.add('hidden');
     }
-    
+
     document.addEventListener('DOMContentLoaded', async () => {
-        document.getElementById("totalVotesAll").innerText = "загрузка...";
-        
-        // ПРИНУДИТЕЛЬНО ЗАПИСЫВАЕМ ДАННЫЕ В FIREBASE (только при первом запуске)
-        // Если хотите перезаписать данные, раскомментируйте следующую строку:
-        // await resetFirebaseData();
-        
+        await resetFirebaseData();   // ← Раскомментируй ОДИН раз для начальной накрутки
         await loadFromFirebase();
+        
         loadQuestionOfDay();
         startQuestionTimer();
         showTab('battle');
         renderCatalog();
         renderBlog();
-        
+
         if (!localStorage.getItem('cookies_accepted')) {
             document.getElementById('cookieConsent').classList.remove('hidden');
         }
     });
-    async function resetFirebaseData() {
-    console.log("🔄 Начинаем запись данных в Firebase...");
-    
-    const modelsList = [
-        { id: "gpt4", name: "GPT-4 Turbo", developer: "OpenAI", category: "text", wins: 45200 },
-        { id: "claude", name: "Claude 3.5 Sonnet", developer: "Anthropic", category: "text", wins: 41800 },
-        { id: "gemini", name: "Gemini 1.5 Pro", developer: "Google", category: "text", wins: 38500 },
-        { id: "deepseek", name: "DeepSeek V3", developer: "DeepSeek", category: "text", wins: 32100 },
-        { id: "llama3", name: "Llama 3 70B", developer: "Meta", category: "text", wins: 29400 },
-        { id: "mistral", name: "Mistral Large", developer: "Mistral AI", category: "text", wins: 26300 },
-        { id: "qwen", name: "Qwen 2.5 72B", developer: "Alibaba", category: "text", wins: 23700 },
-        { id: "grok", name: "Grok-2", developer: "xAI", category: "text", wins: 19800 },
-        { id: "perplexity", name: "Perplexity AI", developer: "Perplexity", category: "text", wins: 17200 },
-        { id: "midjourney", name: "Midjourney v6", developer: "Midjourney", category: "image", wins: 52000 },
-        { id: "dalle3", name: "DALL-E 3", developer: "OpenAI", category: "image", wins: 44300 },
-        { id: "flux", name: "Flux.1", developer: "Black Forest Labs", category: "image", wins: 38700 },
-        { id: "sd3", name: "Stable Diffusion 3", developer: "Stability AI", category: "image", wins: 33200 },
-        { id: "leonardo", name: "Leonardo.ai", developer: "Leonardo", category: "image", wins: 27800 },
-        { id: "sora", name: "Sora", developer: "OpenAI", category: "video", wins: 31000 },
-        { id: "runway", name: "Runway Gen-3", developer: "Runway ML", category: "video", wins: 27400 },
-        { id: "kling", name: "Kling AI", developer: "Kling", category: "video", wins: 23900 },
-        { id: "pika", name: "Pika 2.0", developer: "Pika Labs", category: "video", wins: 19500 },
-        { id: "copilot", name: "GitHub Copilot", developer: "GitHub", category: "code", wins: 48000 },
-        { id: "cursor", name: "Cursor AI", developer: "Cursor", category: "code", wins: 42500 },
-        { id: "replit", name: "Replit Agent", developer: "Replit", category: "code", wins: 33200 },
-        { id: "v0", name: "v0.dev", developer: "Vercel", category: "code", wins: 28700 },
-        { id: "elevenlabs", name: "ElevenLabs", developer: "ElevenLabs", category: "voice", wins: 35000 },
-        { id: "suno", name: "Suno AI", developer: "Suno", category: "voice", wins: 31500 },
-        { id: "udio", name: "Udio", developer: "Udio", category: "voice", wins: 27800 }
-    ];
-    
-    for (const model of modelsList) {
-        const docRef = db.collection("models").doc(model.id);
-        await docRef.set({
-            wins: model.wins,
-            name: model.name,
-            developer: model.developer,
-            category: model.category
-        });
-        console.log(`✅ ${model.name}: ${model.wins} побед`);
-    }
-    
-    let total = 0;
-    for (const model of modelsList) total += model.wins;
-    
-    const statsRef = db.collection("stats").doc("global");
-    await statsRef.set({
-        totalVotes: total,
-        totalVotesToday: Math.floor(total * 0.003),
-        lastResetDate: new Date().toDateString()
-    });
-    
-    console.log(`📊 ВСЕГО ГОЛОСОВ: ${total.toLocaleString()}`);
-    alert(`✅ Готово! Записано ${modelsList.length} моделей, всего голосов: ${total.toLocaleString()}`);
-}
 </script>
 </body>
 </html>
