@@ -37,10 +37,8 @@
         
         .animated-bg {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
             z-index: 0;
             overflow: hidden;
         }
@@ -76,7 +74,6 @@
             background: rgba(15, 20, 35, 0.7);
             backdrop-filter: blur(16px);
             border: 1px solid rgba(59, 130, 246, 0.2);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
         
         .model-card {
@@ -85,54 +82,20 @@
             border: 1px solid rgba(59, 130, 246, 0.2);
             transition: all 0.3s ease;
             cursor: pointer;
-            min-height: 380px;
+            min-height: 340px;
         }
         
         .model-card:hover {
-            transform: translateY(-8px) scale(1.02);
+            transform: translateY(-6px) scale(1.02);
             border-color: #3b82f6;
             box-shadow: 0 20px 40px rgba(59, 130, 246, 0.2);
         }
         
-        .nav-btn {
-            position: relative;
-            padding: 0.5rem 1.25rem;
-            border-radius: 2rem;
-            font-weight: 500;
-            transition: all 0.2s;
-            background: transparent;
-            color: #94a3b8;
-            cursor: pointer;
-        }
-        
-        .nav-btn.active {
-            background: linear-gradient(135deg, rgba(59,130,246,0.2), rgba(139,92,246,0.1));
-            color: #3b82f6;
-        }
-        
-        .nav-btn.active::after {
-            content: '';
-            position: absolute;
-            bottom: -4px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 30px;
-            height: 2px;
-            background: linear-gradient(90deg, #3b82f6, #8b5cf6);
-            border-radius: 2px;
-        }
-        
-        .catalog-cat {
-            background: rgba(255,255,255,0.05);
-            border: 1px solid rgba(255,255,255,0.1);
-            transition: all 0.2s;
-            cursor: pointer;
-        }
-        
-        .catalog-cat.active {
-            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
-            border-color: transparent;
-            color: white;
+        .arena-container {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap;
         }
         
         .catalog-item {
@@ -140,63 +103,15 @@
             backdrop-filter: blur(10px);
             border: 1px solid rgba(255,255,255,0.08);
             transition: all 0.3s;
-            min-height: 340px;
+            min-height: 310px;
         }
         
         .catalog-item:hover {
             transform: translateY(-5px);
             border-color: #3b82f6;
-            box-shadow: 0 10px 30px rgba(59,130,246,0.2);
         }
         
-        .ai-logo {
-            width: 60px;
-            height: 60px;
-            border-radius: 16px;
-            object-fit: contain;
-            background: linear-gradient(135deg, #1e293b, #0f172a);
-            padding: 8px;
-        }
-        
-        .rank-badge {
-            background: linear-gradient(135deg, #fbbf24, #f59e0b);
-            box-shadow: 0 0 15px rgba(245,158,11,0.3);
-        }
-        
-        .vs-neon {
-            font-size: 4rem;
-            font-weight: 800;
-            background: linear-gradient(135deg, #3b82f6, #ec4899, #8b5cf6);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            text-shadow: 0 0 30px rgba(59,130,246,0.5);
-            animation: vsPulse 2s ease-in-out infinite;
-        }
-        
-        @keyframes vsPulse {
-            0%, 100% { opacity: 0.8; text-shadow: 0 0 20px rgba(59,130,246,0.3); }
-            50% { opacity: 1; text-shadow: 0 0 40px rgba(59,130,246,0.8); }
-        }
-        
-        .vote-toast {
-            position: fixed;
-            bottom: 30px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 1000;
-            animation: toastAnim 2.5s ease forwards;
-        }
-        
-        @keyframes toastAnim {
-            0% { opacity: 0; transform: translateY(20px); }
-            15%, 85% { opacity: 1; transform: translateY(0); }
-            100% { opacity: 0; transform: translateY(-20px); }
-        }
-        
-        footer {
-            margin-top: auto;
-        }
+        footer { margin-top: auto; }
     </style>
 </head>
 <body>
@@ -229,7 +144,7 @@
 
 <main class="container mx-auto px-4 pt-24 pb-20 relative z-10 flex-1">
     
-    <!-- ВКЛАДКА БАТТЛ -->
+    <!-- БАТТЛ -->
     <div id="battleTab" class="fade-in-up">
         <div class="text-center max-w-3xl mx-auto mb-12">
             <div class="inline-flex items-center gap-2 bg-gradient-to-r from-blue-500/20 to-purple-500/20 px-5 py-2 rounded-full mb-4 border border-blue-500/30">
@@ -244,54 +159,54 @@
 
         <div class="max-w-6xl mx-auto">
             <div class="arena-container">
-                <div id="modelACard" class="model-card p-8 text-center flex-1 min-w-[280px] max-w-[420px]" onclick="voteFor('A')">
-                    <div class="w-32 h-32 mx-auto mb-6 bg-gradient-to-br from-blue-500/30 to-purple-500/30 rounded-2xl flex items-center justify-center">
-                        <img id="modelALogo" class="ai-logo w-24 h-24" src="" alt="logo" onerror="this.src='https://placehold.co/80x80/3b82f6/white?text=AI'">
+                <div id="modelACard" class="model-card p-6 text-center flex-1 min-w-[260px] max-w-[380px]" onclick="voteFor('A')">
+                    <div class="w-24 h-24 mx-auto mb-5 bg-gradient-to-br from-blue-500/30 to-purple-500/30 rounded-2xl flex items-center justify-center">
+                        <img id="modelALogo" class="ai-logo w-20 h-20" src="" alt="logo" onerror="this.src='https://placehold.co/80x80/3b82f6/white?text=AI'">
                     </div>
-                    <h3 id="modelAName" class="text-2xl font-bold mb-3">Загрузка...</h3>
-                    <p id="modelADesc" class="text-slate-400 text-base mb-8">Разработчик: --</p>
-                    <div class="flex justify-center gap-4 text-sm">
-                        <div class="flex items-center gap-3 text-yellow-400">
-                            <i class="fas fa-trophy text-2xl"></i>
-                            <span id="modelAWins" class="font-bold text-3xl">0</span>
+                    <h3 id="modelAName" class="text-xl font-bold mb-2">Загрузка...</h3>
+                    <p id="modelADesc" class="text-slate-400 text-sm mb-6">Разработчик: --</p>
+                    <div class="flex justify-center gap-4">
+                        <div class="flex items-center gap-2 text-yellow-400">
+                            <i class="fas fa-trophy"></i>
+                            <span id="modelAWins" class="font-bold">0</span>
                         </div>
                     </div>
                 </div>
 
-                <div class="flex items-center justify-center py-8">
-                    <div class="vs-neon">VS</div>
+                <div class="flex items-center justify-center py-6">
+                    <div class="vs-neon text-5xl">VS</div>
                 </div>
 
-                <div id="modelBCard" class="model-card p-8 text-center flex-1 min-w-[280px] max-w-[420px]" onclick="voteFor('B')">
-                    <div class="w-32 h-32 mx-auto mb-6 bg-gradient-to-br from-purple-500/30 to-pink-500/30 rounded-2xl flex items-center justify-center">
-                        <img id="modelBLogo" class="ai-logo w-24 h-24" src="" alt="logo" onerror="this.src='https://placehold.co/80x80/8b5cf6/white?text=AI'">
+                <div id="modelBCard" class="model-card p-6 text-center flex-1 min-w-[260px] max-w-[380px]" onclick="voteFor('B')">
+                    <div class="w-24 h-24 mx-auto mb-5 bg-gradient-to-br from-purple-500/30 to-pink-500/30 rounded-2xl flex items-center justify-center">
+                        <img id="modelBLogo" class="ai-logo w-20 h-20" src="" alt="logo" onerror="this.src='https://placehold.co/80x80/8b5cf6/white?text=AI'">
                     </div>
-                    <h3 id="modelBName" class="text-2xl font-bold mb-3">Загрузка...</h3>
-                    <p id="modelBDesc" class="text-slate-400 text-base mb-8">Разработчик: --</p>
-                    <div class="flex justify-center gap-4 text-sm">
-                        <div class="flex items-center gap-3 text-yellow-400">
-                            <i class="fas fa-trophy text-2xl"></i>
-                            <span id="modelBWins" class="font-bold text-3xl">0</span>
+                    <h3 id="modelBName" class="text-xl font-bold mb-2">Загрузка...</h3>
+                    <p id="modelBDesc" class="text-slate-400 text-sm mb-6">Разработчик: --</p>
+                    <div class="flex justify-center gap-4">
+                        <div class="flex items-center gap-2 text-yellow-400">
+                            <i class="fas fa-trophy"></i>
+                            <span id="modelBWins" class="font-bold">0</span>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div class="glass-card rounded-2xl p-6 text-center mt-12">
+            <div class="glass-card rounded-2xl p-5 text-center mt-10">
                 <div class="flex justify-center gap-8 text-sm flex-wrap">
                     <div class="flex items-center gap-2">
                         <i class="fas fa-chart-line text-green-400"></i>
-                        <span id="totalVotesToday" class="font-mono font-bold text-2xl">0</span>
+                        <span id="totalVotesToday" class="font-mono font-bold text-xl">0</span>
                         <span class="text-slate-500">голосов сегодня</span>
                     </div>
                     <div class="flex items-center gap-2">
                         <i class="fas fa-users text-blue-400"></i>
-                        <span id="totalVotesAll" class="font-mono font-bold text-2xl">0</span>
+                        <span id="totalVotesAll" class="font-mono font-bold text-xl">0</span>
                         <span class="text-slate-500">всего голосов</span>
                     </div>
                     <div class="flex items-center gap-2">
                         <i class="fas fa-clock text-slate-500"></i>
-                        <span id="nextQuestionTimer" class="font-mono font-bold text-2xl">--:--:--</span>
+                        <span id="nextQuestionTimer" class="font-mono font-bold text-xl">--:--:--</span>
                         <span class="text-slate-500">до нового вопроса</span>
                     </div>
                 </div>
@@ -299,7 +214,7 @@
         </div>
     </div>
 
-    <!-- ВКЛАДКА РЕЙТИНГ -->
+    <!-- РЕЙТИНГ -->
     <div id="ratingTab" class="hidden fade-in-up">
         <div class="text-center max-w-3xl mx-auto mb-10">
             <h2 class="text-4xl md:text-5xl font-bold bg-gradient-to-r from-yellow-400 via-orange-400 to-pink-400 bg-clip-text text-transparent">
@@ -334,7 +249,7 @@
         </div>
     </div>
 
-    <!-- ВКЛАДКА КАТАЛОГ -->
+    <!-- КАТАЛОГ -->
     <div id="catalogTab" class="hidden fade-in-up">
         <div class="text-center max-w-3xl mx-auto mb-10">
             <h2 class="text-4xl md:text-5xl font-bold bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
@@ -352,10 +267,10 @@
             <button onclick="filterCatalog('voice')" id="catalogCatVoice" class="catalog-cat px-5 py-2.5 rounded-xl text-sm font-medium transition-all">🎤 Голос/Музыка</button>
         </div>
 
-        <div id="catalogGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+        <div id="catalogGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
     </div>
 
-    <!-- ВКЛАДКА БЛОГ -->
+    <!-- БЛОГ -->
     <div id="blogTab" class="hidden fade-in-up">
         <div class="text-center max-w-3xl mx-auto mb-10">
             <h2 class="text-4xl md:text-5xl font-bold bg-gradient-to-r from-green-400 to-emerald-400 bg-clip-text text-transparent">
@@ -363,20 +278,18 @@
             </h2>
             <p class="text-slate-400 mt-3">Свежие статьи, сравнения и новости из мира нейросетей</p>
         </div>
-
         <div id="blogGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
     </div>
 
-    <!-- ВКЛАДКА О НАС -->
+    <!-- О НАС -->
     <div id="aboutTab" class="hidden fade-in-up">
         <div class="max-w-4xl mx-auto">
             <div class="glass-card rounded-2xl p-8">
                 <h2 class="text-3xl font-bold mb-4 bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">ℹ️ О проекте AI Arena</h2>
                 <p class="text-slate-300 mb-4">AI Arena — это независимая платформа для сравнения и рейтинга нейросетей. Мы помогаем пользователям выбирать лучшие ИИ-инструменты для своих задач.</p>
-                <p class="text-slate-300 mb-6">Наш рейтинг формируется на основе голосов реальных пользователей. Каждый день мы задаём новый вопрос и собираем мнения сообщества.</p>
+                <p class="text-slate-300 mb-6">Рейтинг формируется на основе голосов реальных пользователей.</p>
                 <h3 class="text-xl font-bold mb-3 text-white">📧 Контакты</h3>
                 <p class="text-slate-300">Email: info@ai-arena.com</p>
-                <p class="text-slate-300 mt-4 text-sm">Последнее обновление: 20 мая 2026</p>
             </div>
         </div>
     </div>
@@ -398,7 +311,6 @@
 </div>
 
 <script>
-    // ==================== FIREBASE КОНФИГУРАЦИЯ ====================
     const firebaseConfig = {
         apiKey: "AIzaSyDXV647tuR7adub0pO6PAGlFkivU5WY6T0",
         authDomain: "aivs-93aaf.firebaseapp.com",
@@ -410,8 +322,7 @@
     
     firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
-    
-    // ==================== МОДЕЛИ ====================
+
     const modelsList = [
         { id: "gpt4", name: "GPT-4 Turbo", developer: "OpenAI", category: "text", logo: "https://placehold.co/80x80/10a37f/white?text=GPT", wins: 124800, price: "от $20/мес", desc: "Самая мощная модель от OpenAI. Поддерживает анализ изображений, написание кода, решение сложных задач.", link: "https://chat.openai.com" },
         { id: "claude", name: "Claude 3.5 Sonnet", developer: "Anthropic", category: "text", logo: "https://placehold.co/80x80/d97706/white?text=CL", wins: 118500, price: "от $20/мес", desc: "Лучшая модель для написания кода и анализа документов.", link: "https://claude.ai" },
@@ -439,7 +350,7 @@
         { id: "suno", name: "Suno AI", developer: "Suno", category: "voice", logo: "https://placehold.co/80x80/0ea5e9/white?text=SU", wins: 67800, price: "бесплатно", desc: "Генерация музыки с вокалом.", link: "https://suno.ai" },
         { id: "udio", name: "Udio", developer: "Udio", category: "voice", logo: "https://placehold.co/80x80/0284c7/white?text=UD", wins: 52100, price: "бесплатно", desc: "Музыкальная модель.", link: "https://udio.com" }
     ];
-    
+
     const questionsList = [
         { text: "Какая нейросеть лучше пишет программный код?", category: "code" },
         { text: "Какая нейросеть лучше генерирует изображения?", category: "image" },
@@ -449,7 +360,7 @@
         { text: "Какая нейросеть лучше переводит тексты?", category: "text" },
         { text: "Какая нейросеть лучше создаёт музыку?", category: "voice" }
     ];
-    
+
     const blogPosts = [
         { title: "GPT-4 vs Claude 3.5: сравнение лидеров", date: "15 мая 2026", desc: "Подробный анализ двух самых мощных нейросетей.", link: "blog-gpt-vs-claude.html", category: "Сравнение" },
         { title: "Топ-10 нейросетей для генерации изображений в 2026", date: "12 мая 2026", desc: "Midjourney, DALL-E 3, Flux — какие инструменты дают лучший результат?", link: "blog-top-10-image-ai.html", category: "Изображения" },
@@ -457,7 +368,7 @@
         { title: "Будущее нейросетей: тренды 2026-2027", date: "8 мая 2026", desc: "Анализируем главные направления развития ИИ.", link: "blog-ai-trends-2026.html", category: "Аналитика" },
         { title: "Как нейросети меняют образование", date: "5 мая 2026", desc: "ИИ-репетиторы, проверка заданий, создание материалов.", link: "blog-ai-education.html", category: "Образование" }
     ];
-    
+
     let currentModels = { A: null, B: null };
     let currentQuestionObj = null;
     let lastVoteTimestamp = 0;
@@ -467,19 +378,19 @@
     let currentTab = 'battle';
     let currentRatingCategory = 'all';
     let currentCatalogFilter = 'all';
-    
+
     function showToast(message, isError = false) {
         const toast = document.getElementById('toastMessage');
         const icon = toast.querySelector('i');
         const text = toast.querySelector('span');
-        if (icon) icon.className = isError ? 'fas fa-exclamation-circle text-red-400 text-2xl' : 'fas fa-check-circle text-green-400 text-2xl';
-        if (text) text.innerText = message;
+        icon.className = isError ? 'fas fa-exclamation-circle text-red-400 text-2xl' : 'fas fa-check-circle text-green-400 text-2xl';
+        text.innerText = message;
         toast.classList.remove('hidden');
         setTimeout(() => toast.classList.add('hidden'), 2500);
     }
-    
+
     async function resetFirebaseData() {
-        console.log("🔄 Начинаем запись данных в Firebase...");
+        console.log("🔄 Запись данных...");
         for (const model of modelsList) {
             await db.collection("models").doc(model.id).set({
                 wins: model.wins,
@@ -494,9 +405,9 @@
             totalVotesToday: Math.floor(total * 0.003),
             lastResetDate: new Date().toDateString()
         });
-        showToast("✅ Данные успешно накручены!", false);
+        showToast("✅ Данные накручены!", false);
     }
-    
+
     async function loadFromFirebase() {
         for (const model of modelsList) {
             const doc = await db.collection("models").doc(model.id).get();
@@ -510,7 +421,7 @@
         document.getElementById("totalVotesAll").innerText = totalVotesAll.toLocaleString();
         document.getElementById("totalVotesToday").innerText = totalVotesToday.toLocaleString();
     }
-    
+
     async function saveVoteToFirebase(modelId) {
         await db.collection("models").doc(modelId).update({ wins: firebase.firestore.FieldValue.increment(1) });
         await db.collection("stats").doc("global").update({ 
@@ -522,7 +433,7 @@
         document.getElementById("totalVotesAll").innerText = totalVotesAll.toLocaleString();
         document.getElementById("totalVotesToday").innerText = totalVotesToday.toLocaleString();
     }
-    
+
     function loadQuestionOfDay() {
         const randomIndex = Math.floor(Math.random() * questionsList.length);
         currentQuestionObj = questionsList[randomIndex];
@@ -537,7 +448,7 @@
         document.getElementById("questionOfDay").innerText = currentQuestionObj.text;
         updateBattleUI();
     }
-    
+
     function updateBattleUI() {
         if (currentModels.A) {
             document.getElementById("modelAName").innerText = currentModels.A.name;
@@ -552,46 +463,44 @@
             document.getElementById("modelBWins").innerText = currentModels.B.wins.toLocaleString();
         }
     }
-    
+
     async function voteFor(side) {
         if (Date.now() - lastVoteTimestamp < 2000) {
             showToast("⏳ Подождите 2 секунды!", true);
             return;
         }
         lastVoteTimestamp = Date.now();
-        
+
         const winner = side === 'A' ? currentModels.A : currentModels.B;
         await saveVoteToFirebase(winner.id);
         winner.wins++;
         updateBattleUI();
         showToast(`🎉 ${winner.name} +1 победа!`, false);
-        
+
         let candidates = modelsList.filter(m => m.id !== winner.id);
         const newChallenger = candidates[Math.floor(Math.random() * candidates.length)];
         
         if (side === 'A') currentModels.B = newChallenger;
         else currentModels.A = newChallenger;
-        
         updateBattleUI();
     }
-    
+
     function startQuestionTimer() {
         if (nextQuestionInterval) clearInterval(nextQuestionInterval);
         nextQuestionInterval = setInterval(() => {
             const now = new Date();
             const tomorrow = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1);
             const diff = tomorrow - now;
-            const hours = Math.floor(diff / (1000 * 60 * 60));
-            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-            const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+            const hours = Math.floor(diff / (1000*60*60));
+            const minutes = Math.floor((diff % (1000*60*60)) / (1000*60));
+            const seconds = Math.floor((diff % (1000*60)) / 1000);
             document.getElementById("nextQuestionTimer").innerText = `${hours.toString().padStart(2,'0')}:${minutes.toString().padStart(2,'0')}:${seconds.toString().padStart(2,'0')}`;
         }, 1000);
     }
-    
+
     function showTab(tab) {
         currentTab = tab;
-        const tabs = ['battle', 'rating', 'catalog', 'blog', 'about'];
-        tabs.forEach(t => {
+        ['battle','rating','catalog','blog','about'].forEach(t => {
             const el = document.getElementById(t + 'Tab');
             if (el) el.classList.toggle('hidden', t !== tab);
         });
@@ -599,7 +508,7 @@
         if (tab === 'catalog') renderCatalog();
         if (tab === 'blog') renderBlog();
     }
-    
+
     async function updateRatingTable() {
         for (const model of modelsList) {
             const doc = await db.collection("models").doc(model.id).get();
@@ -617,68 +526,63 @@
             tbody.innerHTML += `
                 <tr class="border-b border-white/5 hover:bg-white/5">
                     <td class="py-4 px-6">${idx === 0 ? '<span class="rank-badge inline-block w-7 h-7 rounded-full text-center leading-7 text-black font-bold">1</span>' : idx+1}</td>
-                    <td class="py-4 px-6 font-medium">${model.name}</td>
+                    <td class="py-4 px-6">${model.name}</td>
                     <td class="py-4 px-6 text-center font-bold text-yellow-400">${model.wins.toLocaleString()}</td>
                     <td class="py-4 px-6">
                         <div class="w-full bg-white/10 rounded-full h-2">
                             <div class="bg-gradient-to-r from-blue-500 to-purple-500 h-2 rounded-full" style="width: ${percent}%"></div>
                         </div>
                     </td>
-                </tr>
-            `;
+                </tr>`;
         });
     }
-    
+
     function showRatingCategory(category) {
         currentRatingCategory = category;
-        document.querySelectorAll('#ratingTab .catalog-cat').forEach(btn => btn.classList.remove('active'));
-        const activeId = category === 'all' ? 'catAll' : 'cat' + category.charAt(0).toUpperCase() + category.slice(1);
-        document.getElementById(activeId).classList.add('active');
+        document.querySelectorAll('#ratingTab .catalog-cat').forEach(b => b.classList.remove('active'));
+        const id = category === 'all' ? 'catAll' : 'cat' + category.charAt(0).toUpperCase() + category.slice(1);
+        document.getElementById(id).classList.add('active');
         updateRatingTable();
     }
-    
+
     function renderCatalog() {
         let filtered = currentCatalogFilter === 'all' ? [...modelsList] : modelsList.filter(m => m.category === currentCatalogFilter);
-        const grid = document.getElementById("catalogGrid");
-        grid.innerHTML = filtered.map(model => `
-            <div class="catalog-item rounded-2xl p-6 cursor-pointer" onclick="window.open('${model.link}', '_blank')">
-                <div class="flex items-start gap-4">
-                    <img src="${model.logo}" class="ai-logo w-16 h-16" onerror="this.src='https://placehold.co/80x80/3b82f6/white?text=AI'">
-                    <div class="flex-1">
-                        <h3 class="font-bold text-lg">${model.name}</h3>
-                        <p class="text-blue-400">${model.developer}</p>
-                        <div class="flex gap-2 mt-2">
-                            <span class="text-xs px-3 py-1 bg-white/10 rounded-full">${model.price}</span>
-                        </div>
+        document.getElementById("catalogGrid").innerHTML = filtered.map(model => `
+            <div class="catalog-item rounded-2xl p-5 cursor-pointer" onclick="window.open('${model.link}', '_blank')">
+                <div class="flex gap-4">
+                    <img src="${model.logo}" class="ai-logo w-14 h-14 flex-shrink-0" onerror="this.src='https://placehold.co/60x60/3b82f6/white?text=AI'">
+                    <div>
+                        <h3 class="font-bold">${model.name}</h3>
+                        <p class="text-blue-400 text-sm">${model.developer}</p>
+                        <p class="text-xs text-slate-400 mt-1">${model.price}</p>
                     </div>
                 </div>
-                <p class="text-slate-400 text-sm mt-4">${model.desc}</p>
+                <p class="text-sm text-slate-400 mt-4 line-clamp-4">${model.desc}</p>
             </div>
         `).join('');
     }
-    
+
     function filterCatalog(category) {
         currentCatalogFilter = category;
         document.querySelectorAll('#catalogTab .catalog-cat').forEach(btn => btn.classList.remove('active'));
-        const activeId = category === 'all' ? 'catalogCatAll' : 'catalogCat' + category.charAt(0).toUpperCase() + category.slice(1);
-        document.getElementById(activeId).classList.add('active');
+        const id = category === 'all' ? 'catalogCatAll' : 'catalogCat' + category.charAt(0).toUpperCase() + category.slice(1);
+        document.getElementById(id).classList.add('active');
         renderCatalog();
     }
-    
+
     function renderBlog() {
-        const grid = document.getElementById("blogGrid");
-        grid.innerHTML = blogPosts.map(post => `
-            <div class="catalog-item rounded-2xl p-6 cursor-pointer" onclick="window.open('${post.link}', '_blank')">
+        document.getElementById("blogGrid").innerHTML = blogPosts.map(post => `
+            <div class="catalog-item rounded-2xl p-5 cursor-pointer" onclick="window.open('${post.link}', '_blank')">
                 <span class="text-xs text-blue-400">${post.category}</span>
-                <h3 class="font-bold text-lg mt-3">${post.title}</h3>
-                <p class="text-slate-400 text-sm mt-2">${post.desc}</p>
+                <h3 class="font-bold mt-3">${post.title}</h3>
+                <p class="text-sm text-slate-400 mt-2">${post.desc}</p>
                 <p class="text-xs text-slate-500 mt-4">${post.date}</p>
             </div>
         `).join('');
     }
-    
+
     document.addEventListener('DOMContentLoaded', async () => {
-        // await resetFirebaseData();   // Раскомментировать один раз для начальной накрутки
+        // await resetFirebaseData();   // Раскомментировать один раз
         await loadFromFirebase();
         loadQuestionOfDay();
         startQuestionTimer();
