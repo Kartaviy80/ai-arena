@@ -14,6 +14,7 @@
     <meta property="og:url" content="https://ai-arena-self.vercel.app">
     <link rel="canonical" href="https://ai-arena-self.vercel.app">
     
+    <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
     
@@ -140,17 +141,17 @@
         }
         
         .catalog-item {
-            background: rgba(20, 25, 45, 0.8);
-            backdrop-filter: blur(10px);
+            background: rgba(20, 25, 45, 0.85);
+            backdrop-filter: blur(12px);
             border: 1px solid rgba(255,255,255,0.08);
             transition: all 0.3s;
-            min-height: 280px;
+            min-height: 290px;
         }
         
         .catalog-item:hover {
-            transform: translateY(-5px);
+            transform: translateY(-6px);
             border-color: #3b82f6;
-            box-shadow: 0 10px 30px rgba(59,130,246,0.2);
+            box-shadow: 0 15px 35px rgba(59,130,246,0.25);
         }
         
         .ai-logo {
@@ -168,7 +169,7 @@
         }
         
         .vs-neon {
-            font-size: 3.5rem;
+            font-size: 3.8rem;
             font-weight: 800;
             background: linear-gradient(135deg, #3b82f6, #ec4899, #8b5cf6);
             -webkit-background-clip: text;
@@ -247,8 +248,8 @@
 
         <div class="max-w-6xl mx-auto">
             <div class="arena-container">
-                <div id="modelACard" class="model-card p-6 text-center flex-1 min-w-[280px] max-w-[420px]" onclick="voteFor('A')">
-                    <div class="w-28 h-28 mx-auto mb-5 bg-gradient-to-br from-blue-500/30 to-purple-500/30 rounded-2xl flex items-center justify-center">
+                <div id="modelACard" class="model-card p-8 text-center flex-1 min-w-[290px] max-w-[420px]" onclick="voteFor('A')">
+                    <div class="w-28 h-28 mx-auto mb-6 bg-gradient-to-br from-blue-500/30 to-purple-500/30 rounded-2xl flex items-center justify-center">
                         <img id="modelALogo" class="ai-logo w-20 h-20" src="" alt="logo" onerror="this.src='https://placehold.co/80x80/3b82f6/white?text=AI'">
                     </div>
                     <h3 id="modelAName" class="text-2xl font-bold mb-2">Загрузка...</h3>
@@ -265,8 +266,8 @@
                     <div class="vs-neon">VS</div>
                 </div>
 
-                <div id="modelBCard" class="model-card p-6 text-center flex-1 min-w-[280px] max-w-[420px]" onclick="voteFor('B')">
-                    <div class="w-28 h-28 mx-auto mb-5 bg-gradient-to-br from-purple-500/30 to-pink-500/30 rounded-2xl flex items-center justify-center">
+                <div id="modelBCard" class="model-card p-8 text-center flex-1 min-w-[290px] max-w-[420px]" onclick="voteFor('B')">
+                    <div class="w-28 h-28 mx-auto mb-6 bg-gradient-to-br from-purple-500/30 to-pink-500/30 rounded-2xl flex items-center justify-center">
                         <img id="modelBLogo" class="ai-logo w-20 h-20" src="" alt="logo" onerror="this.src='https://placehold.co/80x80/8b5cf6/white?text=AI'">
                     </div>
                     <h3 id="modelBName" class="text-2xl font-bold mb-2">Загрузка...</h3>
@@ -280,7 +281,7 @@
                 </div>
             </div>
 
-            <div class="glass-card rounded-2xl p-5 text-center mt-10">
+            <div class="glass-card rounded-2xl p-5 text-center mt-12">
                 <div class="flex justify-center gap-8 text-sm flex-wrap">
                     <div class="flex items-center gap-2">
                         <i class="fas fa-chart-line text-green-400"></i>
@@ -355,7 +356,7 @@
             <button onclick="filterCatalog('voice')" id="catalogCatVoice" class="catalog-cat px-5 py-2.5 rounded-xl text-sm font-medium transition-all">🎤 Голос/Музыка</button>
         </div>
 
-        <div id="catalogGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+        <div id="catalogGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"></div>
     </div>
 
     <!-- БЛОГ -->
@@ -376,14 +377,11 @@
                 <h2 class="text-3xl font-bold mb-4 bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">ℹ️ О проекте AI Arena</h2>
                 <p class="text-slate-300 mb-4">AI Arena — это независимая платформа для сравнения и рейтинга нейросетей. Мы помогаем пользователям выбирать лучшие ИИ-инструменты для своих задач.</p>
                 <p class="text-slate-300 mb-4">Наш рейтинг формируется на основе голосов реальных пользователей. Каждый день мы задаём новый вопрос и собираем мнения сообщества.</p>
-                <p class="text-slate-300 mb-6">Проект создан в 2026 году для всех, кто интересуется искусственным интеллектом и хочет быть в курсе последних трендов.</p>
+                <p class="text-slate-300 mb-6">Проект создан в 2026 году для всех, кто интересуется искусственным интеллектом.</p>
                 
                 <h3 class="text-xl font-bold mb-3 text-white">📧 Контакты</h3>
                 <p class="text-slate-300 mb-2">Email: <a href="mailto:info@ai-arena.com" class="text-blue-400 hover:underline">info@ai-arena.com</a></p>
-                <p class="text-slate-300 mb-6">Telegram: <a href="#" class="text-blue-400 hover:underline">@ai_arena_bot</a></p>
-                
-                <h3 class="text-xl font-bold mb-3 text-white">📜 Политика конфиденциальности</h3>
-                <p class="text-slate-300 text-sm mt-4">Последнее обновление: 20 мая 2026</p>
+                <p class="text-slate-300">Telegram: <a href="#" class="text-blue-400 hover:underline">@ai_arena_bot</a></p>
             </div>
         </div>
     </div>
@@ -488,10 +486,9 @@
     }
 
     async function resetFirebaseData() {
-        console.log("🔄 Начинаем запись данных в Firebase...");
+        console.log("🔄 Начинаем запись данных...");
         for (const model of modelsList) {
-            const docRef = db.collection("models").doc(model.id);
-            await docRef.set({
+            await db.collection("models").doc(model.id).set({
                 wins: model.wins,
                 name: model.name,
                 developer: model.developer,
@@ -499,33 +496,26 @@
             });
         }
         let total = modelsList.reduce((sum, m) => sum + m.wins, 0);
-        totalVotesAll = total;
-        totalVotesToday = Math.floor(total * 0.003);
-        const statsRef = db.collection("stats").doc("global");
-        await statsRef.set({
-            totalVotes: totalVotesAll,
-            totalVotesToday: totalVotesToday,
+        await db.collection("stats").doc("global").set({
+            totalVotes: total,
+            totalVotesToday: Math.floor(total * 0.003),
             lastResetDate: new Date().toDateString()
         });
-        document.getElementById("totalVotesAll").innerText = totalVotesAll.toLocaleString();
-        document.getElementById("totalVotesToday").innerText = totalVotesToday.toLocaleString();
-        showToast("✅ Данные Firebase обновлены!", false);
+        showToast("✅ Данные обновлены!", false);
     }
 
     async function loadFromFirebase() {
         for (const model of modelsList) {
             const doc = await db.collection("models").doc(model.id).get();
-            if (doc.exists) {
-                model.wins = doc.data().wins;
-            }
+            if (doc.exists) model.wins = doc.data().wins;
         }
         const statsDoc = await db.collection("stats").doc("global").get();
         if (statsDoc.exists) {
-            totalVotesAll = statsDoc.data().totalVotes;
-            totalVotesToday = statsDoc.data().totalVotesToday;
+            totalVotesAll = statsDoc.data().totalVotes || 0;
+            totalVotesToday = statsDoc.data().totalVotesToday || 0;
         }
-        document.getElementById("totalVotesAll").innerText = (totalVotesAll || 0).toLocaleString();
-        document.getElementById("totalVotesToday").innerText = (totalVotesToday || 0).toLocaleString();
+        document.getElementById("totalVotesAll").innerText = totalVotesAll.toLocaleString();
+        document.getElementById("totalVotesToday").innerText = totalVotesToday.toLocaleString();
     }
 
     async function saveVoteToFirebase(modelId) {
@@ -547,12 +537,7 @@
         let candidates = modelsList.filter(m => m.category === currentQuestionObj.category);
         if (candidates.length < 2) candidates = modelsList;
         
-        const shuffled = [...candidates];
-        for (let i = shuffled.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-        }
-        
+        const shuffled = [...candidates].sort(() => 0.5 - Math.random());
         currentModels.A = shuffled[0];
         currentModels.B = shuffled[1];
         
@@ -600,9 +585,7 @@
         if (nextQuestionInterval) clearInterval(nextQuestionInterval);
         nextQuestionInterval = setInterval(() => {
             const now = new Date();
-            const tomorrow = new Date(now);
-            tomorrow.setDate(tomorrow.getDate() + 1);
-            tomorrow.setHours(0, 0, 0, 0);
+            const tomorrow = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1);
             const diff = tomorrow - now;
             const hours = Math.floor(diff / (1000 * 60 * 60));
             const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
@@ -636,18 +619,15 @@
         const maxWins = filtered[0]?.wins || 1;
         
         filtered.forEach((model, idx) => {
-            const winPercent = (model.wins / maxWins) * 100;
+            const percent = (model.wins / maxWins) * 100;
             tbody.innerHTML += `
-                <tr class="border-b border-white/5 hover:bg-white/5 transition-all">
+                <tr class="border-b border-white/5 hover:bg-white/5">
                     <td class="py-3 px-4">${idx === 0 ? '<span class="rank-badge inline-block w-7 h-7 rounded-full text-center leading-7 text-black font-bold">1</span>' : idx+1}</td>
-                    <td class="py-3 px-4 font-medium">
-                        <img src="${model.logo}" class="w-6 h-6 inline mr-2 rounded" onerror="this.style.display='none'">
-                        ${model.name}
-                    </td>
+                    <td class="py-3 px-4">${model.name}</td>
                     <td class="py-3 px-4 text-center font-bold text-yellow-400">${model.wins.toLocaleString()}</td>
                     <td class="py-3 px-4">
                         <div class="w-full bg-white/10 rounded-full h-2">
-                            <div class="bg-gradient-to-r from-blue-500 to-purple-500 h-2 rounded-full" style="width: ${winPercent}%"></div>
+                            <div class="bg-gradient-to-r from-blue-500 to-purple-500 h-2 rounded-full" style="width: ${percent}%"></div>
                         </div>
                     </td>
                 </tr>
@@ -659,8 +639,7 @@
         currentRatingCategory = category;
         document.querySelectorAll('#ratingTab .catalog-cat').forEach(btn => btn.classList.remove('active'));
         const activeId = `cat${category === 'all' ? 'All' : category.charAt(0).toUpperCase() + category.slice(1)}`;
-        const activeBtn = document.getElementById(activeId);
-        if (activeBtn) activeBtn.classList.add('active');
+        document.getElementById(activeId).classList.add('active');
         updateRatingTable();
     }
 
@@ -669,17 +648,15 @@
         const grid = document.getElementById("catalogGrid");
         grid.innerHTML = filtered.map(model => `
             <div class="catalog-item rounded-2xl p-5 cursor-pointer" onclick="window.open('${model.link}', '_blank')">
-                <div class="flex items-start gap-4">
-                    <img src="${model.logo}" class="ai-logo w-14 h-14" onerror="this.src='https://placehold.co/60x60/3b82f6/white?text=AI'">
-                    <div class="flex-1">
+                <div class="flex items-center gap-4">
+                    <img src="${model.logo}" class="ai-logo w-16 h-16" onerror="this.src='https://placehold.co/60x60/3b82f6/white?text=AI'">
+                    <div>
                         <h3 class="font-bold text-lg">${model.name}</h3>
-                        <p class="text-blue-400 text-sm">${model.developer}</p>
-                        <div class="flex gap-2 text-xs mt-2">
-                            <span class="px-2 py-0.5 rounded-full bg-white/10">${model.price}</span>
-                        </div>
+                        <p class="text-blue-400">${model.developer}</p>
                     </div>
                 </div>
-                <p class="text-sm text-slate-400 mt-4">${model.desc}</p>
+                <p class="text-sm text-slate-400 mt-4 line-clamp-3">${model.desc}</p>
+                <div class="mt-4 text-xs text-slate-400">${model.price}</div>
             </div>
         `).join('');
     }
@@ -688,8 +665,7 @@
         currentCatalogFilter = category;
         document.querySelectorAll('#catalogTab .catalog-cat').forEach(btn => btn.classList.remove('active'));
         const activeId = `catalogCat${category.charAt(0).toUpperCase() + category.slice(1)}`;
-        const activeBtn = document.getElementById(activeId);
-        if (activeBtn) activeBtn.classList.add('active');
+        document.getElementById(activeId).classList.add('active');
         renderCatalog();
     }
 
@@ -697,12 +673,10 @@
         const grid = document.getElementById("blogGrid");
         grid.innerHTML = blogPosts.map(post => `
             <div class="catalog-item rounded-2xl p-5 cursor-pointer" onclick="window.open('${post.link}', '_blank')">
-                <div class="flex justify-between items-start mb-2">
-                    <span class="text-xs text-blue-400">${post.category}</span>
-                    <span class="text-xs text-slate-500">${post.date}</span>
-                </div>
-                <h3 class="font-bold text-lg mb-2">${post.title}</h3>
-                <p class="text-sm text-slate-400">${post.desc}</p>
+                <span class="text-xs text-blue-400">${post.category}</span>
+                <h3 class="font-bold text-lg mt-3">${post.title}</h3>
+                <p class="text-sm text-slate-400 mt-2">${post.desc}</p>
+                <p class="text-xs text-slate-500 mt-4">${post.date}</p>
             </div>
         `).join('');
     }
