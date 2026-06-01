@@ -99,6 +99,24 @@
             box-shadow: 0 20px 40px rgba(59, 130, 246, 0.2);
         }
         
+        /* ГЛАВНОЕ ИСПРАВЛЕНИЕ - горизонтальное расположение карточек */
+        .arena-container {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+        
+        /* Адаптивность для мобильных устройств */
+        @media (max-width: 768px) {
+            .arena-container {
+                flex-direction: column;
+                gap: 1.5rem;
+            }
+        }
+        
         .nav-btn {
             position: relative;
             padding: 0.5rem 1.25rem;
@@ -201,6 +219,21 @@
         }
         
         footer { margin-top: auto; }
+        
+        .fade-in-up {
+            animation: fadeInUp 0.5s ease-out;
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
     </style>
 </head>
 <body>
@@ -248,7 +281,7 @@
 
         <div class="max-w-6xl mx-auto">
             <div class="arena-container">
-                <div id="modelACard" class="model-card p-8 text-center flex-1 min-w-[300px] max-w-md" onclick="voteFor('A')">
+                <div id="modelACard" class="model-card p-8 text-center w-full min-w-[280px] max-w-md" onclick="voteFor('A')">
                     <div class="w-28 h-28 mx-auto mb-6 bg-gradient-to-br from-blue-500/30 to-purple-500/30 rounded-2xl flex items-center justify-center">
                         <img id="modelALogo" class="ai-logo w-20 h-20" src="" alt="logo" onerror="this.src='https://placehold.co/80x80/3b82f6/white?text=AI'">
                     </div>
@@ -266,7 +299,7 @@
                     <div class="vs-neon">VS</div>
                 </div>
 
-                <div id="modelBCard" class="model-card p-8 text-center flex-1 min-w-[300px] max-w-md" onclick="voteFor('B')">
+                <div id="modelBCard" class="model-card p-8 text-center w-full min-w-[280px] max-w-md" onclick="voteFor('B')">
                     <div class="w-28 h-28 mx-auto mb-6 bg-gradient-to-br from-purple-500/30 to-pink-500/30 rounded-2xl flex items-center justify-center">
                         <img id="modelBLogo" class="ai-logo w-20 h-20" src="" alt="logo" onerror="this.src='https://placehold.co/80x80/8b5cf6/white?text=AI'">
                     </div>
@@ -582,6 +615,20 @@
             const el = document.getElementById(t + 'Tab');
             if (el) el.classList.toggle('hidden', t !== tab);
         });
+        
+        // Обновляем активную кнопку навигации
+        const navBtns = ['tabBattleBtn', 'tabRatingBtn', 'tabCatalogBtn', 'tabBlogBtn', 'tabAboutBtn'];
+        navBtns.forEach(btnId => {
+            const btn = document.getElementById(btnId);
+            if (btn) {
+                if (btnId === `tab${tab.charAt(0).toUpperCase() + tab.slice(1)}Btn`) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            }
+        });
+        
         if (tab === 'rating') updateRatingTable();
         if (tab === 'catalog') renderCatalog();
         if (tab === 'blog') renderBlog();
@@ -602,13 +649,13 @@
         filtered.forEach((model, idx) => {
             const percent = (model.wins / maxWins) * 100;
             tbody.innerHTML += `
-                <tr class="border-b border-white/5 hover:bg-white/5">
-                    <td class="py-3 px-4">${idx === 0 ? '<span class="rank-badge inline-block w-7 h-7 rounded-full text-center leading-7 text-black font-bold">1</span>' : idx+1}</td>
+                <tr class="border-b border-white/5 hover:bg-white/5 transition">
+                    <td class="py-3 px-4 font-medium">${idx === 0 ? '<span class="rank-badge inline-block w-7 h-7 rounded-full text-center leading-7 text-black font-bold">1</span>' : idx+1}</td>
                     <td class="py-3 px-4 font-medium">${model.name}</td>
                     <td class="py-3 px-4 text-center font-bold text-yellow-400">${model.wins.toLocaleString()}</td>
                     <td class="py-3 px-4">
-                        <div class="w-full bg-white/10 rounded-full h-2">
-                            <div class="bg-gradient-to-r from-blue-500 to-purple-500 h-2 rounded-full" style="width: ${percent}%"></div>
+                        <div class="w-full bg-white/10 rounded-full h-2 overflow-hidden">
+                            <div class="bg-gradient-to-r from-blue-500 to-purple-500 h-2 rounded-full transition-all" style="width: ${percent}%"></div>
                         </div>
                     </td>
                 </tr>
@@ -628,7 +675,7 @@
         let filtered = currentCatalogFilter === 'all' ? [...modelsList] : modelsList.filter(m => m.category === currentCatalogFilter);
         const grid = document.getElementById("catalogGrid");
         grid.innerHTML = filtered.map(model => `
-            <div class="catalog-item rounded-2xl p-5 cursor-pointer" onclick="window.open('${model.link}', '_blank')">
+            <div class="catalog-item rounded-2xl p-5 cursor-pointer transition-all" onclick="window.open('${model.link}', '_blank')">
                 <div class="flex items-start gap-4">
                     <img src="${model.logo}" class="ai-logo w-14 h-14" onerror="this.src='https://placehold.co/60x60/3b82f6/white?text=AI'">
                     <div class="flex-1">
@@ -637,7 +684,7 @@
                         <p class="text-xs text-slate-400 mt-1">${model.price}</p>
                     </div>
                 </div>
-                <p class="text-sm text-slate-400 mt-4">${model.desc}</p>
+                <p class="text-sm text-slate-400 mt-4 line-clamp-3">${model.desc}</p>
             </div>
         `).join('');
     }
@@ -653,12 +700,12 @@
     function renderBlog() {
         const grid = document.getElementById("blogGrid");
         grid.innerHTML = blogPosts.map(post => `
-            <div class="catalog-item rounded-2xl p-5 cursor-pointer" onclick="window.open('${post.link}', '_blank')">
+            <div class="catalog-item rounded-2xl p-5 cursor-pointer transition-all" onclick="window.open('${post.link}', '_blank')">
                 <div class="flex justify-between items-start mb-2">
                     <span class="text-xs text-blue-400">${post.category}</span>
                     <span class="text-xs text-slate-500">${post.date}</span>
                 </div>
-                <h3 class="font-bold text-lg mb-2">${post.title}</h3>
+                <h3 class="font-bold text-lg mb-2 hover:text-blue-400 transition">${post.title}</h3>
                 <p class="text-sm text-slate-400">${post.desc}</p>
             </div>
         `).join('');
