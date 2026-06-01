@@ -869,25 +869,73 @@ const questionsList = [
     }
 
     async function voteFor(side) {
-        if (Date.now() - lastVoteTimestamp < 2000) {
-            showToast("⏳ Подождите 2 секунды!", true);
-            return;
-        }
-        lastVoteTimestamp = Date.now();
+    if (Date.now() - lastVoteTimestamp < 2000) {
+        showToast("⏳ Подождите 2 секунды!", true);
+        return;
+    }
+    lastVoteTimestamp = Date.now();
+    
+    const winner = side === 'A' ? currentModels.A : currentModels.B;
+    
+    // Пытаемся обновить с автоматическим созданием документа
+    try {
+        const modelRef = db.collection("models").doc(winner.id);
+        const modelDoc = await modelRef.get();
         
-        const winner = side === 'A' ? currentModels.A : currentModels.B;
-        await saveVoteToFirebase(winner.id);
+        if (!modelDoc.exists) {
+            // Если документа нет - создаём
+            await modelRef.set({
+                wins: winner.wins + 1,
+                name: winner.name,
+                category: winner.category,
+                createdAt: new Date()
+            });
+            console.log(`✅ Создан новый документ для: ${winner.name}`);
+        } else {
+            // Если есть - обновляем
+            await modelRef.update({ wins: firebase.firestore.FieldValue.increment(1) });
+        }
+        
+        // Обновляем статистику
+        const statsRef = db.collection("stats").doc("global");
+        const statsDoc = await statsRef.get();
+        
+        if (!statsDoc.exists) {
+            await statsRef.set({
+                totalVotes: 1,
+                totalVotesToday: 1,
+                lastReset: new Date()
+            });
+        } else {
+            await statsRef.update({
+                totalVotes: firebase.firestore.FieldValue.increment(1),
+                totalVotesToday: firebase.firestore.FieldValue.increment(1)
+            });
+        }
+        
         winner.wins++;
         updateBattleUI();
         showToast(`🎉 ${winner.name} +1 победа!`, false);
         
+        // Обновляем глобальные счётчики
+        totalVotesAll++;
+        totalVotesToday++;
+        document.getElementById("totalVotesAll").innerText = totalVotesAll.toLocaleString();
+        document.getElementById("totalVotesToday").innerText = totalVotesToday.toLocaleString();
+        
+        // Загружаем нового соперника
         let candidates = modelsList.filter(m => m.id !== winner.id);
         const newChallenger = candidates[Math.floor(Math.random() * candidates.length)];
         
         if (side === 'A') currentModels.B = newChallenger;
         else currentModels.A = newChallenger;
         updateBattleUI();
+        
+    } catch (error) {
+        console.error("Ошибка при голосовании:", error);
+        showToast("❌ Ошибка при голосовании. Попробуйте позже.", true);
     }
+}
 
     function startQuestionTimer() {
         if (nextQuestionInterval) clearInterval(nextQuestionInterval);
