@@ -404,20 +404,141 @@
     </div>
 
     <!-- О НАС -->
-    <div id="aboutTab" class="hidden fade-in-up">
-        <div class="max-w-4xl mx-auto">
-            <div class="glass-card rounded-2xl p-8">
-                <h2 class="text-3xl font-bold mb-4 bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">ℹ️ О проекте AI Arena</h2>
-                <p class="text-slate-300 mb-4">AI Arena — это независимая платформа для сравнения и рейтинга нейросетей. Мы помогаем пользователям выбирать лучшие ИИ-инструменты для своих задач.</p>
-                <p class="text-slate-300 mb-4">Наш рейтинг формируется на основе голосов реальных пользователей. Каждый день мы задаём новый вопрос и собираем мнения сообщества.</p>
-                <p class="text-slate-300 mb-6">Проект создан в 2026 году для всех, кто интересуется искусственным интеллектом.</p>
+    <!-- О НАС + ПОЛИТИКА КОНФИДЕНЦИАЛЬНОСТИ -->
+<div id="aboutTab" class="hidden fade-in-up">
+    <div class="max-w-4xl mx-auto">
+        
+        <!-- Вкладки: О нас / Политика -->
+        <div class="flex gap-2 mb-6 border-b border-white/10 pb-4">
+            <button onclick="switchAboutTab('about')" id="aboutUsBtn" class="px-5 py-2 rounded-xl text-sm font-medium transition-all bg-blue-600 text-white">ℹ️ О нас</button>
+            <button onclick="switchAboutTab('privacy')" id="privacyBtn" class="px-5 py-2 rounded-xl text-sm font-medium transition-all bg-white/5 text-slate-400 hover:bg-white/10">🔒 Политика конфиденциальности</button>
+        </div>
+        
+        <!-- Блок: О нас -->
+        <div id="aboutContent" class="glass-card rounded-2xl p-8">
+            <h2 class="text-3xl font-bold mb-4 bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">ℹ️ О проекте AI Arena</h2>
+            
+            <div class="space-y-4 text-slate-300">
+                <p><strong class="text-white">AI Arena</strong> — это независимая платформа для сравнения и рейтинга нейросетей. Мы помогаем пользователям выбирать лучшие ИИ-инструменты для своих задач: от генерации изображений до написания кода.</p>
                 
-                <h3 class="text-xl font-bold mb-3 text-white">📧 Контакты</h3>
-                <p class="text-slate-300 mb-2">Email: <a href="mailto:info@ai-arena.com" class="text-blue-400 hover:underline">info@ai-arena.com</a></p>
-                <p class="text-slate-300">Telegram: <a href="#" class="text-blue-400 hover:underline">@ai_arena_bot</a></p>
+                <p>Наш рейтинг формируется на основе голосов реальных пользователей. Каждый день мы задаём новый вопрос, а вы голосуете за ту нейросеть, которая, по вашему мнению, справляется лучше. Так мы создаём объективную картину лидеров рынка ИИ.</p>
+                
+                <p>В нашем каталоге собрано <strong>более 100 нейросетей</strong> с подробными описаниями, ценами и ссылками. Мы регулярно обновляем информацию и добавляем новые модели.</p>
+                
+                <p>Проект создан в 2026 году для всех, кто интересуется искусственным интеллектом — от новичков до профессионалов.</p>
+            </div>
+            
+            <div class="mt-8 pt-6 border-t border-white/10">
+                <h3 class="text-xl font-bold mb-4 text-white">📊 Наша статистика</h3>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
+                    <div class="bg-white/5 rounded-xl p-4">
+                        <div class="text-2xl font-bold text-blue-400" id="statModels">100+</div>
+                        <div class="text-xs text-slate-500">нейросетей в каталоге</div>
+                    </div>
+                    <div class="bg-white/5 rounded-xl p-4">
+                        <div class="text-2xl font-bold text-purple-400" id="statQuestions">100+</div>
+                        <div class="text-xs text-slate-500">вопросов для сравнения</div>
+                    </div>
+                    <div class="bg-white/5 rounded-xl p-4">
+                        <div class="text-2xl font-bold text-pink-400" id="statVotes">0</div>
+                        <div class="text-xs text-slate-500">всего голосов</div>
+                    </div>
+                    <div class="bg-white/5 rounded-xl p-4">
+                        <div class="text-2xl font-bold text-green-400">2026</div>
+                        <div class="text-xs text-slate-500">год основания</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mt-8 pt-6 border-t border-white/10">
+                <h3 class="text-xl font-bold mb-4 text-white">📧 Контакты</h3>
+                <p class="text-slate-300 mb-2">📧 Email: <a href="mailto:info@ai-arena.com" class="text-blue-400 hover:underline">info@ai-arena.com</a></p>
+                <p class="text-slate-300 mb-2">📱 Telegram: <a href="#" class="text-blue-400 hover:underline">@ai_arena_bot</a></p>
+                <p class="text-slate-300">🐦 Twitter (X): <a href="#" class="text-blue-400 hover:underline">@ai_arena</a></p>
             </div>
         </div>
+        
+        <!-- Блок: Политика конфиденциальности (скрыт по умолчанию) -->
+        <div id="privacyContent" class="glass-card rounded-2xl p-8 hidden">
+            <h2 class="text-3xl font-bold mb-6 bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">🔒 Политика конфиденциальности</h2>
+            
+            <div class="space-y-6 text-slate-300">
+                <div>
+                    <h3 class="text-xl font-semibold text-white mb-2">1. Общие положения</h3>
+                    <p>Настоящая Политика конфиденциальности описывает, как AI Arena (далее — «Мы», «Наш», «Проект») собирает, использует и защищает информацию, которую вы предоставляете при использовании нашего веб-сайта <span class="text-blue-400">https://ai-arena-self.vercel.app</span> (далее — «Сайт»).</p>
+                    <p class="mt-2">Используя наш Сайт, вы соглашаетесь с условиями данной Политики. Если вы не согласны с этими условиями, пожалуйста, не используйте наш Сайт.</p>
+                </div>
+                
+                <div>
+                    <h3 class="text-xl font-semibold text-white mb-2">2. Какую информацию мы собираем</h3>
+                    <p>Мы собираем следующие типы информации:</p>
+                    <ul class="list-disc pl-6 mt-2 space-y-1">
+                        <li><strong>Техническая информация:</strong> IP-адрес, тип браузера, операционная система, время посещения, просмотренные страницы.</li>
+                        <li><strong>Информация о голосованиях:</strong> Ваши голоса за нейросети (без привязки к личным данным).</li>
+                        <li><strong>Файлы cookie:</strong> Небольшие текстовые файлы для улучшения работы сайта и анализа трафика.</li>
+                        <li><strong>Данные Firebase:</strong> Мы используем Firebase для хранения анонимных данных о голосованиях и статистике.</li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="text-xl font-semibold text-white mb-2">3. Как мы используем вашу информацию</h3>
+                    <p>Собранная информация используется для:</p>
+                    <ul class="list-disc pl-6 mt-2 space-y-1">
+                        <li>Формирования рейтинга нейросетей на основе голосов пользователей.</li>
+                        <li>Улучшения работы сайта и пользовательского опыта.</li>
+                        <li>Анализа трафика и популярности различных нейросетей.</li>
+                        <li>Показа рекламы через Google AdSense (без передачи личных данных).</li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="text-xl font-semibold text-white mb-2">4. Файлы cookie и сторонние сервисы</h3>
+                    <p>Мы используем следующие сторонние сервисы, которые могут устанавливать свои cookie:</p>
+                    <ul class="list-disc pl-6 mt-2 space-y-1">
+                        <li><strong>Google AdSense</strong> — для показа рекламы. Google может использовать cookie для показа релевантных объявлений. <a href="https://policies.google.com/technologies/ads" target="_blank" class="text-blue-400 hover:underline">Политика Google</a></li>
+                        <li><strong>Firebase (Google)</strong> — для хранения данных. <a href="https://firebase.google.com/support/privacy" target="_blank" class="text-blue-400 hover:underline">Политика Firebase</a></li>
+                        <li><strong>Tailwind CSS / Font Awesome</strong> — для стилизации (не собирают данные).</li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="text-xl font-semibold text-white mb-2">5. Хранение и защита данных</h3>
+                    <p>Все данные о голосованиях хранятся в защищённой облачной базе данных Firebase. Мы принимаем разумные меры для защиты вашей информации от несанкционированного доступа, изменения или уничтожения.</p>
+                    <p class="mt-2">Обратите внимание: данные о голосованиях являются анонимными и не содержат личной информации, которая могла бы идентифицировать вас.</p>
+                </div>
+                
+                <div>
+                    <h3 class="text-xl font-semibold text-white mb-2">6. Отказ от ответственности</h3>
+                    <p>AI Arena не несёт ответственности за:</p>
+                    <ul class="list-disc pl-6 mt-2 space-y-1">
+                        <li>Содержание внешних сайтов, на которые мы ссылаемся (нейросети, обзоры).</li>
+                        <li>Точность информации о сторонних сервисах (цены, функции — могут меняться).</li>
+                        <li>Любые прямые или косвенные убытки, возникшие при использовании нашего сайта.</li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="text-xl font-semibold text-white mb-2">7. Изменения в политике</h3>
+                    <p>Мы оставляем за собой право в любое время изменять данную Политику конфиденциальности. Изменения вступают в силу с момента публикации обновлённой версии на этой странице. Рекомендуем периодически проверять эту страницу для ознакомления с актуальной версией.</p>
+                </div>
+                
+                <div>
+                    <h3 class="text-xl font-semibold text-white mb-2">8. Контактная информация</h3>
+                    <p>Если у вас есть вопросы по данной Политике конфиденциальности, пожалуйста, свяжитесь с нами:</p>
+                    <ul class="list-none pl-0 mt-2 space-y-1">
+                        <li>📧 Email: <a href="mailto:privacy@ai-arena.com" class="text-blue-400 hover:underline">privacy@ai-arena.com</a></li>
+                        <li>📱 Telegram: <a href="#" class="text-blue-400 hover:underline">@ai_arena_support</a></li>
+                    </ul>
+                </div>
+                
+                <div class="pt-4 text-center text-sm text-slate-500 border-t border-white/10">
+                    <p>Последнее обновление: 1 июня 2026 года</p>
+                </div>
+            </div>
+        </div>
+        
     </div>
+</div>
 
 </main>
 
@@ -669,18 +790,24 @@ const questionsList = [
     }
 
     async function loadFromFirebase() {
-        for (const model of modelsList) {
-            const doc = await db.collection("models").doc(model.id).get();
-            if (doc.exists) model.wins = doc.data().wins;
-        }
-        const statsDoc = await db.collection("stats").doc("global").get();
-        if (statsDoc.exists) {
-            totalVotesAll = statsDoc.data().totalVotes || 0;
-            totalVotesToday = statsDoc.data().totalVotesToday || 0;
-        }
-        document.getElementById("totalVotesAll").innerText = totalVotesAll.toLocaleString();
-        document.getElementById("totalVotesToday").innerText = totalVotesToday.toLocaleString();
+    for (const model of modelsList) {
+        const doc = await db.collection("models").doc(model.id).get();
+        if (doc.exists) model.wins = doc.data().wins;
     }
+    const statsDoc = await db.collection("stats").doc("global").get();
+    if (statsDoc.exists) {
+        totalVotesAll = statsDoc.data().totalVotes || 0;
+        totalVotesToday = statsDoc.data().totalVotesToday || 0;
+    }
+    document.getElementById("totalVotesAll").innerText = totalVotesAll.toLocaleString();
+    document.getElementById("totalVotesToday").innerText = totalVotesToday.toLocaleString();
+    
+    // 👇 ДОБАВЬТЕ ЭТИ СТРОКИ ДЛЯ ОБНОВЛЕНИЯ СТАТИСТИКИ В БЛОКЕ "О НАС"
+    const statVotes = document.getElementById('statVotes');
+    if (statVotes) {
+        statVotes.innerText = totalVotesAll.toLocaleString();
+    }
+}
 
     async function saveVoteToFirebase(modelId) {
         await db.collection("models").doc(modelId).update({ wins: firebase.firestore.FieldValue.increment(1) });
@@ -798,6 +925,30 @@ const questionsList = [
         if (tab === 'catalog') renderCatalog();
         if (tab === 'blog') renderBlog();
     }
+
+    // Переключение между вкладками "О нас" и "Политика"
+function switchAboutTab(tab) {
+    const aboutContent = document.getElementById('aboutContent');
+    const privacyContent = document.getElementById('privacyContent');
+    const aboutBtn = document.getElementById('aboutUsBtn');
+    const privacyBtn = document.getElementById('privacyBtn');
+    
+    if (tab === 'about') {
+        aboutContent.classList.remove('hidden');
+        privacyContent.classList.add('hidden');
+        aboutBtn.classList.add('bg-blue-600', 'text-white');
+        aboutBtn.classList.remove('bg-white/5', 'text-slate-400');
+        privacyBtn.classList.remove('bg-blue-600', 'text-white');
+        privacyBtn.classList.add('bg-white/5', 'text-slate-400');
+    } else {
+        aboutContent.classList.add('hidden');
+        privacyContent.classList.remove('hidden');
+        privacyBtn.classList.add('bg-blue-600', 'text-white');
+        privacyBtn.classList.remove('bg-white/5', 'text-slate-400');
+        aboutBtn.classList.remove('bg-blue-600', 'text-white');
+        aboutBtn.classList.add('bg-white/5', 'text-slate-400');
+    }
+}
 
     async function updateRatingTable() {
         for (const model of modelsList) {
