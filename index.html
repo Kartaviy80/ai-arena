@@ -544,20 +544,35 @@
         document.getElementById("totalVotesToday").innerText = totalVotesToday.toLocaleString();
     }
 
-    function loadQuestionOfDay() {
+   function loadQuestionOfDay() {
+    // Проверяем, есть ли сохранённый вопрос на сегодня
+    const today = new Date().toDateString();
+    const savedQuestion = localStorage.getItem('dailyQuestion');
+    const savedDate = localStorage.getItem('dailyQuestionDate');
+    
+    if (savedQuestion && savedDate === today) {
+        // Используем сохранённый вопрос
+        currentQuestionObj = JSON.parse(savedQuestion);
+    } else {
+        // Выбираем новый вопрос на сегодня
         const randomIndex = Math.floor(Math.random() * questionsList.length);
         currentQuestionObj = questionsList[randomIndex];
         
-        let candidates = modelsList.filter(m => m.category === currentQuestionObj.category);
-        if (candidates.length < 2) candidates = modelsList;
-        
-        const shuffled = [...candidates].sort(() => 0.5 - Math.random());
-        currentModels.A = shuffled[0];
-        currentModels.B = shuffled[1];
-        
-        document.getElementById("questionOfDay").innerText = currentQuestionObj.text;
-        updateBattleUI();
+        // Сохраняем на сегодня
+        localStorage.setItem('dailyQuestion', JSON.stringify(currentQuestionObj));
+        localStorage.setItem('dailyQuestionDate', today);
     }
+    
+    let candidates = modelsList.filter(m => m.category === currentQuestionObj.category);
+    if (candidates.length < 2) candidates = modelsList;
+    
+    const shuffled = [...candidates].sort(() => 0.5 - Math.random());
+    currentModels.A = shuffled[0];
+    currentModels.B = shuffled[1];
+    
+    document.getElementById("questionOfDay").innerText = currentQuestionObj.text;
+    updateBattleUI();
+}
 
     function updateBattleUI() {
         if (currentModels.A) {
